@@ -20,5 +20,11 @@ MonoBehaviour:
   keywordsList:
   - keyword: 1
     value: 2
-  - keyword: 3
+    duration: 0
+    inflictSelf: 0
+    delay: 0
+  - keyword: 2
     value: 1
+    duration: 0
+    inflictSelf: 1
+    delay: 0

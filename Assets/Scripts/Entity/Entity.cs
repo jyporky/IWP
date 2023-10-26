@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using TMPro;
 
 public class Entity : MonoBehaviour
 {
@@ -21,6 +21,16 @@ public class Entity : MonoBehaviour
     [Header("Prefab Reference")]
     [SerializeField] GameObject cardPrefab;
     protected Transform cardSpawnArea;
+
+    [Header("DeckAndDiscard")]
+    [SerializeField] TextMeshProUGUI deckAmt;
+    [SerializeField] TextMeshProUGUI discardAmt;
+
+    /// <summary>
+    /// Store the list of status effect the entity has. Postive value suggest turns, negative value suggest by cards played.
+    /// If the value reaches 0, that effect no longer exist and will be removed.
+    /// </summary>
+    protected Dictionary<KeywordType, StatusEffectInfo> statusEffectList = new Dictionary<KeywordType, StatusEffectInfo>();
 
     /// <summary>
     /// Get the max HP of the Entity
@@ -94,7 +104,7 @@ public class Entity : MonoBehaviour
     /// <summary>
     /// Draw cards from the deck into the hand
     /// </summary>
-    public virtual void DrawCardFromDeck()
+    void DrawCardFromDeck()
     {
         int cardIndexToGetFrom = Random.Range(0, cardsInDeckList.Count);
         if (cardsInDeckList.Count != 0)
@@ -104,6 +114,17 @@ public class Entity : MonoBehaviour
         }
         else
             Debug.Log("No cards left to draw!");
+    }
+
+    /// <summary>
+    /// Draw cards from the deck into the hand. Specify the number needed
+    /// </summary>
+    public void DrawCardFromDeck(int amtOfCardsToDraw)
+    {
+        for (int i = 0; i < amtOfCardsToDraw; i++)
+        {
+            DrawCardFromDeck();
+        }
     }
 
     /// <summary>
@@ -175,22 +196,24 @@ public class Entity : MonoBehaviour
     /// <summary>
     /// Move a card from a list to another (Remove the card from originalList and add it to the newList)
     /// </summary>
-    protected virtual void MoveToDifferentList(List<CardSO> originalList, List<CardSO> newList, CardSO cardToMove)
+    void MoveToDifferentList(List<CardSO> originalList, List<CardSO> newList, CardSO cardToMove)
     {
         originalList.Remove(cardToMove);
         newList.Add(cardToMove);
+        UpdateDeckAndDiscardAmountDisplay();
     }
 
     /// <summary>
     /// Move all cards from the list to another (Remove all card from original list and add them to the newList)
     /// </summary>
-    protected virtual void MoveToDifferentList(List<CardSO> originalList, List<CardSO> newList)
+    void MoveToDifferentList(List<CardSO> originalList, List<CardSO> newList)
     {
         while(originalList.Count != 0)
         {
             CardSO tempCardRef = originalList[0];
             originalList.RemoveAt(0);
             newList.Add(tempCardRef);
+            UpdateDeckAndDiscardAmountDisplay();
         }
     }
 
@@ -247,5 +270,35 @@ public class Entity : MonoBehaviour
             cardList[i].transform.localPosition = new Vector3(xPos, yPos, cardList[i].transform.localPosition.z);
             cardList[i].transform.eulerAngles = new Vector3(0, 0, zRot);
         }
+    }
+
+    /// <summary>
+    /// Check to see if the entity deck needs to be reshuffled. Deck will be automatically
+    /// reshuffle if entity has no cards left in their deck
+    /// </summary>
+    public void CheckIfNeedReshuffle()
+    {
+        if (cardsInDeckList.Count == 0)
+        {
+            ReshuffleDeck();
+        }
+    }
+
+    /// <summary>
+    /// Update the display for the amount of cards in the deck and the discard pile.
+    /// </summary>
+    protected void UpdateDeckAndDiscardAmountDisplay()
+    {
+        deckAmt.text = cardsInDeckList.Count.ToString();
+        discardAmt.text = cardsInDiscardList.Count.ToString();
+    }
+
+    /// <summary>
+    /// Add a status effect to the entity. when stating duration value, positive mean turn, negative means by amt of cards. Note that amt of cards
+    /// will reset when player end their turn.
+    /// </summary>
+    public void AddStatusEffect(KeywordType statusType, StatusEffectInfo statusEffectInfo)
+    {
+        statusEffectList.Add(statusType, statusEffectInfo);
     }
 }

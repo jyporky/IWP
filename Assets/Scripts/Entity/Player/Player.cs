@@ -15,10 +15,6 @@ public class Player : Entity
     [SerializeField] Button normalShieldButton;
     [SerializeField] Button heavyShieldButton;
 
-    [Header("DeckAndDiscard")]
-    [SerializeField] TextMeshProUGUI deckAmt;
-    [SerializeField] TextMeshProUGUI discardAmt;
-
     private void Awake()
     {
         // Link the cardspawnarea
@@ -31,6 +27,7 @@ public class Player : Entity
         LoadCardToDeck();
         ChangeHealth(0);
         ChangeShieldPoint(0);
+        UpdateDeckAndDiscardAmountDisplay();
     }
 
     /// <summary>
@@ -69,23 +66,5 @@ public class Player : Entity
         base.ChangeShieldPoint(shieldPointChanged);
         shieldPointBarSlider.value = (float)currentSP / maxSP;
         shieldPointValue.text = currentSP.ToString() + "/" + maxSP.ToString();
-    }
-
-    protected override void MoveToDifferentList(List<CardSO> originalList, List<CardSO> newList)
-    {
-        base.MoveToDifferentList(originalList, newList);
-        UpdateDeckAndDiscardAmountDisplay();
-    }
-
-    protected override void MoveToDifferentList(List<CardSO> originalList, List<CardSO> newList, CardSO cardToMove)
-    {
-        base.MoveToDifferentList(originalList, newList, cardToMove);
-        UpdateDeckAndDiscardAmountDisplay();
-    }
-
-    void UpdateDeckAndDiscardAmountDisplay()
-    {
-        deckAmt.text = cardsInDeckList.Count.ToString();
-        discardAmt.text = cardsInDiscardList.Count.ToString();
     }
 }

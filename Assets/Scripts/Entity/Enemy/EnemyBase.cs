@@ -29,6 +29,7 @@ public class EnemyBase : Entity
         ChangeHealth(0);
         ChangeShieldPoint(0);
         GameplayManager.GetInstance().onEnemyPlay += ExecuteTurn;
+        UpdateDeckAndDiscardAmountDisplay();
     }
 
     /// <summary>

@@ -15,6 +15,7 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] Transform enemyArea;
     [SerializeField] EnemySO tempEnemySOReference;
     [SerializeField] Button endTurnButton;
+    [SerializeField] Button reshuffledDeckButton;
 
     private GameObject selectedCard;
     Coroutine draggingCards;
@@ -66,6 +67,7 @@ public class GameplayManager : MonoBehaviour
 
         TurnStart();
         endTurnButton.onClick.AddListener(EndPlayerTurn);
+        reshuffledDeckButton.onClick.AddListener(ReshuflePlayerDeck);
     }
 
     /// <summary>
@@ -79,20 +81,6 @@ public class GameplayManager : MonoBehaviour
         Vector3 pos = imageRef.transform.position;
         enemyMinHitbox = new Vector2(pos.x - widthScale, pos.y - heightScale);
         enemyMaxHitbox = new Vector2(pos.x + widthScale, pos.y + heightScale);
-    }
-
-    private void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    player.GetComponent<Player>().DrawCardFromDeck();
-        //}
-        /*else */if (Input.GetKeyDown(KeyCode.R))
-        {
-            player.GetComponent<Player>().ReshuffleDeck();
-            EndPlayerTurn();
-            Debug.Log("Deck Reshuffled");
-        }
     }
 
     /// <summary>
@@ -149,7 +137,7 @@ public class GameplayManager : MonoBehaviour
         {
             CardSO selectedCardSO = selectedCard.GetComponent<SelectedCard>().GetCardSO();
             player.GetComponent<Player>().PlayCard(selectedCardSO);
-            CardManager.GetInstance().ExecuteCard(selectedCardSO, player.GetComponent<Player>(), enemy.GetComponent<EnemyBase>(), CastToWho.PLAYERTOENEMY);
+            CardManager.GetInstance().ExecuteCard(selectedCardSO, player.GetComponent<Player>(), enemy.GetComponent<EnemyBase>(), Caster.PLAYER);
         }
     }
 
@@ -174,13 +162,21 @@ public class GameplayManager : MonoBehaviour
         selectedCard.transform.position = playArea.position;
         selectedCard.GetComponent<SelectedCard>().UpdateCardDetails(cardPlayed);
         enemy.GetComponent<EnemyBase>().PlayCard(cardPlayed);
-        CardManager.GetInstance().ExecuteCard(cardPlayed, player.GetComponent<Player>(), enemy.GetComponent<EnemyBase>(), CastToWho.ENEMYTOPLAYER);
+        CardManager.GetInstance().ExecuteCard(cardPlayed, player.GetComponent<Player>(), enemy.GetComponent<EnemyBase>(), Caster.ENEMY);
         selectedCard.SetActive(true);
         yield return new WaitForSeconds(2);
         selectedCard.SetActive(false);
         onEnemyPlay?.Invoke();
     }
 
+    /// <summary>
+    /// Forcefully reshuffled the player deck
+    /// </summary>
+    void ReshuflePlayerDeck()
+    {
+        player.GetComponent<Player>().ReshuffleDeck();
+        EndPlayerTurn();
+    }
 
     /// <summary>
     /// End the player turn. Call the TurnStart() function aftwards.
@@ -188,6 +184,7 @@ public class GameplayManager : MonoBehaviour
     public void EndPlayerTurn()
     {
         currentTurn = Turn.ENEMY_TURN;
+        player.GetComponent<Player>().CheckIfNeedReshuffle();
         TurnStart();
     }
 
@@ -196,8 +193,8 @@ public class GameplayManager : MonoBehaviour
     /// </summary>
     public void EndEnemyTurn()
     {
-        Debug.Log("Enemy Turn end");
         currentTurn = Turn.PLAYER_TURN;
+        enemy.GetComponent<EnemyBase>().CheckIfNeedReshuffle();
         TurnStart();
     }
 
@@ -210,18 +207,15 @@ public class GameplayManager : MonoBehaviour
         {
             case Turn.PLAYER_TURN:
                 endTurnButton.interactable = true;
+                reshuffledDeckButton.interactable = true;
                 onDragging?.Invoke(false);
-                for (int i = 0; i < 3; i++)
-                {
-                    player.GetComponent<Player>().DrawCardFromDeck();
-                }
+                player.GetComponent<Player>().DrawCardFromDeck(3);
                 break;
 
             case Turn.ENEMY_TURN:
-                Debug.Log("Enemy turn starts");
-                enemy.GetComponent<EnemyBase>().DrawCardFromDeck();
-                enemy.GetComponent<EnemyBase>().DrawCardFromDeck();
+                enemy.GetComponent<EnemyBase>().DrawCardFromDeck(1);
                 endTurnButton.interactable = false;
+                reshuffledDeckButton.interactable = false;
                 onDragging?.Invoke(true);
                 onEnemyPlay?.Invoke();
                 break;
