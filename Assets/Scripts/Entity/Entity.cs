@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Events;
 
 public class Entity : MonoBehaviour
 {
@@ -23,14 +24,37 @@ public class Entity : MonoBehaviour
     protected Transform cardSpawnArea;
 
     [Header("DeckAndDiscard")]
+    [SerializeField] int startTurnDrawAmt;
     [SerializeField] TextMeshProUGUI deckAmt;
     [SerializeField] TextMeshProUGUI discardAmt;
+
+    [Header("StatusEffect")]
+    [SerializeField] GameObject statusPrefab;
+    [SerializeField] Transform statusHolder;
+
+    public delegate void OnEntityStartTurn();
+    /// <summary>
+    /// This is called when the entity starts their turn. Reduce the turn value by 1.
+    /// </summary>
+    public OnEntityStartTurn onEntityStartTurn;
+
+    public delegate void OnEntityEndTurn();
+    /// <summary>
+    /// This is called when the entity ends their turn. Could use this to delete any card played status effect.
+    /// </summary>
+    public OnEntityStartTurn onEntityEndTurn;
+
+    /// <summary>
+    /// This is called when the entity plays a card. Reduce the card played effect by 1.
+    /// </summary>
+    public delegate void OnEntityPlayCard();
+    public OnEntityPlayCard onEntityPlayCard;
 
     /// <summary>
     /// Store the list of status effect the entity has. Postive value suggest turns, negative value suggest by cards played.
     /// If the value reaches 0, that effect no longer exist and will be removed.
     /// </summary>
-    protected Dictionary<KeywordType, StatusEffectInfo> statusEffectList = new Dictionary<KeywordType, StatusEffectInfo>();
+    protected Dictionary<KeywordType, GameObject> statusEffectList = new Dictionary<KeywordType, GameObject>();
 
     /// <summary>
     /// Get the max HP of the Entity
@@ -50,11 +74,15 @@ public class Entity : MonoBehaviour
 
     /// <summary>
     /// Change the value of the current health. Put negative values for minus of health, and vice versa.
-    /// Note that player health cannot go above the maximum limit
+    /// Note that player health cannot go above the maximum limit. Negative health change can be increased with Marked debuff.
     /// </summary>
     public virtual void ChangeHealth(int healthChanged)
     {
         currentHP += healthChanged;
+        if (noDelay(KeywordType.Marked) && healthChanged < 0)
+        {
+            currentHP += statusEffectList[KeywordType.Marked].GetComponent<StatusEffect>().GetValue();
+        }
 
         if (currentHP > maxHP)
         {
@@ -91,6 +119,25 @@ public class Entity : MonoBehaviour
     public int GetCurrentSP()
     {
         return currentSP;
+    }
+
+    /// <summary>
+    /// Trigger the start turn effect of the entity, such as drawing cards and triggering any start turn effect.
+    /// </summary>
+    public void StartTurn()
+    {
+        TriggerEffect(false);
+        DrawCardFromDeck(startTurnDrawAmt);
+        onEntityStartTurn?.Invoke();
+    }
+
+    /// <summary>
+    /// Trigger the end turn effect of the entity, such as drawing cards and triggering any start turn effect.
+    /// </summary>
+    public void EndTurn()
+    {
+        CheckIfNeedReshuffle();
+        onEntityEndTurn?.Invoke();
     }
 
     /// <summary>
@@ -143,6 +190,8 @@ public class Entity : MonoBehaviour
             }
         }
 
+        TriggerEffect(true);
+        onEntityPlayCard?.Invoke();
         RemoveCardObject(cardPlayed);
         DisplayCardList();
         MoveToDifferentList(cardsInHandList, cardsInDiscardList, cardPlayed);
@@ -208,7 +257,7 @@ public class Entity : MonoBehaviour
     /// </summary>
     void MoveToDifferentList(List<CardSO> originalList, List<CardSO> newList)
     {
-        while(originalList.Count != 0)
+        while (originalList.Count != 0)
         {
             CardSO tempCardRef = originalList[0];
             originalList.RemoveAt(0);
@@ -276,7 +325,7 @@ public class Entity : MonoBehaviour
     /// Check to see if the entity deck needs to be reshuffled. Deck will be automatically
     /// reshuffle if entity has no cards left in their deck
     /// </summary>
-    public void CheckIfNeedReshuffle()
+    void CheckIfNeedReshuffle()
     {
         if (cardsInDeckList.Count == 0)
         {
@@ -299,6 +348,91 @@ public class Entity : MonoBehaviour
     /// </summary>
     public void AddStatusEffect(KeywordType statusType, StatusEffectInfo statusEffectInfo)
     {
-        statusEffectList.Add(statusType, statusEffectInfo);
+        GameObject newStatus = Instantiate(statusPrefab, statusHolder);
+        newStatus.GetComponent<StatusEffect>().SetStatus(this, statusType, statusEffectInfo);
+
+        statusEffectList.Add(statusType, newStatus);
+    }
+
+    /// <summary>
+    /// When a status effect expire, call this function to remove it from the dictionary
+    /// </summary>
+    public void RemoveStatusEffect(KeywordType removeWhatStatus)
+    {
+        statusEffectList.Remove(removeWhatStatus);
+    }
+
+    /// <summary>
+    /// Calculate the damage value of the attack, along with any buff that affects it. The buff include: Strength and Weaken.
+    /// </summary>
+    public int CalculateDamage(int attackdmg)
+    {
+        int finalDmg = attackdmg;
+        // calculate the attack buff modifier, if it is not a delay
+        if (noDelay(KeywordType.Strength))
+            finalDmg += statusEffectList[KeywordType.Strength].GetComponent<StatusEffect>().GetValue();
+        // caculate the attack debuff modifier, if it is not a delay
+        if (noDelay(KeywordType.Weaken))
+            finalDmg -= statusEffectList[KeywordType.Weaken].GetComponent<StatusEffect>().GetValue();
+
+        // if dmg is negative, set it to 0
+        if (finalDmg < 0)
+            finalDmg = 0;
+
+        return finalDmg;
+    }
+
+    /// <summary>
+    /// Return true, if there is no delay in the keywordtype. Return false if the keywordtype do not exist or the keywordtype has a delay
+    /// </summary>
+    /// <returns></returns>
+    bool noDelay(KeywordType kw)
+    {
+        if (!statusEffectList.ContainsKey(kw) || statusEffectList[kw].GetComponent<StatusEffect>().IsDelay())
+            return false;
+
+        return true;
+    }
+
+    /// <summary>
+    /// Trigger the effect of damage, gain_Sp, heal and draw
+    /// </summary>
+    void TriggerEffect(bool byCardPlayed)
+    {
+        if (noDelay(KeywordType.Damage))
+        {
+            StatusEffect statusEffect = statusEffectList[KeywordType.Damage].GetComponent<StatusEffect>();
+            if (statusEffect.GetDuration() > 0 && !byCardPlayed || statusEffect.GetDuration() < 0 && byCardPlayed)
+            {
+                ChangeHealth(-statusEffect.GetValue());
+            }
+        }
+
+        if (noDelay(KeywordType.Heal))
+        {
+            StatusEffect statusEffect = statusEffectList[KeywordType.Heal].GetComponent<StatusEffect>();
+            if (statusEffect.GetDuration() > 0 && !byCardPlayed || statusEffect.GetDuration() < 0 && byCardPlayed)
+            {
+                ChangeHealth(statusEffect.GetValue());
+            }
+        }
+
+        if (noDelay(KeywordType.Draw_Card))
+        {
+            StatusEffect statusEffect = statusEffectList[KeywordType.Draw_Card].GetComponent<StatusEffect>();
+            if (statusEffect.GetDuration() > 0 && !byCardPlayed || statusEffect.GetDuration() < 0 && byCardPlayed)
+            {
+                DrawCardFromDeck(statusEffect.GetValue());
+            }
+        }
+
+        if (noDelay(KeywordType.Gain_SP))
+        {
+            StatusEffect statusEffect = statusEffectList[KeywordType.Gain_SP].GetComponent<StatusEffect>();
+            if (statusEffect.GetDuration() > 0 && !byCardPlayed || statusEffect.GetDuration() < 0 && byCardPlayed)
+            {
+                ChangeShieldPoint(statusEffect.GetValue());
+            }
+        }
     }
 }

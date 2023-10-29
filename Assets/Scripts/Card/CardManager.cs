@@ -23,9 +23,15 @@ public class Keyword
     public bool inflictSelf;
 
     /// <summary>
-    /// If set to true, instead of doing the value per duration, the value will be done after set duration instead.
+    /// If set to true, wait for the delayDuration to be over before executing the effect.
     /// </summary>
     public bool delay;
+
+    /// <summary>
+    /// Define the delayDuration of the delay, positive number to indicate turns and negative number to indicate cards played.
+    /// Noted that if cards played duration is not fulfilled when turns end, the effect will not be applied.
+    /// </summary>
+    public int delayDuration;
 }
 
 public enum KeywordType
@@ -40,7 +46,6 @@ public enum KeywordType
     Weaken,
     Glitch,
     Trojan,
-    Shuffle,
     Armor,
 }
 
@@ -59,24 +64,20 @@ public enum AttackCardType
     Heavy,
 }
 
-/// <summary>
-/// The entity who casted the attack
-/// </summary>
-public enum Caster
-{
-    PLAYER,
-    ENEMY,
-}
-
 public class StatusEffectInfo
 {
     public int duration;
     public int value;
+
     public bool delay;
+    public int delayDuration;
+    public Entity targetting;
 }
 
 public class CardManager : MonoBehaviour
 {
+    [SerializeField] List<StatusSpriteInfo> statusSpriteInfoList = new List<StatusSpriteInfo>();
+
     public static CardManager GetInstance()
     {
         return instance;
@@ -94,107 +95,130 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    public void ExecuteCard(CardSO card, Player player, EnemyBase enemy, Caster castFrom)
+    /// <summary>
+    /// Execute the card. The caster is the one who is attacking, and the target is the one receivng the attack
+    /// </summary>
+    public void ExecuteCard(CardSO card, Entity caster, Entity target)
     {
         for (int i = 0; i < card.keywordsList.Count; i++)
         {
-            int kwValue = card.keywordsList[i].value;
-            KeywordType kw = card.keywordsList[i].keyword;
-            int duration = card.keywordsList[i].duration;
-            bool delay = card.keywordsList[i].delay;
-            Caster castTo = GetCastTo(castFrom, card.keywordsList[i].inflictSelf);
-
-            if (kw == KeywordType.Glitch)
+            if (card.keywordsList[i].keyword == KeywordType.Glitch)
                 continue;
 
-            // duration being 0 means it is instant, and no status effect is applied
-            if (duration == 0)
+            ExecuteKeywordEffect(card.keywordsList[i], caster, target);
+        }
+    }
+
+    /// <summary>
+    /// Execute the card 
+    /// </summary>
+    public void ExecuteCardFromDelay(Entity caster, StatusEffectInfo statusInfo, KeywordType whichStatus)
+    {
+        Keyword kw = new Keyword();
+        kw.keyword = whichStatus;
+        kw.value = statusInfo.value;
+        kw.duration = statusInfo.duration;
+        kw.inflictSelf = true;
+        kw.delay = false;
+        kw.delayDuration = 0;
+        ExecuteKeywordEffect(kw, caster, statusInfo.targetting);
+    }
+
+    /// <summary>
+    /// Execute the keywordType effect given the keyword class.
+    /// </summary>
+    public void ExecuteKeywordEffect(Keyword keyword, Entity caster, Entity target)
+    {
+        int kwValue = keyword.value;
+        KeywordType kw = keyword.keyword;
+        int duration = keyword.duration;
+        bool inflictSelf = keyword.inflictSelf;
+        bool delay = keyword.delay;
+        int delayduration = keyword.delayDuration;
+
+        Entity targetEntity = GetTarget(caster, target, inflictSelf);
+
+        // duration being 0 means it is instant, and no status effect is applied. However there must not be a delay
+        if (duration == 0 && !delay)
+        {
+            switch (kw)
             {
-                switch (castTo)
-                {
-                    case Caster.PLAYER:
-                        {
-                            switch (kw)
-                            {
-                                case KeywordType.Damage:
-                                    player.ChangeHealth(-kwValue);
-                                    break;
-                                case KeywordType.Draw_Card:
-                                    player.DrawCardFromDeck(kwValue);
-                                    break;
-                                case KeywordType.Heal:
-                                    player.ChangeHealth(kwValue);
-                                    break;
-                                case KeywordType.Gain_SP:
-                                    player.ChangeShieldPoint(kwValue);
-                                    break;
-                            }
-                        }
-                        break;
-
-                    case Caster.ENEMY:
-                        {
-                            switch (kw)
-                            {
-                                case KeywordType.Damage:
-                                    enemy.ChangeHealth(-kwValue);
-                                    break;
-                                case KeywordType.Draw_Card:
-                                    enemy.DrawCardFromDeck(kwValue);
-                                    break;
-                                case KeywordType.Heal:
-                                    enemy.ChangeHealth(kwValue);
-                                    break;
-                                case KeywordType.Gain_SP:
-                                    enemy.ChangeShieldPoint(kwValue);
-                                    break;
-                            }
-                        }
-                        break;
-                }
+                case KeywordType.Damage:
+                    targetEntity.ChangeHealth(-caster.GetComponent<Entity>().CalculateDamage(kwValue));
+                    break;
+                case KeywordType.Draw_Card:
+                    targetEntity.DrawCardFromDeck(kwValue);
+                    break;
+                case KeywordType.Heal:
+                    targetEntity.ChangeHealth(kwValue);
+                    break;
+                case KeywordType.Gain_SP:
+                    targetEntity.ChangeShieldPoint(kwValue);
+                    break;
             }
+        }
 
+        else
+        {
+            StatusEffectInfo newStatusEffectInfo = new StatusEffectInfo();
+            newStatusEffectInfo.value = kwValue;
+            newStatusEffectInfo.duration = duration;
+            newStatusEffectInfo.delay = delay;
+            newStatusEffectInfo.delayDuration = delayduration;
+            newStatusEffectInfo.targetting = targetEntity;
+
+            // if there is no delay. Simply add those debuff to the target
+            if (!delay)
+            {
+                targetEntity.AddStatusEffect(kw, newStatusEffectInfo);
+            }
+            // if there is a delay, show it to themselves
             else
             {
-                StatusEffectInfo newStatusEffectInfo = new StatusEffectInfo();
-                newStatusEffectInfo.value = kwValue;
-                newStatusEffectInfo.duration = duration;
-                newStatusEffectInfo.delay = delay;
-
-                switch (castTo)
-                {
-                    case Caster.PLAYER:
-                        player.AddStatusEffect(kw, newStatusEffectInfo);
-                        break;
-                    case Caster.ENEMY:
-                        enemy.AddStatusEffect(kw, newStatusEffectInfo);
-                        break;
-                }
+                caster.AddStatusEffect(kw, newStatusEffectInfo);
             }
         }
     }
 
-    Caster GetCastTo(Caster castToWho, bool targetSelf)
+    /// <summary>
+    /// Get the sprite of the status effect. Requires the statusEffectInfo as well as who is the one having the status.
+    /// </summary>
+    public StatusSpriteInfo GetStatusSpriteInfo(StatusEffectInfo statusEffect, KeywordType statusType)
     {
-        switch (castToWho)
+        for (int i = 0; i < statusSpriteInfoList.Count; i++)
         {
-            case Caster.PLAYER:
-                {
-                    if (!targetSelf)
-                        return Caster.ENEMY;
-
-                    break;
-                }
-
-            case Caster.ENEMY:
-                {
-                    if (!targetSelf)
-                        return Caster.PLAYER;
-
-                    break;
-                }
+            if (statusSpriteInfoList[i].whichStatus == statusType &&
+                statusSpriteInfoList[i].isDelay == statusEffect.delay &&
+                statusSpriteInfoList[i].byTurn == (statusEffect.duration > 0))
+            {
+                return statusSpriteInfoList[i];
+            }
         }
 
-        return castToWho;
+        return null;
     }
+
+    /// <summary>
+    /// Get which entity is the one receving the card effect
+    /// </summary>
+    public Entity GetTarget(Entity caster, Entity target, bool inflictSelf)
+    {
+        if (inflictSelf)
+            return caster;
+        else
+            return target;
+    }
+}
+
+[System.Serializable]
+public class StatusSpriteInfo
+{
+    public string statusName;
+    [TextArea]
+    public string statusDescription;
+    public Sprite statusSprite;
+    [Header("Card Info")]
+    public KeywordType whichStatus;
+    public bool isDelay;
+    public bool byTurn;
 }

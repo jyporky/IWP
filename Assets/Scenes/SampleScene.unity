@@ -351,7 +351,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -850, y: 160}
+  m_AnchoredPosition: {x: -850, y: 260}
   m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &290024791
@@ -727,7 +727,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -850, y: -100}
+  m_AnchoredPosition: {x: -850, y: 0}
   m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &621549299
@@ -1481,6 +1481,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 182b5415d42c2844a9191fd75886bbe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  statusSpriteInfoList:
+  - statusName: Burning
+    statusDescription: Take n damage everytime you play a card.
+    statusSprite: {fileID: 21300000, guid: 00bcf3c73ebea734bb4035926d83963e, type: 3}
+    whichStatus: 1
+    isDelay: 0
+    byTurn: 0
+  - statusName: Self-Harm
+    statusDescription: Take n damage at the start of your turn.
+    statusSprite: {fileID: 21300000, guid: 00bcf3c73ebea734bb4035926d83963e, type: 3}
+    whichStatus: 1
+    isDelay: 0
+    byTurn: 1
+  - statusName: Self Restoration
+    statusDescription: Heal n every turn
+    statusSprite: {fileID: 21300000, guid: 76b0e5c2bd65539458c72277ba574cc9, type: 3}
+    whichStatus: 3
+    isDelay: 0
+    byTurn: 1
+  - statusName: Agile
+    statusDescription: Draw extra n card a the start of your turn
+    statusSprite: {fileID: 21300000, guid: 76b0e5c2bd65539458c72277ba574cc9, type: 3}
+    whichStatus: 2
+    isDelay: 0
+    byTurn: 1
 --- !u!4 &1601993926
 Transform:
   m_ObjectHideFlags: 0
@@ -1509,14 +1534,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalCardList:
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
-  - {fileID: 11400000, guid: f77c14c72d1cd8d48ac2e4767bbdaf2c, type: 2}
-  - {fileID: 11400000, guid: 54bc7011c614fbe4a87c6f999834ee8e, type: 2}
-  - {fileID: 11400000, guid: 54bc7011c614fbe4a87c6f999834ee8e, type: 2}
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
+  - {fileID: 11400000, guid: 520c97ab70fc14c47859ebd2af245d15, type: 2}
   - {fileID: 11400000, guid: c11e76ce0d2388845b33bc7770a47112, type: 2}
+  - {fileID: 11400000, guid: 54bc7011c614fbe4a87c6f999834ee8e, type: 2}
+  - {fileID: 11400000, guid: f77c14c72d1cd8d48ac2e4767bbdaf2c, type: 2}
+  - {fileID: 11400000, guid: bb9fc8034f5f5254788ffbaf8fc3d0cd, type: 2}
+  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
+  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
+  - {fileID: 11400000, guid: 54bc7011c614fbe4a87c6f999834ee8e, type: 2}
 --- !u!114 &1601993928
 MonoBehaviour:
   m_ObjectHideFlags: 0
