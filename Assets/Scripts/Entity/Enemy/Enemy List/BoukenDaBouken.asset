@@ -18,8 +18,6 @@ MonoBehaviour:
   level: 69
   enemySP: 0
   enemyDeck:
-  - {fileID: 11400000, guid: 54bc7011c614fbe4a87c6f999834ee8e, type: 2}
-  - {fileID: 11400000, guid: f77c14c72d1cd8d48ac2e4767bbdaf2c, type: 2}
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
   - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
   - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}

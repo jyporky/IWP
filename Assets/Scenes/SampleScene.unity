@@ -572,7 +572,7 @@ MonoBehaviour:
   selectedCardSpawnTransform: {fileID: 2019614355}
   playerArea: {fileID: 1631233970}
   enemyArea: {fileID: 362513246}
-  tempEnemySOReference: {fileID: 11400000, guid: 56e55c0eea9c0214c9b6331b8d730244, type: 2}
+  tempEnemySOReference: {fileID: 11400000, guid: 4a8e2b3045a461e4d96ffa5eebc02e38, type: 2}
   endTurnButton: {fileID: 55376539}
   reshuffledDeckButton: {fileID: 670703285}
   gameOverScreen: {fileID: 1681708266}
@@ -1812,15 +1812,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalCardList:
-  - {fileID: 11400000, guid: b0b387864f4108b43a005adc3b045969, type: 2}
-  - {fileID: 11400000, guid: b0b387864f4108b43a005adc3b045969, type: 2}
-  - {fileID: 11400000, guid: b0b387864f4108b43a005adc3b045969, type: 2}
-  - {fileID: 11400000, guid: b0b387864f4108b43a005adc3b045969, type: 2}
-  - {fileID: 11400000, guid: b0b387864f4108b43a005adc3b045969, type: 2}
-  - {fileID: 11400000, guid: b0b387864f4108b43a005adc3b045969, type: 2}
-  - {fileID: 11400000, guid: b0b387864f4108b43a005adc3b045969, type: 2}
-  - {fileID: 11400000, guid: b0b387864f4108b43a005adc3b045969, type: 2}
-  - {fileID: 11400000, guid: b0b387864f4108b43a005adc3b045969, type: 2}
+  - {fileID: 11400000, guid: 25e8d78ae3bc2ed418df5dabad323da3, type: 2}
+  - {fileID: 11400000, guid: bb9fc8034f5f5254788ffbaf8fc3d0cd, type: 2}
+  - {fileID: 11400000, guid: ac30f058b0cf9694a98bee443e68743b, type: 2}
+  - {fileID: 11400000, guid: 8e7a50312216ea04a9b90a6ca48cbda4, type: 2}
+  - {fileID: 11400000, guid: c11e76ce0d2388845b33bc7770a47112, type: 2}
+  - {fileID: 11400000, guid: c11e76ce0d2388845b33bc7770a47112, type: 2}
 --- !u!114 &1601993928
 MonoBehaviour:
   m_ObjectHideFlags: 0

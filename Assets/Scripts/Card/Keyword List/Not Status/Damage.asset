@@ -12,9 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3629fa356144f6542ac4c27a56db4390, type: 3}
   m_Name: Damage
   m_EditorClassIdentifier: 
-  statusName: 
-  statusDescription: 
-  statusSprite: {fileID: 0}
-  keyword: 1
-  durationByTurn: 0
-  delay: 0
+  statusName: Damage
+  statusDescription: Reduce Opponet Health
+  statusSprite: {fileID: 21300000, guid: e0cf85a07879ada4ab6d915950166a42, type: 3}

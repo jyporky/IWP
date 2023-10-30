@@ -25,25 +25,34 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         entityReference = entity;
         statusEffectInfo = statusInfo;
 
-        // assign the duration value acoording to whether it is delay or not
-        switch (statusEffectInfo.keywordSO.delay)
+        // assign the duration value as well as the status information display according to whether it is delay or not
+        switch (statusEffectInfo.cardDelay.statusInfo == null)
         {
             case true:
-                duration = statusEffectInfo.delayDuration;
-                break;
-            case false:
-                duration = statusEffectInfo.duration;
-                break;
-        }
+                {
+                    duration = statusEffectInfo.duration;
+                    StatusSO ss = statusEffectInfo.statusSO;
 
-        // Update the display
-        statusImage.sprite = statusEffectInfo.keywordSO.statusSprite;
-        baseDescription = statusEffectInfo.keywordSO.statusName + ":" + statusEffectInfo.keywordSO.statusDescription;
+                    statusImage.sprite = ss.statusSprite;
+                    baseDescription = ss.statusName + ":" + ss.statusDescription;
+                    break;
+                }
+
+            case false:
+                {
+                    duration = statusEffectInfo.cardDelay.duration;
+                    StatusSO ss = statusEffectInfo.cardDelay.statusInfo;
+
+                    statusImage.sprite = ss.statusSprite;
+                    baseDescription = ss.statusDescription;
+                    break;
+                }
+        }
 
         SetBaseDescription();
 
         // according to whether the duration is by card play or by turn, it will be assigned to the delegate event accordingly
-        if (statusEffectInfo.keywordSO.durationByTurn)
+        if ((statusEffectInfo.cardDelay.statusInfo != null &&  statusEffectInfo.cardDelay.durationByTurn)|| statusEffectInfo.durationByTurn)
         {
             entityReference.onEntityStartTurn += DecreaseDuration;
         }
@@ -62,14 +71,30 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         string extraText = "";
 
-        switch (statusEffectInfo.keywordSO.durationByTurn)
+        if (statusEffectInfo.cardDelay.statusInfo == null)
         {
-            case true:
-                extraText = "(" + duration.ToString() + " turns left)";
-                break;
-            case false:
-                extraText = "(" + duration.ToString() + " times left)";
-                break;
+            switch (statusEffectInfo.durationByTurn)
+            {
+                case true:
+                    extraText = "(" + duration.ToString() + " turns left)";
+                    break;
+                case false:
+                    extraText = "(" + duration.ToString() + " times left)";
+                    break;
+            }
+        }
+
+        else
+        {
+            switch (statusEffectInfo.cardDelay.durationByTurn)
+            {
+                case true:
+                    extraText = duration.ToString() + " turns";
+                    break;
+                case false:
+                    extraText = "playing " + duration.ToString() + " more cards.";
+                    break;
+            }
         }
 
         statusDescription.text = baseDescription + extraText;
@@ -88,7 +113,31 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
                 if (i + 1 != baseDescription.Length && baseDescription[i + 1] == ' ')
                 {
                     string front = baseDescription.Substring(0, i);
-                    string value = statusEffectInfo.value.ToString();
+
+                    string value;
+
+                    switch (statusEffectInfo.cardDelay.statusInfo == null)
+                    {
+                        case true:
+                            value = statusEffectInfo.value.ToString();
+                            break;
+
+                        case false:
+                            value = statusEffectInfo.statusSO.statusName + "(" + statusEffectInfo.value + ") to ";
+                            switch (statusEffectInfo.inflictSelf)
+                            {
+                                case true:
+                                    value += "self";
+                                    break;
+                                case false:
+                                    value += "opponent";
+                                    break;
+                            }
+
+                            break;
+                    }
+
+
                     string back = baseDescription.Substring(i + 1, baseDescription.Length - (i + 1));
 
                     baseDescription = front + value + back;
@@ -112,7 +161,7 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     /// </summary>
     public bool IsDelay()
     {
-        return statusEffectInfo.keywordSO.delay;
+        return (statusEffectInfo.cardDelay.statusInfo != null);
     }
 
     /// <summary>
@@ -120,7 +169,7 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     /// </summary>
     public bool IsDurationByTurn()
     {
-        return statusEffectInfo.keywordSO.durationByTurn;
+        return statusEffectInfo.durationByTurn;
     }
 
     /// <summary>
@@ -137,10 +186,10 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             entityReference.onEntityPlayCard -= DecreaseDuration;
             entityReference.onEntityEndTurn -= EndTurn;
             Destroy(gameObject);
-            entityReference.RemoveStatusEffect(statusEffectInfo.keywordSO.keyword);
+            entityReference.RemoveStatusEffect(statusEffectInfo.keywordType);
         }
 
-        if (statusEffectInfo.keywordSO.delay)
+        if (statusEffectInfo.cardDelay.statusInfo != null)
         {
             GameplayManager.GetInstance().ExecuteCardFromDelay(entityReference, statusEffectInfo);
         }
@@ -155,7 +204,7 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         entityReference.onEntityPlayCard -= DecreaseDuration;
         entityReference.onEntityEndTurn -= EndTurn;
-        entityReference.RemoveStatusEffect(statusEffectInfo.keywordSO.keyword);
+        entityReference.RemoveStatusEffect(statusEffectInfo.keywordType);
         Destroy(gameObject);
     }
 

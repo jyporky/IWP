@@ -188,7 +188,7 @@ public class Entity : MonoBehaviour
     {
         for (int i = 0; i < cardPlayed.keywordsList.Count; i++)
         {
-            if (cardPlayed.keywordsList[i].keywordSO.keyword == KeywordType.Glitch)
+            if (cardPlayed.keywordsList[i].keywordType == KeywordType.Glitch)
             {
                 RemoveCardObject(cardPlayed);
                 return;
@@ -355,7 +355,7 @@ public class Entity : MonoBehaviour
     {
         GameObject newStatus = Instantiate(statusPrefab, statusHolder);
         newStatus.GetComponent<StatusEffect>().SetStatus(this, statusEffectInfo);
-        statusEffectList.Add(statusEffectInfo.keywordSO.keyword, newStatus);
+        statusEffectList.Add(statusEffectInfo.keywordType, newStatus);
     }
 
     /// <summary>

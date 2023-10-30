@@ -18,8 +18,13 @@ MonoBehaviour:
   cardName: Thinking
   cardDescription: Draw 2 cards
   keywordsList:
-  - keywordSO: {fileID: 11400000, guid: a0e5ee247cf204543a12f17d07011c9d, type: 2}
+  - keywordType: 2
     value: 2
-    duration: 0
     inflictSelf: 1
-    delayDuration: 0
+    duration: 0
+    durationByTurn: 0
+    statusSO: {fileID: 11400000, guid: a0e5ee247cf204543a12f17d07011c9d, type: 2}
+    cardDelay:
+      statusInfo: {fileID: 0}
+      duration: 0
+      durationByTurn: 0
