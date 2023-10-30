@@ -18,13 +18,13 @@ MonoBehaviour:
   cardName: Haste
   cardDescription: Do 2 Damage, draw 1 card
   keywordsList:
-  - keyword: 1
+  - keywordSO: {fileID: 11400000, guid: b02df4c662204cf44bcc7c0e1da0004d, type: 2}
     value: 2
     duration: 0
     inflictSelf: 0
-    delay: 0
-  - keyword: 2
+    delayDuration: 0
+  - keywordSO: {fileID: 11400000, guid: a0e5ee247cf204543a12f17d07011c9d, type: 2}
     value: 1
     duration: 0
     inflictSelf: 1
-    delay: 0
+    delayDuration: 0

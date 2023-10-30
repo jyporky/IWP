@@ -10,16 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7b32ee111c73144a9dbe8273ce71f8d, type: 3}
-  m_Name: Self Restoration
+  m_Name: Nishikata x Takagi
   m_EditorClassIdentifier: 
-  cardSprite: {fileID: 21300000, guid: 36b8da43bab3efb4db79cd81552c49ea, type: 3}
+  cardSprite: {fileID: 21300000, guid: e738a1edf5be4034492b2edcdb2b6aad, type: 3}
   cardType: 0
-  attackCardType: 2
-  cardName: Self Restoration
-  cardDescription: Restore 3hp at the start of every turn. Last 2 turns
+  attackCardType: 0
+  cardName: 
+  cardDescription: Heal by 50 next turn. Take 5 more damage this turn.
   keywordsList:
   - keywordSO: {fileID: 11400000, guid: 4e4b6540a0df2e24d90d76c1c5a4a988, type: 2}
-    value: 3
-    duration: 2
+    value: 50
+    duration: 1
+    inflictSelf: 1
+    delayDuration: 0
+  - keywordSO: {fileID: 11400000, guid: 8de2a07ba562bd240b5c6a96e532ee6a, type: 2}
+    value: 5
+    duration: 1
     inflictSelf: 1
     delayDuration: 0

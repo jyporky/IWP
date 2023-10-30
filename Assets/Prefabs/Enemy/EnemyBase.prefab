@@ -668,7 +668,7 @@ GameObject:
   - component: {fileID: 4484999948053366266}
   - component: {fileID: 3002231048127466442}
   m_Layer: 5
-  m_Name: Bouken Da Bouken
+  m_Name: EnemyBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -724,6 +724,8 @@ MonoBehaviour:
   discardAmt: {fileID: 8306704733702408295}
   statusPrefab: {fileID: 8552563035882802448, guid: 150a5216b18df47499ce7b0d40cdf2dc, type: 3}
   statusHolder: {fileID: 4036056095912517655}
+  entitySprite: {fileID: 7632028742214338976}
+  entityNameDisplay: {fileID: 7632028740596983799}
   healthBarSlider: {fileID: 7632028741511803774}
   healthValue: {fileID: 7632028740996387311}
   shieldPointBarSlider: {fileID: 7632028742249515795}
@@ -1611,6 +1613,7 @@ GameObject:
   - component: {fileID: 7632028742214338977}
   - component: {fileID: 7632028742214338979}
   - component: {fileID: 7632028742214338976}
+  - component: {fileID: 5228809636971931455}
   m_Layer: 5
   m_Name: Enemy Sprite
   m_TagString: Untagged
@@ -1676,6 +1679,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &5228809636971931455
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7632028742214338982}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &7632028742231650496
 GameObject:
   m_ObjectHideFlags: 0

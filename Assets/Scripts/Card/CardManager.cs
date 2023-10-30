@@ -7,25 +7,25 @@ using UnityEngine.Events;
 [System.Serializable]
 public class Keyword
 {
-    public KeywordType keyword;
+    /// <summary>
+    /// The keywordSO reference which stores the keyword, byTurn boolean as well as delay boolean.
+    /// </summary>
+    public KeywordSO keywordSO;
+
     /// <summary>
     /// The value of the keyword, put negative for multipler instead
     /// </summary>
     public int value;
+
     /// <summary>
     /// State how long the effect stays, 0 is instant.
-    /// Positive indicate turns, Negative indicate by how many card played.
     /// </summary>
     public int duration;
+
     /// <summary>
     /// Inflict this effect to yourself. Default to false
     /// </summary>
     public bool inflictSelf;
-
-    /// <summary>
-    /// If set to true, wait for the delayDuration to be over before executing the effect.
-    /// </summary>
-    public bool delay;
 
     /// <summary>
     /// Define the delayDuration of the delay, positive number to indicate turns and negative number to indicate cards played.
@@ -64,20 +64,8 @@ public enum AttackCardType
     Heavy,
 }
 
-public class StatusEffectInfo
-{
-    public int duration;
-    public int value;
-
-    public bool delay;
-    public int delayDuration;
-    public Entity targetting;
-}
-
 public class CardManager : MonoBehaviour
 {
-    [SerializeField] List<StatusSpriteInfo> statusSpriteInfoList = new List<StatusSpriteInfo>();
-
     public static CardManager GetInstance()
     {
         return instance;
@@ -96,32 +84,26 @@ public class CardManager : MonoBehaviour
     }
 
     /// <summary>
+    /// this will be set to true if the forcestop function is called. It will stop any ongoing card effect if there is any.
+    /// </summary>
+    private bool forceStop = false;
+
+    /// <summary>
     /// Execute the card. The caster is the one who is attacking, and the target is the one receivng the attack
     /// </summary>
     public void ExecuteCard(CardSO card, Entity caster, Entity target)
     {
         for (int i = 0; i < card.keywordsList.Count; i++)
         {
-            if (card.keywordsList[i].keyword == KeywordType.Glitch)
+            if (card.keywordsList[i].keywordSO.keyword == KeywordType.Glitch)
                 continue;
+
+            if (forceStop)
+                break;
 
             ExecuteKeywordEffect(card.keywordsList[i], caster, target);
         }
-    }
-
-    /// <summary>
-    /// Execute the card 
-    /// </summary>
-    public void ExecuteCardFromDelay(Entity caster, StatusEffectInfo statusInfo, KeywordType whichStatus)
-    {
-        Keyword kw = new Keyword();
-        kw.keyword = whichStatus;
-        kw.value = statusInfo.value;
-        kw.duration = statusInfo.duration;
-        kw.inflictSelf = true;
-        kw.delay = false;
-        kw.delayDuration = 0;
-        ExecuteKeywordEffect(kw, caster, statusInfo.targetting);
+        forceStop = false;
     }
 
     /// <summary>
@@ -130,11 +112,10 @@ public class CardManager : MonoBehaviour
     public void ExecuteKeywordEffect(Keyword keyword, Entity caster, Entity target)
     {
         int kwValue = keyword.value;
-        KeywordType kw = keyword.keyword;
+        KeywordType kw = keyword.keywordSO.keyword;
         int duration = keyword.duration;
         bool inflictSelf = keyword.inflictSelf;
-        bool delay = keyword.delay;
-        int delayduration = keyword.delayDuration;
+        bool delay = keyword.keywordSO.delay;
 
         Entity targetEntity = GetTarget(caster, target, inflictSelf);
 
@@ -160,42 +141,25 @@ public class CardManager : MonoBehaviour
 
         else
         {
-            StatusEffectInfo newStatusEffectInfo = new StatusEffectInfo();
-            newStatusEffectInfo.value = kwValue;
-            newStatusEffectInfo.duration = duration;
-            newStatusEffectInfo.delay = delay;
-            newStatusEffectInfo.delayDuration = delayduration;
-            newStatusEffectInfo.targetting = targetEntity;
-
             // if there is no delay. Simply add those debuff to the target
             if (!delay)
             {
-                targetEntity.AddStatusEffect(kw, newStatusEffectInfo);
+                targetEntity.AddStatusEffect(keyword);
             }
             // if there is a delay, show it to themselves
             else
             {
-                caster.AddStatusEffect(kw, newStatusEffectInfo);
+                caster.AddStatusEffect(keyword);
             }
         }
     }
 
     /// <summary>
-    /// Get the sprite of the status effect. Requires the statusEffectInfo as well as who is the one having the status.
+    /// Force stop any card effect that is still taking place
     /// </summary>
-    public StatusSpriteInfo GetStatusSpriteInfo(StatusEffectInfo statusEffect, KeywordType statusType)
+    public void ForceStopCardEffect()
     {
-        for (int i = 0; i < statusSpriteInfoList.Count; i++)
-        {
-            if (statusSpriteInfoList[i].whichStatus == statusType &&
-                statusSpriteInfoList[i].isDelay == statusEffect.delay &&
-                statusSpriteInfoList[i].byTurn == (statusEffect.duration > 0))
-            {
-                return statusSpriteInfoList[i];
-            }
-        }
-
-        return null;
+        forceStop = true;
     }
 
     /// <summary>
@@ -208,17 +172,4 @@ public class CardManager : MonoBehaviour
         else
             return target;
     }
-}
-
-[System.Serializable]
-public class StatusSpriteInfo
-{
-    public string statusName;
-    [TextArea]
-    public string statusDescription;
-    public Sprite statusSprite;
-    [Header("Card Info")]
-    public KeywordType whichStatus;
-    public bool isDelay;
-    public bool byTurn;
 }

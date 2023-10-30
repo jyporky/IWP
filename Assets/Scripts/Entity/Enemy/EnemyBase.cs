@@ -43,6 +43,8 @@ public class EnemyBase : Entity
         maxSP = enemySOInfo.enemySP;
         currentSP = maxSP;
         level = enemySOInfo.level;
+        entitySprite.sprite = enemySOInfo.enemySprite;
+        entityNameDisplay.text = enemySOInfo.enemyName + "(lv " + enemySOInfo.level + ")";
         List<CardSO> cardList = enemySOInfo.enemyDeck;
 
         for (int i = 0; i < cardList.Count; i++)
@@ -56,6 +58,10 @@ public class EnemyBase : Entity
         base.ChangeHealth(healthChanged);
         healthBarSlider.value = (float)currentHP / maxHP;
         healthValue.text = currentHP.ToString() + "/" + maxHP.ToString();
+        if (currentHP <= 0)
+        {
+            StartCoroutine(EnemyDefeated());
+        }
     }
 
     public override void ChangeShieldPoint(int shieldPointChanged)
@@ -90,5 +96,41 @@ public class EnemyBase : Entity
         {
             gm.EndEnemyTurn();
         }
+    }
+
+    /// <summary>
+    /// Play some animation of the enemy being defeated
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator EnemyDefeated()
+    {
+        int iteration = 7;
+        float baseBlinkTimer = 0.2f;
+        float blinkTimer = baseBlinkTimer;
+        float changeBy = -1;
+        CanvasGroup enemySpriteCG = entitySprite.GetComponent<CanvasGroup>();
+
+        while (iteration != 0)
+        {
+            blinkTimer += changeBy * Time.deltaTime;
+
+            if (blinkTimer <= 0)
+            {
+                changeBy = 1;
+                iteration--;
+            }    
+            else if (blinkTimer >= baseBlinkTimer)
+            {
+                changeBy = -1;
+                iteration--;
+            }
+
+            enemySpriteCG.alpha = Mathf.Lerp(0, 1, blinkTimer/ baseBlinkTimer);
+            yield return null;
+        }
+
+        GameplayManager.GetInstance().CurrentEnemyDied(this);
+        GameplayManager.GetInstance().onEnemyPlay -= ExecuteTurn;
+        Destroy(gameObject);
     }
 }

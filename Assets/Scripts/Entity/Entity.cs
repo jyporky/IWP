@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class Entity : MonoBehaviour
 {
@@ -31,6 +32,10 @@ public class Entity : MonoBehaviour
     [Header("StatusEffect")]
     [SerializeField] GameObject statusPrefab;
     [SerializeField] Transform statusHolder;
+
+    [Header("Entity Information")]
+    [SerializeField] protected Image entitySprite;
+    [SerializeField] protected TextMeshProUGUI entityNameDisplay;
 
     public delegate void OnEntityStartTurn();
     /// <summary>
@@ -81,7 +86,7 @@ public class Entity : MonoBehaviour
         currentHP += healthChanged;
         if (noDelay(KeywordType.Marked) && healthChanged < 0)
         {
-            currentHP += statusEffectList[KeywordType.Marked].GetComponent<StatusEffect>().GetValue();
+            currentHP -= statusEffectList[KeywordType.Marked].GetComponent<StatusEffect>().GetValue();
         }
 
         if (currentHP > maxHP)
@@ -183,7 +188,7 @@ public class Entity : MonoBehaviour
     {
         for (int i = 0; i < cardPlayed.keywordsList.Count; i++)
         {
-            if (cardPlayed.keywordsList[i].keyword == KeywordType.Glitch)
+            if (cardPlayed.keywordsList[i].keywordSO.keyword == KeywordType.Glitch)
             {
                 RemoveCardObject(cardPlayed);
                 return;
@@ -346,12 +351,11 @@ public class Entity : MonoBehaviour
     /// Add a status effect to the entity. when stating duration value, positive mean turn, negative means by amt of cards. Note that amt of cards
     /// will reset when player end their turn.
     /// </summary>
-    public void AddStatusEffect(KeywordType statusType, StatusEffectInfo statusEffectInfo)
+    public void AddStatusEffect(Keyword statusEffectInfo)
     {
         GameObject newStatus = Instantiate(statusPrefab, statusHolder);
-        newStatus.GetComponent<StatusEffect>().SetStatus(this, statusType, statusEffectInfo);
-
-        statusEffectList.Add(statusType, newStatus);
+        newStatus.GetComponent<StatusEffect>().SetStatus(this, statusEffectInfo);
+        statusEffectList.Add(statusEffectInfo.keywordSO.keyword, newStatus);
     }
 
     /// <summary>
@@ -402,7 +406,7 @@ public class Entity : MonoBehaviour
         if (noDelay(KeywordType.Damage))
         {
             StatusEffect statusEffect = statusEffectList[KeywordType.Damage].GetComponent<StatusEffect>();
-            if (statusEffect.GetDuration() > 0 && !byCardPlayed || statusEffect.GetDuration() < 0 && byCardPlayed)
+            if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
             {
                 ChangeHealth(-statusEffect.GetValue());
             }
@@ -411,7 +415,7 @@ public class Entity : MonoBehaviour
         if (noDelay(KeywordType.Heal))
         {
             StatusEffect statusEffect = statusEffectList[KeywordType.Heal].GetComponent<StatusEffect>();
-            if (statusEffect.GetDuration() > 0 && !byCardPlayed || statusEffect.GetDuration() < 0 && byCardPlayed)
+            if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
             {
                 ChangeHealth(statusEffect.GetValue());
             }
@@ -420,7 +424,7 @@ public class Entity : MonoBehaviour
         if (noDelay(KeywordType.Draw_Card))
         {
             StatusEffect statusEffect = statusEffectList[KeywordType.Draw_Card].GetComponent<StatusEffect>();
-            if (statusEffect.GetDuration() > 0 && !byCardPlayed || statusEffect.GetDuration() < 0 && byCardPlayed)
+            if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
             {
                 DrawCardFromDeck(statusEffect.GetValue());
             }
@@ -429,10 +433,24 @@ public class Entity : MonoBehaviour
         if (noDelay(KeywordType.Gain_SP))
         {
             StatusEffect statusEffect = statusEffectList[KeywordType.Gain_SP].GetComponent<StatusEffect>();
-            if (statusEffect.GetDuration() > 0 && !byCardPlayed || statusEffect.GetDuration() < 0 && byCardPlayed)
+            if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
             {
                 ChangeShieldPoint(statusEffect.GetValue());
             }
         }
+    }
+
+    /// <summary>
+    /// Reshuffle cards. Remove all status effect.
+    /// </summary>
+    public void RefreshStatusAndDeck()
+    {
+        foreach (KeyValuePair<KeywordType, GameObject> kw in statusEffectList)
+        {
+            Destroy(kw.Value);
+        }
+
+        statusEffectList.Clear();
+        ReshuffleDeck();
     }
 }

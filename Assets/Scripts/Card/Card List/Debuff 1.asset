@@ -19,9 +19,8 @@ MonoBehaviour:
   cardDescription: Do 1 damage to yourself for every card you play afterward (Up
     to 3 times)
   keywordsList:
-  - keyword: 1
+  - keywordSO: {fileID: 11400000, guid: 176bf01142530a24ebafa36146dd36af, type: 2}
     value: 1
-    duration: -3
+    duration: 3
     inflictSelf: 0
-    delay: 0
     delayDuration: 0

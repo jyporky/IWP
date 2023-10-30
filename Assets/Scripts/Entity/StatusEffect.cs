@@ -10,51 +10,48 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     [SerializeField] Image statusImage;
     [SerializeField] TextMeshProUGUI statusDescription;
     [SerializeField] GameObject textBoxDescription;
-    private StatusEffectInfo statusEffectInfo;
-    private KeywordType whichStatus;
+    private Keyword statusEffectInfo;
     private Entity entityReference;
     private string baseDescription;
+    private int duration;
 
     /// <summary>
     /// Set up the status effect
     /// </summary>
-    public void SetStatus(Entity entity, KeywordType keywordType, StatusEffectInfo statusInfo)
+    public void SetStatus(Entity entity, Keyword statusInfo)
     {
         textBoxDescription.SetActive(false);
+        // Assign the references
         entityReference = entity;
-        whichStatus = keywordType;
         statusEffectInfo = statusInfo;
-        StatusSpriteInfo tempSpriteInfo = CardManager.GetInstance().GetStatusSpriteInfo(statusEffectInfo, whichStatus);
 
-        if (tempSpriteInfo != null)
+        // assign the duration value acoording to whether it is delay or not
+        switch (statusEffectInfo.keywordSO.delay)
         {
-            statusImage.sprite = tempSpriteInfo.statusSprite;
-            baseDescription = tempSpriteInfo.statusName + ":" + tempSpriteInfo.statusDescription;
+            case true:
+                duration = statusEffectInfo.delayDuration;
+                break;
+            case false:
+                duration = statusEffectInfo.duration;
+                break;
         }
+
+        // Update the display
+        statusImage.sprite = statusEffectInfo.keywordSO.statusSprite;
+        baseDescription = statusEffectInfo.keywordSO.statusName + ":" + statusEffectInfo.keywordSO.statusDescription;
+
         SetBaseDescription();
 
-        if (statusEffectInfo.delay)
+        // according to whether the duration is by card play or by turn, it will be assigned to the delegate event accordingly
+        if (statusEffectInfo.keywordSO.durationByTurn)
         {
-            if (statusEffectInfo.delay && statusEffectInfo.delayDuration > 0)
-                entityReference.onEntityStartTurn += DecreaseTurn;
-
-            else if (statusEffectInfo.delay && statusEffectInfo.delayDuration < 0)
-            {
-                entityReference.onEntityPlayCard += DecreaseCardPlayed;
-                entityReference.onEntityEndTurn += EndTurn;
-            }
+            entityReference.onEntityStartTurn += DecreaseDuration;
         }
 
         else
         {
-            if (statusEffectInfo.duration > 0)
-                entityReference.onEntityStartTurn += DecreaseTurn;
-
-            else if (statusEffectInfo.duration < 0)
-            {
-                entityReference.onEntityPlayCard += DecreaseCardPlayed;
-                entityReference.onEntityEndTurn += EndTurn;
-            }
+            entityReference.onEntityPlayCard += DecreaseDuration;
+            entityReference.onEntityEndTurn += EndTurn;
         }
     }
 
@@ -65,22 +62,14 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         string extraText = "";
 
-        if (!statusEffectInfo.delay)
+        switch (statusEffectInfo.keywordSO.durationByTurn)
         {
-            if (statusEffectInfo.duration > 0)
-                extraText = "(" + statusEffectInfo.duration.ToString() + " turns left)";
-
-            else if (statusEffectInfo.duration < 0)
-                extraText = "(" + (-statusEffectInfo.duration).ToString() + " times left)";
-        }
-
-        else
-        {
-            if (statusEffectInfo.delayDuration > 0)
-                extraText = "(" + statusEffectInfo.delayDuration.ToString() + " turns left)";
-
-            else if (statusEffectInfo.delayDuration < 0)
-                extraText = "(" + (-statusEffectInfo.delayDuration).ToString() + " times left)";
+            case true:
+                extraText = "(" + duration.ToString() + " turns left)";
+                break;
+            case false:
+                extraText = "(" + duration.ToString() + " times left)";
+                break;
         }
 
         statusDescription.text = baseDescription + extraText;
@@ -123,85 +112,39 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     /// </summary>
     public bool IsDelay()
     {
-        return statusEffectInfo.delay;
+        return statusEffectInfo.keywordSO.delay;
     }
 
     /// <summary>
-    /// Get the duration of the status.
+    /// Return true if the duration is by turn. Return false if the duration is by cards played
     /// </summary>
-    public int GetDuration()
+    public bool IsDurationByTurn()
     {
-        return statusEffectInfo.duration;
+        return statusEffectInfo.keywordSO.durationByTurn;
     }
 
     /// <summary>
-    /// Decrease the number of turns in the duration of the keyword. If the duration reaches 0, the effect varies.
-    /// Delay duration hits 0: activate card effect. Duration hits 0: Destroy this status effect.
+    /// Decrease the duration of this status effect. If it hits 0, it will delete itself and the dictonary of that keyword in the Entity class.
+    /// If there is a delay, execute the card effect.
     /// </summary>
-    void DecreaseTurn()
+    void DecreaseDuration()
     {
-        switch (statusEffectInfo.delay)
+        duration--;
+
+        if (duration <= 0)
         {
-            case true:
-                {
-                    statusEffectInfo.delayDuration--;
-
-                    if (statusEffectInfo.delayDuration <= 0)
-                    {
-                        entityReference.onEntityStartTurn -= DecreaseTurn;
-                        Destroy(gameObject);
-                        entityReference.RemoveStatusEffect(whichStatus);
-                        CardManager.GetInstance().ExecuteCardFromDelay(entityReference, statusEffectInfo, whichStatus);
-                    }
-                }
-                break;
-
-            case false:
-                {
-                    statusEffectInfo.duration--;
-
-                    if (statusEffectInfo.duration <= 0)
-                    {
-                        entityReference.onEntityStartTurn -= DecreaseTurn;
-                        Destroy(gameObject);
-                        entityReference.RemoveStatusEffect(whichStatus);
-                    }
-                }
-                break;
+            entityReference.onEntityStartTurn -= DecreaseDuration;
+            entityReference.onEntityPlayCard -= DecreaseDuration;
+            entityReference.onEntityEndTurn -= EndTurn;
+            Destroy(gameObject);
+            entityReference.RemoveStatusEffect(statusEffectInfo.keywordSO.keyword);
         }
-        UpdateText();
-    }
 
-    /// <summary>
-    /// Decrease the amount of card play duration for the effect. If the card effect requires 3 cards, playing 1 reducing it to 2.
-    /// </summary>
-    void DecreaseCardPlayed()
-    {
-        switch (statusEffectInfo.delay)
+        if (statusEffectInfo.keywordSO.delay)
         {
-            case true:
-                {
-                    statusEffectInfo.delayDuration++;
-
-                    if (statusEffectInfo.delayDuration >= 0)
-                    {
-                        EndTurn();
-                        CardManager.GetInstance().ExecuteCardFromDelay(entityReference, statusEffectInfo, whichStatus);
-                    }
-                }
-                break;
-
-            case false:
-                {
-                    statusEffectInfo.duration++;
-
-                    if (statusEffectInfo.duration >= 0)
-                    {
-                        EndTurn();
-                    }
-                }
-                break;
+            GameplayManager.GetInstance().ExecuteCardFromDelay(entityReference, statusEffectInfo);
         }
+
         UpdateText();
     }
 
@@ -210,9 +153,9 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     /// </summary>
     void EndTurn()
     {
-        entityReference.onEntityPlayCard -= DecreaseCardPlayed;
+        entityReference.onEntityPlayCard -= DecreaseDuration;
         entityReference.onEntityEndTurn -= EndTurn;
-        entityReference.RemoveStatusEffect(whichStatus);
+        entityReference.RemoveStatusEffect(statusEffectInfo.keywordSO.keyword);
         Destroy(gameObject);
     }
 

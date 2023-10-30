@@ -59,6 +59,10 @@ public class Player : Entity
         base.ChangeHealth(healthChanged);
         healthBarSlider.value = (float)currentHP / maxHP;
         healthValue.text = currentHP.ToString() + "/" + maxHP.ToString();
+        if (currentHP <= 0)
+        {
+            GameplayManager.GetInstance().SetGameOver(true);
+        }
     }
 
     public override void ChangeShieldPoint(int shieldPointChanged)

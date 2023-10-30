@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7b32ee111c73144a9dbe8273ce71f8d, type: 3}
-  m_Name: Slap
+  m_Name: Double Tap
   m_EditorClassIdentifier: 
-  cardSprite: {fileID: 21300000, guid: 1644ac38aac3104429b3ff4c4c4af212, type: 3}
+  cardSprite: {fileID: 21300000, guid: 2a3f9064f4fbe3d45ba6e330b6c66903, type: 3}
   cardType: 0
-  attackCardType: 2
-  cardName: Slap
-  cardDescription: Do 3 damage, heal for the damage dealt
+  attackCardType: 0
+  cardName: Double Tap
+  cardDescription: Do 3 damage 2 times.
   keywordsList:
   - keywordSO: {fileID: 11400000, guid: b02df4c662204cf44bcc7c0e1da0004d, type: 2}
     value: 3
     duration: 0
     inflictSelf: 0
     delayDuration: 0
-  - keywordSO: {fileID: 11400000, guid: 9b88811f4e784fe428e6d549ed77ce22, type: 2}
+  - keywordSO: {fileID: 11400000, guid: b02df4c662204cf44bcc7c0e1da0004d, type: 2}
     value: 3
     duration: 0
-    inflictSelf: 1
+    inflictSelf: 0
     delayDuration: 0

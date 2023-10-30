@@ -18,5 +18,8 @@ MonoBehaviour:
   cardName: Basic Attack
   cardDescription: Deal 2 Damage
   keywordsList:
-  - keyword: 1
+  - keywordSO: {fileID: 11400000, guid: b02df4c662204cf44bcc7c0e1da0004d, type: 2}
     value: 2
+    duration: 0
+    inflictSelf: 0
+    delayDuration: 0

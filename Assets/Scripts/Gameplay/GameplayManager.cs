@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameplayManager : MonoBehaviour
 {
@@ -11,11 +12,20 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] GameObject selectedCardPrefab;
 
     [Header("Object Reference")]
+    [SerializeField] Transform selectedCardSpawnTransform;
     [SerializeField] Transform playerArea;
     [SerializeField] Transform enemyArea;
     [SerializeField] EnemySO tempEnemySOReference;
     [SerializeField] Button endTurnButton;
     [SerializeField] Button reshuffledDeckButton;
+
+    [Header("Gameover Screen")]
+    [SerializeField] GameObject gameOverScreen;
+    [SerializeField] TextMeshProUGUI gameOverTitleDisplay;
+
+    [Header("Enemy Left")]
+    [SerializeField] string baseEnemyLeftDisplayText;
+    [SerializeField] TextMeshProUGUI enemyLeftCounterDisplay;
 
     private GameObject selectedCard;
     Coroutine draggingCards;
@@ -46,7 +56,7 @@ public class GameplayManager : MonoBehaviour
         instance = this;
 
         // create the selectedCard gameobject
-        selectedCard = Instantiate(selectedCardPrefab, gameObject.transform);
+        selectedCard = Instantiate(selectedCardPrefab, reshuffledDeckButton.transform);
         selectedCard.SetActive(false);
     }
 
@@ -55,14 +65,20 @@ public class GameplayManager : MonoBehaviour
         // create the player and enemy reference
         player = Instantiate(playerGameplayReference, playerArea);
         // add the enemy reference into a list. Should an enemy die, the next one will be loaded in
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 2; i++)
         {
             GameObject enemyReference = EnemyManager.GetInstance().GetEnemyPrefabViaEnemySO(tempEnemySOReference);
             GameObject newEnemy = Instantiate(enemyReference, enemyArea);
+            newEnemy.name += i.ToString();
             enemyObjectReferenceList.Add(newEnemy);
             newEnemy.GetComponent<EnemyBase>().LoadStatsAndDeck(tempEnemySOReference);
+            newEnemy.SetActive(false);
         }
+
+        UpdateEnemyLeftDisplay();
+        gameOverScreen.SetActive(false);
         enemy = enemyObjectReferenceList[0];
+        enemy.SetActive(true);
         SetEnemyHitbox();
 
         TurnStart();
@@ -230,5 +246,80 @@ public class GameplayManager : MonoBehaviour
     {
         PLAYER_TURN,
         ENEMY_TURN,
+    }
+
+    /// <summary>
+    /// According to who the caster is, as well as whether it is inflict self, execute the effect by calling the cardManager.
+    /// </summary>
+    public void ExecuteCardFromDelay(Entity caster, Keyword statusInfo)
+    {
+        // if it is self inflict, execute the effect to itself
+        switch (statusInfo.inflictSelf)
+        {
+            case true:
+                CardManager.GetInstance().ExecuteKeywordEffect(statusInfo, caster, caster);
+                break;
+
+            // if it is not self inflict, find who the caster is and slot the target accordingly.
+            case false:
+                {
+                    if (caster.gameObject.GetComponent<Player>())
+                    {
+                        CardManager.GetInstance().ExecuteKeywordEffect(statusInfo, enemy.GetComponent<Entity>(), caster);
+                    }
+                    else
+                    {
+                        CardManager.GetInstance().ExecuteKeywordEffect(statusInfo, player.GetComponent<Entity>(), caster);
+                    }
+                }
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Call this function when the current enemy the player is fighting died. Change the current enemy to the next enemy in the list as well as 
+    /// reshuffle the player deck. If there is no next enemy in the list, the player clear the run.
+    /// </summary>
+    public void CurrentEnemyDied(Entity reference)
+    {
+        enemyObjectReferenceList.Remove(reference.gameObject);
+        if (enemyObjectReferenceList.Count > 0)
+        {
+            CardManager.GetInstance().ForceStopCardEffect();
+            player.GetComponent<Entity>().RefreshStatusAndDeck();
+            enemy = enemyObjectReferenceList[0];
+            enemy.SetActive(true);
+            EndEnemyTurn();
+        }
+        else
+        {
+            SetGameOver(false);
+        }
+        UpdateEnemyLeftDisplay();
+    }
+
+    /// <summary>
+    /// Update the text display of the enemies left.
+    /// </summary>
+    void UpdateEnemyLeftDisplay()
+    {
+        enemyLeftCounterDisplay.text = baseEnemyLeftDisplayText + enemyObjectReferenceList.Count.ToString();
+    }
+
+    /// <summary>
+    /// Set the game to a gameOver state. If the playerLose boolean is true, trigger run fail. Else trigger run clear.
+    /// </summary>
+    public void SetGameOver(bool playerLose)
+    {
+        gameOverScreen.SetActive(true);
+        switch (playerLose)
+        {
+            case true:
+                gameOverTitleDisplay.text = "Run Fail!";
+                break;
+            case false:
+                gameOverTitleDisplay.text = "Run Success!";
+                break;
+        }
     }
 }
