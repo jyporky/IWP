@@ -59,7 +59,7 @@ public class Entity : MonoBehaviour
     /// Store the list of status effect the entity has. Postive value suggest turns, negative value suggest by cards played.
     /// If the value reaches 0, that effect no longer exist and will be removed.
     /// </summary>
-    protected Dictionary<KeywordType, GameObject> statusEffectList = new Dictionary<KeywordType, GameObject>();
+    protected Dictionary<KeywordType, List<GameObject>> statusEffectList = new Dictionary<KeywordType, List<GameObject>>();
 
     /// <summary>
     /// Get the max HP of the Entity
@@ -84,9 +84,12 @@ public class Entity : MonoBehaviour
     public virtual void ChangeHealth(int healthChanged)
     {
         currentHP += healthChanged;
-        if (noDelay(KeywordType.Marked) && healthChanged < 0)
+        if (statusEffectList.ContainsKey(KeywordType.Marked) && healthChanged < 0)
         {
-            currentHP -= statusEffectList[KeywordType.Marked].GetComponent<StatusEffect>().GetValue();
+            for (int i = 0; i < statusEffectList[KeywordType.Marked].Count; i++)
+            {
+                currentHP -= statusEffectList[KeywordType.Marked][i].GetComponent<StatusEffect>().GetValue();
+            }
         }
 
         if (currentHP > maxHP)
@@ -353,17 +356,68 @@ public class Entity : MonoBehaviour
     /// </summary>
     public void AddStatusEffect(Keyword statusEffectInfo)
     {
-        GameObject newStatus = Instantiate(statusPrefab, statusHolder);
-        newStatus.GetComponent<StatusEffect>().SetStatus(this, statusEffectInfo);
-        statusEffectList.Add(statusEffectInfo.keywordType, newStatus);
+        Keyword newKeyword = new Keyword(statusEffectInfo);
+        // check to see if the status effect with that gameobject exist. If it exist and has the same duration, stack the value.
+        if (statusEffectList.ContainsKey(newKeyword.keywordType) && GetExistingStatusEffect(newKeyword) != null)
+        {
+            GameObject statusReference = GetExistingStatusEffect(newKeyword);
+            statusReference.GetComponent<StatusEffect>().UpdateValue(newKeyword.value);
+        }
+
+        else
+        {
+            GameObject newStatus = Instantiate(statusPrefab, statusHolder);
+            newStatus.GetComponent<StatusEffect>().SetStatus(this, newKeyword);
+
+            // if there is already a list in that key, simply add the new status to that list
+            if (statusEffectList.ContainsKey(newKeyword.keywordType))
+            {
+                statusEffectList[newKeyword.keywordType].Add(newStatus);
+            }
+            // if there is no list in that key, create the new status, then create a dictionary list and add it to the statuseffectList.
+            else
+            {
+                List<GameObject> newStatusList = new List<GameObject>();
+                newStatusList.Add(newStatus);
+                statusEffectList.Add(newKeyword.keywordType, newStatusList);
+            }
+        }
     }
 
     /// <summary>
-    /// When a status effect expire, call this function to remove it from the dictionary
+    /// Get any existing gameobject with the status effect IF the duration matches as well as whether they are delayed.
     /// </summary>
-    public void RemoveStatusEffect(KeywordType removeWhatStatus)
+    /// <returns></returns>
+    GameObject GetExistingStatusEffect(Keyword statusEffect)
     {
-        statusEffectList.Remove(removeWhatStatus);
+
+
+        List<GameObject> statusList = statusEffectList[statusEffect.keywordType];
+        for (int i = 0; i < statusList.Count; i++)
+        {
+            StatusEffect se = statusList[i].GetComponent<StatusEffect>();
+            if ((statusEffect.durationByTurn == se.IsDurationByTurn())
+                && (statusEffect.duration == se.GetDuration())
+                && (statusEffect.cardDelay.statusInfo != null == se.IsDelay()))
+            {
+                return statusList[i];
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// When a status effect expire, call this function to remove the object from the keyword status list. If that keyword status list is empty. Delete
+    /// that keyword from the dictionary.
+    /// </summary>
+    public void RemoveStatusEffect(KeywordType removeWhatStatus, GameObject objectReference)
+    {
+        statusEffectList[removeWhatStatus].Remove(objectReference);
+        if (statusEffectList[removeWhatStatus].Count == 0)
+        {
+            statusEffectList.Remove(removeWhatStatus);
+        }
     }
 
     /// <summary>
@@ -373,11 +427,22 @@ public class Entity : MonoBehaviour
     {
         int finalDmg = attackdmg;
         // calculate the attack buff modifier, if it is not a delay
-        if (noDelay(KeywordType.Strength))
-            finalDmg += statusEffectList[KeywordType.Strength].GetComponent<StatusEffect>().GetValue();
+        if (statusEffectList.ContainsKey(KeywordType.Strength))
+        {
+            for (int i = 0; i < statusEffectList[KeywordType.Strength].Count; i++)
+            {
+                finalDmg += statusEffectList[KeywordType.Strength][i].GetComponent<StatusEffect>().GetValue();
+            }
+        }
+
         // caculate the attack debuff modifier, if it is not a delay
-        if (noDelay(KeywordType.Weaken))
-            finalDmg -= statusEffectList[KeywordType.Weaken].GetComponent<StatusEffect>().GetValue();
+        if (statusEffectList.ContainsKey(KeywordType.Weaken))
+        {
+            for (int i = 0; i < statusEffectList[KeywordType.Weaken].Count; i++)
+            {
+                finalDmg += statusEffectList[KeywordType.Weaken][i].GetComponent<StatusEffect>().GetValue();
+            }
+        }
 
         // if dmg is negative, set it to 0
         if (finalDmg < 0)
@@ -387,55 +452,55 @@ public class Entity : MonoBehaviour
     }
 
     /// <summary>
-    /// Return true, if there is no delay in the keywordtype. Return false if the keywordtype do not exist or the keywordtype has a delay
-    /// </summary>
-    /// <returns></returns>
-    bool noDelay(KeywordType kw)
-    {
-        if (!statusEffectList.ContainsKey(kw) || statusEffectList[kw].GetComponent<StatusEffect>().IsDelay())
-            return false;
-
-        return true;
-    }
-
-    /// <summary>
     /// Trigger the effect of damage, gain_Sp, heal and draw
     /// </summary>
     void TriggerEffect(bool byCardPlayed)
     {
-        if (noDelay(KeywordType.Damage))
+        if (statusEffectList.ContainsKey(KeywordType.Damage))
         {
-            StatusEffect statusEffect = statusEffectList[KeywordType.Damage].GetComponent<StatusEffect>();
-            if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
+            for (int i = 0; i < statusEffectList[KeywordType.Damage].Count; i++)
             {
-                ChangeHealth(-statusEffect.GetValue());
+                StatusEffect statusEffect = statusEffectList[KeywordType.Damage][i].GetComponent<StatusEffect>();
+                if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
+                {
+                    ChangeHealth(-statusEffect.GetValue());
+                }
             }
         }
 
-        if (noDelay(KeywordType.Heal))
+        if (statusEffectList.ContainsKey(KeywordType.Heal))
         {
-            StatusEffect statusEffect = statusEffectList[KeywordType.Heal].GetComponent<StatusEffect>();
-            if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
+            for (int i = 0; i < statusEffectList[KeywordType.Heal].Count; i++)
             {
-                ChangeHealth(statusEffect.GetValue());
+                StatusEffect statusEffect = statusEffectList[KeywordType.Heal][i].GetComponent<StatusEffect>();
+                if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
+                {
+                    ChangeHealth(statusEffect.GetValue());
+                }
             }
         }
 
-        if (noDelay(KeywordType.Draw_Card))
+        if (statusEffectList.ContainsKey(KeywordType.Draw_Card))
         {
-            StatusEffect statusEffect = statusEffectList[KeywordType.Draw_Card].GetComponent<StatusEffect>();
-            if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
+            for (int i = 0; i < statusEffectList[KeywordType.Draw_Card].Count; i++)
             {
-                DrawCardFromDeck(statusEffect.GetValue());
+                StatusEffect statusEffect = statusEffectList[KeywordType.Draw_Card][i].GetComponent<StatusEffect>();
+                if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
+                {
+                    DrawCardFromDeck(statusEffect.GetValue());
+                }
             }
         }
 
-        if (noDelay(KeywordType.Gain_SP))
+        if (statusEffectList.ContainsKey(KeywordType.Gain_SP))
         {
-            StatusEffect statusEffect = statusEffectList[KeywordType.Gain_SP].GetComponent<StatusEffect>();
-            if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
+            for (int i = 0; i < statusEffectList[KeywordType.Gain_SP].Count; i++)
             {
-                ChangeShieldPoint(statusEffect.GetValue());
+                StatusEffect statusEffect = statusEffectList[KeywordType.Gain_SP][i].GetComponent<StatusEffect>();
+                if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
+                {
+                    ChangeShieldPoint(statusEffect.GetValue());
+                }
             }
         }
     }
@@ -445,9 +510,12 @@ public class Entity : MonoBehaviour
     /// </summary>
     public void RefreshStatusAndDeck()
     {
-        foreach (KeyValuePair<KeywordType, GameObject> kw in statusEffectList)
+        foreach (KeyValuePair<KeywordType, List<GameObject>> kw in statusEffectList)
         {
-            Destroy(kw.Value);
+            for (int i = 0; i < kw.Value.Count; i = 0)
+            {
+                Destroy(kw.Value[0]);
+            }
         }
 
         statusEffectList.Clear();

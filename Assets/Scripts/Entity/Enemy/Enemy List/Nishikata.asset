@@ -17,4 +17,10 @@ MonoBehaviour:
   enemyHP: 120
   level: 42069
   enemySP: 0
-  enemyDeck: []
+  enemyDeck:
+  - {fileID: 11400000, guid: c6d5fb2a7a7041143bb025d820033352, type: 2}
+  - {fileID: 11400000, guid: c6d5fb2a7a7041143bb025d820033352, type: 2}
+  - {fileID: 11400000, guid: c6d5fb2a7a7041143bb025d820033352, type: 2}
+  - {fileID: 11400000, guid: c6d5fb2a7a7041143bb025d820033352, type: 2}
+  - {fileID: 11400000, guid: c6d5fb2a7a7041143bb025d820033352, type: 2}
+  - {fileID: 11400000, guid: c6d5fb2a7a7041143bb025d820033352, type: 2}

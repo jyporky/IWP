@@ -48,8 +48,9 @@ public class Keyword
 
     /// <summary>
     /// Copy all the values except the cardDelay from the keywordToCopy to the new Keyword reference.
+    /// If ignoreCardDelay is true, create a new CardDelay otherwise use the copied one.
     /// </summary>
-    public Keyword(Keyword keywordToCopy)
+    public Keyword(Keyword keywordToCopy, bool ignoreCardDelay = false)
     {
         keywordType = keywordToCopy.keywordType;
         value = keywordToCopy.value;
@@ -57,7 +58,10 @@ public class Keyword
         duration = keywordToCopy.duration;
         durationByTurn = keywordToCopy.durationByTurn;
         statusSO = keywordToCopy.statusSO;
-        cardDelay = new CardDelay();
+        if (ignoreCardDelay)
+            cardDelay = new CardDelay();
+        else
+            cardDelay = keywordToCopy.cardDelay;
     }
 }
 

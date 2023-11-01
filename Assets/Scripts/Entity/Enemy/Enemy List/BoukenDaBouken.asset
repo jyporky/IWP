@@ -12,12 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3644211d70345fa498b07bf7cc591a9c, type: 3}
   m_Name: BoukenDaBouken
   m_EditorClassIdentifier: 
-  enemyName: BoukenDaBouken
+  enemyName: Bouken Da Bouken
   enemySprite: {fileID: 21300000, guid: 36b8da43bab3efb4db79cd81552c49ea, type: 3}
   enemyHP: 69
   level: 69
   enemySP: 0
   enemyDeck:
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
   - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}

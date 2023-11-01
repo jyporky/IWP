@@ -1812,12 +1812,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalCardList:
-  - {fileID: 11400000, guid: 25e8d78ae3bc2ed418df5dabad323da3, type: 2}
   - {fileID: 11400000, guid: bb9fc8034f5f5254788ffbaf8fc3d0cd, type: 2}
-  - {fileID: 11400000, guid: ac30f058b0cf9694a98bee443e68743b, type: 2}
-  - {fileID: 11400000, guid: 8e7a50312216ea04a9b90a6ca48cbda4, type: 2}
-  - {fileID: 11400000, guid: c11e76ce0d2388845b33bc7770a47112, type: 2}
-  - {fileID: 11400000, guid: c11e76ce0d2388845b33bc7770a47112, type: 2}
+  - {fileID: 11400000, guid: bb9fc8034f5f5254788ffbaf8fc3d0cd, type: 2}
+  - {fileID: 11400000, guid: bb9fc8034f5f5254788ffbaf8fc3d0cd, type: 2}
 --- !u!114 &1601993928
 MonoBehaviour:
   m_ObjectHideFlags: 0

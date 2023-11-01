@@ -253,12 +253,11 @@ public class GameplayManager : MonoBehaviour
     /// </summary>
     public void ExecuteCardFromDelay(Entity caster, Keyword statusInfo)
     {
-        Keyword copiedKeyword = new Keyword(statusInfo);
         // if it is self inflict, execute the effect to itself
         switch (statusInfo.inflictSelf)
         {
             case true:
-                CardManager.GetInstance().ExecuteKeywordEffect(copiedKeyword, caster, caster);
+                CardManager.GetInstance().ExecuteKeywordEffect(statusInfo, caster, caster);
                 break;
 
             // if it is not self inflict, find who the caster is and slot the target accordingly.
@@ -266,11 +265,11 @@ public class GameplayManager : MonoBehaviour
                 {
                     if (caster.gameObject.GetComponent<Player>())
                     {
-                        CardManager.GetInstance().ExecuteKeywordEffect(copiedKeyword, player.GetComponent<Entity>(), enemy.GetComponent<Entity>());
+                        CardManager.GetInstance().ExecuteKeywordEffect(statusInfo, player.GetComponent<Entity>(), enemy.GetComponent<Entity>());
                     }
                     else
                     {
-                        CardManager.GetInstance().ExecuteKeywordEffect(copiedKeyword, enemy.GetComponent<Entity>(), player.GetComponent<Entity>());
+                        CardManager.GetInstance().ExecuteKeywordEffect(statusInfo, enemy.GetComponent<Entity>(), player.GetComponent<Entity>());
                     }
                 }
                 break;
