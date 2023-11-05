@@ -22,21 +22,25 @@ public class GameplayManager : MonoBehaviour
     [Header("Gameover Screen")]
     [SerializeField] GameObject gameOverScreen;
     [SerializeField] TextMeshProUGUI gameOverTitleDisplay;
-
-    [Header("Enemy Left")]
-    [SerializeField] string baseEnemyLeftDisplayText;
-    [SerializeField] TextMeshProUGUI enemyLeftCounterDisplay;
+    [SerializeField] Button ReturnToChamberButton;
 
     private GameObject selectedCard;
     Coroutine draggingCards;
 
     public delegate void OnDragging(bool changeIsSelected);
     public OnDragging onDragging;
+
+    public delegate void OnGameEnd();
+    /// <summary>
+    /// A delegate event that will unsubscribe any subscription made to any delegate event.
+    /// This is called before destroying this gameobject.
+    /// </summary>
+    public OnGameEnd onGameEnd;
+
     private GameObject player;
     private GameObject enemy;
     private Vector2 enemyMinHitbox;
     private Vector2 enemyMaxHitbox;
-    private List<GameObject> enemyObjectReferenceList = new List<GameObject>();
     private Turn currentTurn = Turn.PLAYER_TURN;
 
 
@@ -65,25 +69,18 @@ public class GameplayManager : MonoBehaviour
         // create the player and enemy reference
         player = Instantiate(playerGameplayReference, playerArea);
         // add the enemy reference into a list. Should an enemy die, the next one will be loaded in
-        for (int i = 0; i < 2; i++)
-        {
-            GameObject enemyReference = EnemyManager.GetInstance().GetEnemyPrefabViaEnemySO(tempEnemySOReference);
-            GameObject newEnemy = Instantiate(enemyReference, enemyArea);
-            newEnemy.name += i.ToString();
-            enemyObjectReferenceList.Add(newEnemy);
-            newEnemy.GetComponent<EnemyBase>().LoadStatsAndDeck(tempEnemySOReference);
-            newEnemy.SetActive(false);
-        }
-
-        UpdateEnemyLeftDisplay();
+        GameObject enemyReference = EnemyManager.GetInstance().GetEnemyPrefabViaEnemySO(tempEnemySOReference);
+        GameObject newEnemy = Instantiate(enemyReference, enemyArea);
+        newEnemy.GetComponent<EnemyBase>().LoadStatsAndDeck(tempEnemySOReference);
         gameOverScreen.SetActive(false);
-        enemy = enemyObjectReferenceList[0];
+        enemy = newEnemy;
         enemy.SetActive(true);
         SetEnemyHitbox();
-
         TurnStart();
         endTurnButton.onClick.AddListener(EndPlayerTurn);
         reshuffledDeckButton.onClick.AddListener(ReshuflePlayerDeck);
+        // link the gameover/room clear buttons
+        ReturnToChamberButton.onClick.AddListener(ReturnToChamber);
     }
 
     /// <summary>
@@ -277,36 +274,6 @@ public class GameplayManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Call this function when the current enemy the player is fighting died. Change the current enemy to the next enemy in the list as well as 
-    /// reshuffle the player deck. If there is no next enemy in the list, the player clear the run.
-    /// </summary>
-    public void CurrentEnemyDied(Entity reference)
-    {
-        enemyObjectReferenceList.Remove(reference.gameObject);
-        if (enemyObjectReferenceList.Count > 0)
-        {
-            CardManager.GetInstance().ForceStopCardEffect();
-            player.GetComponent<Entity>().RefreshStatusAndDeck();
-            enemy = enemyObjectReferenceList[0];
-            enemy.SetActive(true);
-            EndEnemyTurn();
-        }
-        else
-        {
-            SetGameOver(false);
-        }
-        UpdateEnemyLeftDisplay();
-    }
-
-    /// <summary>
-    /// Update the text display of the enemies left.
-    /// </summary>
-    void UpdateEnemyLeftDisplay()
-    {
-        enemyLeftCounterDisplay.text = baseEnemyLeftDisplayText + enemyObjectReferenceList.Count.ToString();
-    }
-
-    /// <summary>
     /// Set the game to a gameOver state. If the playerLose boolean is true, trigger run fail. Else trigger run clear.
     /// </summary>
     public void SetGameOver(bool playerLose)
@@ -315,11 +282,20 @@ public class GameplayManager : MonoBehaviour
         switch (playerLose)
         {
             case true:
-                gameOverTitleDisplay.text = "Run Fail!";
+                gameOverTitleDisplay.text = "Game Over!";
                 break;
             case false:
-                gameOverTitleDisplay.text = "Run Success!";
+                gameOverTitleDisplay.text = "Room cleared!";
                 break;
         }
+    }
+
+    /// <summary>
+    /// Destroy this gameobject.
+    /// </summary>
+    void ReturnToChamber()
+    {
+        onGameEnd?.Invoke();
+        Destroy(gameObject);
     }
 }

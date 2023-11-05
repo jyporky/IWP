@@ -6,6 +6,8 @@ using UnityEngine;
 public class EnemySO : ScriptableObject
 {
     public string enemyName;
+    [TextArea]
+    public string enemyDescription;
     public Sprite enemySprite;
     public int enemyHP;
     public int level;

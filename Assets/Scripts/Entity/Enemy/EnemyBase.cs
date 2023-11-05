@@ -129,7 +129,7 @@ public class EnemyBase : Entity
             yield return null;
         }
 
-        GameplayManager.GetInstance().CurrentEnemyDied(this);
+        GameplayManager.GetInstance().SetGameOver(false);
         GameplayManager.GetInstance().onEnemyPlay -= ExecuteTurn;
         Destroy(gameObject);
     }

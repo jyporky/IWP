@@ -17,6 +17,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     private void Start()
     {
         GameplayManager.GetInstance().onDragging += SetSelected;
+        GameplayManager.GetInstance().onGameEnd += Unsubscribe;
     }
 
     public void UpdateCardDetails(CardSO cardInfo)
@@ -69,5 +70,14 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     void SetSelected(bool isSelected)
     {
         selected = isSelected;
+    }
+
+    /// <summary>
+    /// Unsubscribe all delegate event that it is subscribed to
+    /// </summary>
+    void Unsubscribe()
+    {
+        GameplayManager.GetInstance().onDragging -= SetSelected;
+        GameplayManager.GetInstance().onGameEnd -= Unsubscribe;
     }
 }

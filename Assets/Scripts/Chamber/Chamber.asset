@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f7a459b24dca06449c2b73733e8a080, type: 3}
+  m_Name: Chamber
+  m_EditorClassIdentifier: 
+  rooms: 0100000002000000030000000200000004000000050000000000000000000000000000000400000006000000
+  minimumAmountOfRoomsList: []
+  possibleEnemyToAppearList:
+  - {fileID: 11400000, guid: 4a8e2b3045a461e4d96ffa5eebc02e38, type: 2}
+  - {fileID: 11400000, guid: 56e55c0eea9c0214c9b6331b8d730244, type: 2}

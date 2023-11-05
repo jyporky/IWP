@@ -20,6 +20,7 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     /// </summary>
     public void SetStatus(Entity entity, Keyword statusInfo)
     {
+        GameplayManager.GetInstance().onGameEnd += Unsubscribe;
         textBoxDescription.SetActive(false);
         // Assign the references
         entityReference = entity;
@@ -233,5 +234,16 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public void OnPointerExit(PointerEventData eventData)
     {
         textBoxDescription.SetActive(false);
+    }
+
+    /// <summary>
+    /// Unsubscribe from any delegate event it is subscribed to.
+    /// </summary>
+    void Unsubscribe()
+    {
+        GameplayManager.GetInstance().onGameEnd -= Unsubscribe;
+        entityReference.onEntityStartTurn -= DecreaseDuration;
+        entityReference.onEntityPlayCard -= DecreaseDuration;
+        entityReference.onEntityEndTurn -= EndTurn;
     }
 }
