@@ -13,4 +13,8 @@ public class EnemySO : ScriptableObject
     public int level;
     public int enemySP;
     public List<CardSO> enemyDeck;
+
+    [Header("Loot Drop Info")]
+    public int gearPartsDrop;
+    public int energyPointDrop;
 }

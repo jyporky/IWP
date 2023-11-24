@@ -28,7 +28,7 @@ public class EnemyBase : Entity
     {
         ChangeHealth(0);
         ChangeShieldPoint(0);
-        GameplayManager.GetInstance().onEnemyPlay += ExecuteTurn;
+        CombatManager.GetInstance().onEnemyPlay += ExecuteTurn;
         UpdateDeckAndDiscardAmountDisplay();
     }
 
@@ -85,7 +85,7 @@ public class EnemyBase : Entity
     /// </summary>
     void ExecuteTurn()
     {
-        GameplayManager gm = GameplayManager.GetInstance();
+        CombatManager gm = CombatManager.GetInstance();
         if (cardsInHandList.Count > 0)
         {
             int cardToPlay = Random.Range(0, cardsInHandList.Count);
@@ -129,8 +129,8 @@ public class EnemyBase : Entity
             yield return null;
         }
 
-        GameplayManager.GetInstance().SetGameOver(false);
-        GameplayManager.GetInstance().onEnemyPlay -= ExecuteTurn;
+        CombatManager.GetInstance().SetGameOver(false);
+        CombatManager.GetInstance().onEnemyPlay -= ExecuteTurn;
         Destroy(gameObject);
     }
 }

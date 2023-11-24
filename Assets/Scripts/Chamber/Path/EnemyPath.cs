@@ -18,6 +18,7 @@ public class EnemyPath : PathInfo
 
     public override void PathSelected()
     {
+        EnemyManager.GetInstance().SetEnemySO(enemySO);
         ChamberManager.GetInstance().InteractWithPath(PathType.ENEMY);
     }
 }

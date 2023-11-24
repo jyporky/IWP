@@ -92,7 +92,7 @@ public enum KeywordType
     Damage,
     Draw_Card,
     Heal,
-    Gain_SP,
+    Gain_Energy_Point,
     Marked,
     Strength,
     Weaken,
@@ -185,7 +185,7 @@ public class CardManager : MonoBehaviour
                 case KeywordType.Heal:
                     targetEntity.ChangeHealth(kwValue);
                     break;
-                case KeywordType.Gain_SP:
+                case KeywordType.Gain_Energy_Point:
                     targetEntity.ChangeShieldPoint(kwValue);
                     break;
             }

@@ -5,37 +5,48 @@ using UnityEngine;
 public class PlayerInfo
 {
     /// <summary>
-    ///  Store the list of cards player owned
-    /// </summary>
-    List<CardSO> listOfCards;
-    /// <summary>
     /// Store the list of cards the player has in their deck
     /// </summary>
-    List<CardSO> listOfCardsInDeck;
+    private List<CardSO> listOfCardsInDeck;
     /// <summary>
     /// The base HP of the player
     /// </summary>
-    int baseHp; 
+    private int baseHp;
     /// <summary>
-    /// The base Shield Points the player has
+    /// The base Energy Points the player has
     /// </summary>
-    int baseSP;
+    private int baseEP;
     /// <summary>
     /// The amount of HP increased, add this along with the baseHP for the maximum HP the player has
     /// </summary>
-    int increaseHP;
+    private int increaseHP;
     /// <summary>
-    /// The amount of SP increased, add this along with the baseSP for the maximum SP the player has
+    /// The amount of EP increased, add this along with the baseEP for the maximum EP the player has
     /// </summary>
-    int increaseSP;
+    int increaseEP;
+    /// <summary>
+    /// The current HP the player has
+    /// </summary>
+    private int currentHP;
+    /// <summary>
+    /// The current EP the player has
+    /// </summary>
+    private int currentEP;
+    /// <summary>
+    /// The amount of gears parts the player has
+    /// </summary>
+    private int gearPartsAmount;
 
-    public PlayerInfo(int BaseHp, int BaseSP)
+    public PlayerInfo(int BaseHp, int BaseSP, int startingGearPartsAmount)
     {
         baseHp = BaseHp;
         increaseHP = 0;
-        baseSP = BaseSP;
-        increaseSP = 0;
-        listOfCards = new List<CardSO>();
+        currentHP = baseHp;
+        baseEP = BaseSP;
+        increaseEP = 0;
+        currentEP = baseEP;
+        gearPartsAmount = startingGearPartsAmount;
+        listOfCardsInDeck = new List<CardSO>();
     }
 
     /// <summary>
@@ -43,7 +54,7 @@ public class PlayerInfo
     /// </summary>
     public void AddToListOfCards(CardSO cardToAdd)
     {
-        listOfCards.Add(cardToAdd);
+        listOfCardsInDeck.Add(cardToAdd);
     }
 
     /// <summary>
@@ -51,11 +62,11 @@ public class PlayerInfo
     /// </summary>
     public void RemoveFromListOfCards(CardSO cardRemoved)
     {
-        for (int i = 0; i < listOfCards.Count; i++)
+        for (int i = 0; i < listOfCardsInDeck.Count; i++)
         {
-            if (cardRemoved == listOfCards[i])
+            if (cardRemoved == listOfCardsInDeck[i])
             {
-                listOfCards.RemoveAt(i);
+                listOfCardsInDeck.RemoveAt(i);
                 break;
             }
         }
@@ -66,7 +77,7 @@ public class PlayerInfo
     /// </summary>
     public List<CardSO> GetCardListFromDeck()
     {
-        return listOfCards;
+        return listOfCardsInDeck;
     }
 
     /// <summary>
@@ -78,10 +89,64 @@ public class PlayerInfo
     }
 
     /// <summary>
+    /// Get the Current HP of the player
+    /// </summary>
+    /// <returns></returns>
+    public int GetCurrentHP()
+    {
+        return currentHP;
+    }
+
+    /// <summary>
+    /// Set the current HP of the player
+    /// </summary>
+    public void SetCurrentHP(int newHPValue)
+    {
+        currentHP = newHPValue;
+    }
+
+    /// <summary>
     /// Get the MaxSP of the player
     /// </summary>
-    public int GetMaxSP()
+    public int GetMaxEP()
     {
-        return baseSP + increaseSP;
+        return baseEP + increaseEP;
+    }
+
+    /// <summary>
+    /// Get the Current EP of the player
+    /// </summary>
+    /// <returns></returns>
+    public int GetCurrentEP()
+    {
+        return currentEP;
+    }
+
+    /// <summary>
+    /// Set the current EP of the player
+    /// </summary>
+    public void SetCurrentEP(int newEPValue)
+    {
+        currentEP = newEPValue;
+    }
+
+    /// <summary>
+    /// Get the amount of gear parts the player owned.
+    /// </summary>
+    /// <returns></returns>
+    public int GetGearPartsAmount()
+    {
+        return gearPartsAmount;
+    }
+
+    /// <summary>
+    /// Change the number of gear parts the player has. <br/>
+    /// Use -ve to represent a subtraction. Cannot go below 0.
+    /// </summary>
+    public void ChangeGearPartsAmount(int gearPartsChange)
+    {
+        gearPartsAmount += gearPartsChange;
+        if (gearPartsAmount < 0)
+            gearPartsAmount = 0;
     }
 }

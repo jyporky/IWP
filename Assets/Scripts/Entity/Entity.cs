@@ -212,7 +212,7 @@ public class Entity : MonoBehaviour
     {
         for (int i = 0; i < cardList.Count; i++)
         {
-            if (cardList[i].GetComponent<Card>()?.GetCardSO() == theCard)
+            if (cardList[i].GetComponent<CardBase>()?.GetCardSO() == theCard)
             {
                 Destroy(cardList[i]);
                 cardList.RemoveAt(i);
@@ -244,7 +244,7 @@ public class Entity : MonoBehaviour
     {
         for (int i = cardList.Count - 1; i >= 0; i--)
         {
-            RemoveCardObject(cardList[i].GetComponent<Card>().GetCardSO());
+            RemoveCardObject(cardList[i].GetComponent<CardBase>().GetCardSO());
         }
         MoveToDifferentList(cardsInHandList, cardsInDeckList);
         MoveToDifferentList(cardsInDiscardList, cardsInDeckList);
@@ -281,7 +281,7 @@ public class Entity : MonoBehaviour
     IEnumerator DrawCard(CardSO cardDrawn)
     {
         GameObject newCard = Instantiate(cardPrefab, cardSpawnArea);
-        newCard.GetComponent<Card>()?.UpdateCardDetails(cardDrawn);
+        newCard.GetComponent<CardBase>()?.UpdateCardDetails(cardDrawn);
         newCard.GetComponent<EnemyCard>()?.SetCardSO(cardDrawn);
         cardList.Add(newCard);
         DisplayCardList();
@@ -390,15 +390,12 @@ public class Entity : MonoBehaviour
     /// <returns></returns>
     GameObject GetExistingStatusEffect(Keyword statusEffect)
     {
-
-
         List<GameObject> statusList = statusEffectList[statusEffect.keywordType];
         for (int i = 0; i < statusList.Count; i++)
         {
             StatusEffect se = statusList[i].GetComponent<StatusEffect>();
-            if ((statusEffect.durationByTurn == se.IsDurationByTurn())
-                && (statusEffect.duration == se.GetDuration())
-                && (statusEffect.cardDelay.statusInfo != null == se.IsDelay()))
+            if ((statusEffect.durationByTurn == se.IsDurationByTurn()) && (statusEffect.cardDelay.statusInfo != null == se.IsDelay())
+                && (statusEffect.duration == se.GetDuration() || statusEffect.cardDelay.duration == se.GetDuration()))
             {
                 return statusList[i];
             }
@@ -461,6 +458,8 @@ public class Entity : MonoBehaviour
             for (int i = 0; i < statusEffectList[KeywordType.Damage].Count; i++)
             {
                 StatusEffect statusEffect = statusEffectList[KeywordType.Damage][i].GetComponent<StatusEffect>();
+                if (statusEffect.IsDelay())
+                    continue;
                 if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
                 {
                     ChangeHealth(-statusEffect.GetValue());
@@ -473,6 +472,8 @@ public class Entity : MonoBehaviour
             for (int i = 0; i < statusEffectList[KeywordType.Heal].Count; i++)
             {
                 StatusEffect statusEffect = statusEffectList[KeywordType.Heal][i].GetComponent<StatusEffect>();
+                if (statusEffect.IsDelay())
+                    continue;
                 if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
                 {
                     ChangeHealth(statusEffect.GetValue());
@@ -485,6 +486,8 @@ public class Entity : MonoBehaviour
             for (int i = 0; i < statusEffectList[KeywordType.Draw_Card].Count; i++)
             {
                 StatusEffect statusEffect = statusEffectList[KeywordType.Draw_Card][i].GetComponent<StatusEffect>();
+                if (statusEffect.IsDelay())
+                    continue;
                 if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
                 {
                     DrawCardFromDeck(statusEffect.GetValue());
@@ -492,11 +495,13 @@ public class Entity : MonoBehaviour
             }
         }
 
-        if (statusEffectList.ContainsKey(KeywordType.Gain_SP))
+        if (statusEffectList.ContainsKey(KeywordType.Gain_Energy_Point))
         {
-            for (int i = 0; i < statusEffectList[KeywordType.Gain_SP].Count; i++)
+            for (int i = 0; i < statusEffectList[KeywordType.Gain_Energy_Point].Count; i++)
             {
-                StatusEffect statusEffect = statusEffectList[KeywordType.Gain_SP][i].GetComponent<StatusEffect>();
+                StatusEffect statusEffect = statusEffectList[KeywordType.Gain_Energy_Point][i].GetComponent<StatusEffect>();
+                if (statusEffect.IsDelay())
+                    continue;
                 if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
                 {
                     ChangeShieldPoint(statusEffect.GetValue());

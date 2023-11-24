@@ -9,4 +9,5 @@ public class StatusSO : ScriptableObject
     public string statusName;
     [TextArea] public string statusDescription;
     public Sprite statusSprite;
+    public bool ignoreKeyword;
 }

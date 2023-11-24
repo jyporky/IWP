@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2088923262003154681}
+  - component: {fileID: 4486880793502290242}
   m_Layer: 0
   m_Name: Deck Display
   m_TagString: Untagged
@@ -39,6 +40,50 @@ RectTransform:
   m_AnchoredPosition: {x: -391, y: -47}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4486880793502290242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770955379898211041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 0
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 0}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2105578970711181678
 GameObject:
   m_ObjectHideFlags: 0
@@ -594,6 +639,8 @@ MonoBehaviour:
   discardAmt: {fileID: 7524458338172186036}
   statusPrefab: {fileID: 8552563035882802448, guid: 150a5216b18df47499ce7b0d40cdf2dc, type: 3}
   statusHolder: {fileID: 3226111219738118666}
+  entitySprite: {fileID: 0}
+  entityNameDisplay: {fileID: 0}
   healthBarSlider: {fileID: 2105578971231365523}
   healthValue: {fileID: 2105578971159194433}
   shieldPointBarSlider: {fileID: 2105578972226063402}
@@ -601,6 +648,9 @@ MonoBehaviour:
   lightShieldButton: {fileID: 2105578972464131768}
   normalShieldButton: {fileID: 2105578972750428833}
   heavyShieldButton: {fileID: 2105578972292801545}
+  deckListUIPrefab: {fileID: 5739207525857651362, guid: 3aac2fe99d3a77e46a3dbcb5c61e43e0, type: 3}
+  deckListButton: {fileID: 4486880793502290242}
+  discardListButton: {fileID: 5077257427746473155}
 --- !u!1 &2105578971476593155
 GameObject:
   m_ObjectHideFlags: 0
@@ -611,7 +661,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2105578971476593154}
   m_Layer: 5
-  m_Name: Player Shield Point Display
+  m_Name: Player Energy Point Display
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -651,7 +701,7 @@ GameObject:
   - component: {fileID: 2105578971484742376}
   - component: {fileID: 2105578971484742377}
   m_Layer: 5
-  m_Name: Shield Point Icon
+  m_Name: Energy Point Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -705,7 +755,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: af5f0fb876e53b640b80746000a965ca, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c29f51ab945e0db49b5cd08da33e4686, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1032,7 +1082,7 @@ GameObject:
   - component: {fileID: 2105578972226063403}
   - component: {fileID: 2105578972226063402}
   m_Layer: 5
-  m_Name: Shield point Slider
+  m_Name: Energy Point Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2600,6 +2650,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5795741744320261897}
+  - component: {fileID: 5077257427746473155}
   m_Layer: 0
   m_Name: Discard Display
   m_TagString: Untagged
@@ -2630,3 +2681,47 @@ RectTransform:
   m_AnchoredPosition: {x: 309.5, y: -47}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5077257427746473155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8228569323255348328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 0
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 0}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []

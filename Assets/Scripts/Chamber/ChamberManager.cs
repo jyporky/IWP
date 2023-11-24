@@ -62,15 +62,12 @@ public class ChamberManager : MonoBehaviour
     [SerializeField] Color32 currentRoomColor;
     [SerializeField] Color32 completedRoomColor;
 
-    [Header("UI Display Reference")]
-    [SerializeField] GameObject gameplayUIPrefab;
-
-    private Transform gameplayUISpawnArea;
-
     // the current chamber and room information
     private int currentChamberIndex = 0;
     private int currentRoomIndex = 0;
     bool clearChamber = false;
+    private PathType pathSelected;
+    private EnemySO enemySelected;
 
     public delegate void DestroySelfAfterChamber();
     /// <summary>
@@ -79,8 +76,7 @@ public class ChamberManager : MonoBehaviour
     public DestroySelfAfterChamber destroySelfAfterChamber;
     private void Start()
     {
-        gameplayUISpawnArea = GameObject.FindGameObjectWithTag("GameplayUISpawn").transform;
-
+        ShopManager.GetInstance().AddToShopList(chamberList[currentChamberIndex].avaliableShopItemList);
         List<Room_Type> loadedRoomList = chamberList[currentChamberIndex].rooms;
         Transform roomIconSpawn = GameObject.FindGameObjectWithTag("RoomIconSpawn").transform;
         Transform pathSpawnLocation = GameObject.FindGameObjectWithTag("PathObjectSpawn").transform;
@@ -140,7 +136,8 @@ public class ChamberManager : MonoBehaviour
     /// <summary>
     /// Set the current room color to completedRoomColor, destroy the current room path and increase the currentroom index by 1.
     /// Afterwards, change the currentroom color to currentRoomColor as well as display the new currentroom path.
-    void ClearRoom()
+    /// </summary>
+    public void ClearRoom()
     {
         if (clearChamber)
             return;
@@ -190,50 +187,64 @@ public class ChamberManager : MonoBehaviour
 
     /// <summary>
     /// Interact with the path according to the parameter.
+    /// According to the path, it will load up different UI Panel accordingly.
     /// </summary>
     public void InteractWithPath(PathType pathType)
     {
+        UITransition.GetInstance().BeginTransition(result =>
+        {
+            SpawnPathUI();
+        });
+
         switch (pathType)
         {
             case PathType.SHOP:
+                pathSelected = PathType.SHOP;
                 Debug.Log("Shop");
-                ClearRoom();
                 break;
 
             case PathType.BLACKSMITH:
+                pathSelected = PathType.BLACKSMITH;
                 Debug.Log("Blacksmith");
-                ClearRoom();
                 break;
 
             case PathType.STARTING:
+                pathSelected = PathType.STARTING;
                 Debug.Log("Start Journey");
-                ClearRoom();
                 break;
 
             case PathType.EVENT:
+                pathSelected = PathType.EVENT;
                 Debug.Log("Event");
-                ClearRoom();
                 break;
 
             case PathType.ENEMY:
             case PathType.ELITE:
             case PathType.BOSS:
-
-                UITransition.GetInstance().onFinishTransition += SpawnGameplayUI;
-                UITransition.GetInstance().BeginTransition();
+                pathSelected = PathType.ENEMY;
                 break;
 
         }
     }
 
     /// <summary>
-    /// Spawn the combat UI display for now. Might refactor this to work with other scenes
+    /// Spawn the path UI according to the path selected. Can bring up enemy, shop, blacksmith UI. Might bring up event if needed.
     /// </summary>
-    void SpawnGameplayUI()
+    void SpawnPathUI()
     {
-        UITransition.GetInstance().onFinishTransition -= SpawnGameplayUI;
-        Instantiate(gameplayUIPrefab, gameplayUISpawnArea);
-        Debug.Log("Engage with battle");
-        ClearRoom();
+        switch (pathSelected)
+        {
+            case PathType.ENEMY:
+                GameplayManager.GetInstance().CreateUI(PathType.ENEMY);
+                Debug.Log("Engage with battle");
+                break;
+            case PathType.SHOP:
+                GameplayManager.GetInstance().CreateUI(PathType.SHOP);
+                Debug.Log("Enter Shop");
+                break;
+            default:
+                ClearRoom();
+                break;
+        }
     }
 }

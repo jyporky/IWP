@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,20 +19,19 @@ public class UITransition : MonoBehaviour
         transitionBG = transitionUIDisplayReference.GetComponent<Image>();
     }
 
-    public delegate void OnFinishTransition();
-    public OnFinishTransition onFinishTransition;
-
     [SerializeField] private GameObject transitionUIDisplayReference;
     [SerializeField] private float fadeInAndOutTimer = 1.0f;
     private Image transitionBG;
+    private Action<bool> callback;
 
     /// <summary>
     /// Start the transition effect of the fadein and out. Will invoke delegate event after the fadeIn.
     /// </summary>
-    public void BeginTransition()
+    public void BeginTransition(Action<bool> newcallback)
     {
         transitionBG.fillAmount = 0;
         transitionUIDisplayReference.SetActive(true);
+        callback = newcallback;
         StartCoroutine(FadeInOutTransition());
     }
 
@@ -56,7 +56,8 @@ public class UITransition : MonoBehaviour
 
                 if (fadeTimer >= fadeMaxTimer)
                 {
-                    onFinishTransition?.Invoke();
+                    callback(true);
+                    GameplayManager.GetInstance().UpdatePlayerStatsDisplay();
                     fadeIn = true;
                 }
             }

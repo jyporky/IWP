@@ -4,24 +4,42 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class SelectedCard : MonoBehaviour
+public class SelectedCard : CardBase
 {
-    [SerializeField] Image cardAttackTypeSprite;
-    [SerializeField] TextMeshProUGUI cardName;
-    [SerializeField] Image cardSprite;
-    [SerializeField] TextMeshProUGUI cardDescription;
-    private CardSO card;
+    [Header("Keyword Display Reference")]
+    [SerializeField] GameObject keywordPrefab;
+    [SerializeField] Transform keywordSpawnArea;
 
-    public void UpdateCardDetails(CardSO cardInfo)
+    public override void UpdateCardDetails(CardSO cardInfo)
     {
-        card = cardInfo;
-        cardName.text = cardInfo.cardName;
-        cardSprite.sprite = cardInfo.cardSprite;
-        cardDescription.text = cardInfo.cardDescription;
+        base.UpdateCardDetails(cardInfo);
+        DisplayKeywordList();
     }
 
-    public CardSO GetCardSO()
+    /// <summary>
+    /// Display the list of effect(keywords) of the card if needed.
+    /// Will ignore if it is part of the ignoreStatusList.
+    /// </summary>
+    void DisplayKeywordList()
     {
-        return card;
+        KeywordDisplay[] keywordDisplayList = keywordSpawnArea.GetComponentsInChildren<KeywordDisplay>();
+        for (int i = keywordDisplayList.Length - 1; i >= 0; i--)
+        {
+            Destroy(keywordDisplayList[i].gameObject);
+        }
+
+        List<Keyword> listOfStatus = card.keywordsList;
+        for (int i = 0; i < listOfStatus.Count; i++)
+        {
+            if (listOfStatus[i] == null)
+                continue;
+            else if (listOfStatus[i].statusSO.ignoreKeyword)
+                continue;
+            else
+            {
+                GameObject newStatus = Instantiate(keywordPrefab, keywordSpawnArea);
+                newStatus.GetComponent<KeywordDisplay>().UpdateKeywordDisplay(listOfStatus[i].statusSO.statusName, listOfStatus[i].statusSO.statusDescription);
+            }
+        }
     }
 }

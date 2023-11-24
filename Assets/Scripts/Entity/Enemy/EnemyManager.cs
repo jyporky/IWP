@@ -26,19 +26,37 @@ public class EnemyManager : MonoBehaviour
     }
 
     [SerializeField] List<EnemyInfo> enemyList = new List<EnemyInfo>();
+    private EnemySO selectedEnemy;
 
     /// <summary>
-    /// Get the enemyPrefab according to the enemySo given
+    /// Get the enemyPrefab according to the enemySO within the enemyManager
     /// </summary>
-    public GameObject GetEnemyPrefabViaEnemySO(EnemySO enemySO)
+    public GameObject GetEnemyPrefab()
     {
         for (int i = 0; i < enemyList.Count; i++)
         {
-            if (enemySO == enemyList[i].enemySO)
+            if (selectedEnemy == enemyList[i].enemySO)
             {
                 return enemyList[i].enemyPrefab;
             }
         }
         return null;
+    }
+
+    /// <summary>
+    /// Set the enemySO reference that the player is going to engage.
+    /// </summary>
+    public void SetEnemySO(EnemySO enemySOReference)
+    {
+        selectedEnemy = enemySOReference;
+    }
+
+    /// <summary>
+    /// Get the enemySO reference that the player is going to engage.
+    /// </summary>
+    /// <returns></returns>
+    public EnemySO GetEnemySO()
+    {
+        return selectedEnemy;
     }
 }

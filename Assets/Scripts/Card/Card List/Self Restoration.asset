@@ -16,7 +16,7 @@ MonoBehaviour:
   cardType: 0
   attackCardType: 2
   cardName: Self Restoration
-  cardDescription: Heal 3 health at the start of your turn for 2 turns.
+  cardDescription: Apply Regen(3) for 2 turns.
   keywordsList:
   - keywordType: 3
     value: 3

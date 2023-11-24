@@ -20,3 +20,5 @@ MonoBehaviour:
   enemySP: 0
   enemyDeck:
   - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  gearPartsDrop: 4
+  energyPointDrop: 2

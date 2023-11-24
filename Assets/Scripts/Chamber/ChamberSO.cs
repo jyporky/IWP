@@ -16,4 +16,9 @@ public class ChamberSO : ScriptableObject
     /// Get the list of enemies that can spawn in this chamber
     /// </summary>
     public List<EnemySO> possibleEnemyToAppearList;
+
+    /// <summary>
+    /// Add it to the possible shop item player can encounter. Remains even when going to next chamber.
+    /// </summary>
+    public List<ShopItemSO> avaliableShopItemList;
 }

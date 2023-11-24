@@ -14,13 +14,15 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private Entity entityReference;
     private string baseDescription;
     private string modifiedDescription;
+    private bool isStatusDelay;
+    private int statusDuration;
 
     /// <summary>
     /// Set up the status effect
     /// </summary>
     public void SetStatus(Entity entity, Keyword statusInfo)
     {
-        GameplayManager.GetInstance().onGameEnd += Unsubscribe;
+        CombatManager.GetInstance().onGameEnd += Unsubscribe;
         textBoxDescription.SetActive(false);
         // Assign the references
         entityReference = entity;
@@ -32,7 +34,8 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             case true:
                 {
                     StatusSO ss = statusEffectInfo.statusSO;
-
+                    statusDuration = statusEffectInfo.duration;
+                    isStatusDelay = false;
                     statusImage.sprite = ss.statusSprite;
                     baseDescription = ss.statusName + ":" + ss.statusDescription;
                     break;
@@ -41,7 +44,8 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             case false:
                 {
                     StatusSO ss = statusEffectInfo.cardDelay.statusInfo;
-
+                    statusDuration = statusEffectInfo.cardDelay.duration;
+                    isStatusDelay = true;
                     statusImage.sprite = ss.statusSprite;
                     baseDescription = ss.statusDescription;
                     break;
@@ -51,7 +55,7 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         SetModifiedDescription();
 
         // according to whether the duration is by card play or by turn, it will be assigned to the delegate event accordingly
-        if ((statusEffectInfo.cardDelay.statusInfo != null &&  statusEffectInfo.cardDelay.durationByTurn)|| statusEffectInfo.durationByTurn)
+        if ((isStatusDelay &&  statusEffectInfo.cardDelay.durationByTurn)|| statusEffectInfo.durationByTurn)
         {
             entityReference.onEntityStartTurn += DecreaseDuration;
         }
@@ -70,15 +74,15 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         string extraText = "";
 
-        if (statusEffectInfo.cardDelay.statusInfo == null)
+        if (!isStatusDelay)
         {
             switch (statusEffectInfo.durationByTurn)
             {
                 case true:
-                    extraText = "(" + statusEffectInfo.duration.ToString() + " turns left)";
+                    extraText = "(" + statusDuration.ToString() + " turns left)";
                     break;
                 case false:
-                    extraText = "(" + statusEffectInfo.duration.ToString() + " times left)";
+                    extraText = "(" + statusDuration.ToString() + " times left)";
                     break;
             }
         }
@@ -88,10 +92,10 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             switch (statusEffectInfo.cardDelay.durationByTurn)
             {
                 case true:
-                    extraText = statusEffectInfo.duration.ToString() + " turns";
+                    extraText = statusDuration.ToString() + " turns";
                     break;
                 case false:
-                    extraText = "playing " + statusEffectInfo.duration.ToString() + " more cards.";
+                    extraText = "playing " + statusDuration.ToString() + " more cards.";
                     break;
             }
         }
@@ -100,7 +104,7 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     }
 
     /// <summary>
-    /// Set the modified description to fetch from. The modified description is based on the based description but the value is changed.
+    /// Set the modified description to fetch from. The modified description is based on the based description and how the value is changed.
     /// </summary>
     void SetModifiedDescription()
     {
@@ -114,7 +118,7 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
                     string value;
 
-                    switch (statusEffectInfo.cardDelay.statusInfo == null)
+                    switch (!isStatusDelay)
                     {
                         case true:
                             value = statusEffectInfo.value.ToString();
@@ -159,7 +163,7 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     /// </summary>
     public bool IsDelay()
     {
-        return (statusEffectInfo.cardDelay.statusInfo != null);
+        return (isStatusDelay);
     }
 
     /// <summary>
@@ -176,7 +180,7 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     /// <returns></returns>
     public int GetDuration()
     {
-        return statusEffectInfo.duration;
+        return statusDuration;
     }
 
     /// <summary>
@@ -194,21 +198,21 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     /// </summary>
     void DecreaseDuration()
     {
-        statusEffectInfo.duration--;
+        statusDuration--;
 
-        if (statusEffectInfo.duration <= 0)
+        if (statusDuration <= 0)
         {
             entityReference.onEntityStartTurn -= DecreaseDuration;
             entityReference.onEntityPlayCard -= DecreaseDuration;
             entityReference.onEntityEndTurn -= EndTurn;
             Destroy(gameObject);
             entityReference.RemoveStatusEffect(statusEffectInfo.keywordType, gameObject);
-        }
 
-        if (statusEffectInfo.cardDelay.statusInfo != null)
-        {
-            Keyword newKeyword = new Keyword(statusEffectInfo, true);
-            GameplayManager.GetInstance().ExecuteCardFromDelay(entityReference, newKeyword);
+            if (isStatusDelay)
+            {
+                Keyword newKeyword = new Keyword(statusEffectInfo, true);
+                CombatManager.GetInstance().ExecuteCardFromDelay(entityReference, newKeyword);
+            }
         }
 
         UpdateText();
@@ -241,7 +245,7 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     /// </summary>
     void Unsubscribe()
     {
-        GameplayManager.GetInstance().onGameEnd -= Unsubscribe;
+        CombatManager.GetInstance().onGameEnd -= Unsubscribe;
         entityReference.onEntityStartTurn -= DecreaseDuration;
         entityReference.onEntityPlayCard -= DecreaseDuration;
         entityReference.onEntityEndTurn -= EndTurn;

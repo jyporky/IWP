@@ -16,7 +16,7 @@ MonoBehaviour:
   cardType: 0
   attackCardType: 0
   cardName: Patient Healing
-  cardDescription: Apply Restoration(5) for 2 turns after 1 turn
+  cardDescription: Apply Regen(5) for 2 turns after 1 turn
   keywordsList:
   - keywordType: 3
     value: 5
