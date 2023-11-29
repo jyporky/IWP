@@ -1783,6 +1783,7 @@ GameObject:
   - component: {fileID: 1601993929}
   - component: {fileID: 1601993930}
   - component: {fileID: 1601993931}
+  - component: {fileID: 1601993932}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1934,6 +1935,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c270191686f04aa4bb64d41241e8d160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1601993932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601993924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b34c450d67f55de46895f6044c966394, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upgradeAmountList:
+  - upgradeType: 0
+    modifyValueBy: 3
+    amountPurchase: 0
+  - upgradeType: 1
+    modifyValueBy: 1
+    amountPurchase: 0
 --- !u!1 &1692947563
 GameObject:
   m_ObjectHideFlags: 0
@@ -2008,6 +2028,7 @@ MonoBehaviour:
   energyPointValue: {fileID: 236962031}
   combatUIPrefab: {fileID: 3673185733105181543, guid: ee34afdfc43b7bf4f9c8f785a92c0210, type: 3}
   shopUIPrefab: {fileID: 1852054867441932521, guid: eac07304fe9aa3c4eb54a524f0d570e8, type: 3}
+  upgradeStationPrefab: {fileID: 2466631284421109892, guid: 3db44bb301793164989f69f15dad4035, type: 3}
   gearPartsAmountText: {fileID: 1014877761}
 --- !u!1 &1780289492
 GameObject:

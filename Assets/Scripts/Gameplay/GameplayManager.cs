@@ -26,6 +26,7 @@ public class GameplayManager : MonoBehaviour
     [Header("UI Display Reference")]
     [SerializeField] GameObject combatUIPrefab;
     [SerializeField] GameObject shopUIPrefab;
+    [SerializeField] GameObject upgradeStationPrefab;
     private Transform gameplayUISpawnArea;
 
     [Header("Currency UI Display")]
@@ -51,6 +52,9 @@ public class GameplayManager : MonoBehaviour
                 break;
             case PathType.SHOP:
                 uiToReferenceTo = shopUIPrefab;
+                break;
+            case PathType.UPGRADE_STATION:
+                uiToReferenceTo = upgradeStationPrefab;
                 break;
         }
 

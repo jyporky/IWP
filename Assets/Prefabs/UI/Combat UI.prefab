@@ -606,7 +606,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Collect Loot
+  m_text: Restart Battle
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b422cd2df73d1314a89bf5f7136625d9, type: 2}
   m_sharedMaterial: {fileID: 3834961750493298519, guid: b422cd2df73d1314a89bf5f7136625d9, type: 2}

@@ -106,6 +106,24 @@ public class PlayerInfo
     }
 
     /// <summary>
+    /// Modify the increaseHP value of the player
+    /// </summary>
+    public void ModifyIncreaseHP(int hpChangeBy)
+    {
+        baseHp += hpChangeBy;
+        currentHP += hpChangeBy;
+    }
+
+    /// <summary>
+    /// Get the increaseHP value of the player
+    /// </summary>
+    /// <returns></returns>
+    public int GetIncreaseHP()
+    {
+        return increaseHP;
+    }
+
+    /// <summary>
     /// Get the MaxSP of the player
     /// </summary>
     public int GetMaxEP()
@@ -128,6 +146,24 @@ public class PlayerInfo
     public void SetCurrentEP(int newEPValue)
     {
         currentEP = newEPValue;
+    }
+
+    /// <summary>
+    /// Modify the increaseEP value of the player
+    /// </summary>
+    public void ModifyIncreaseEP(int epChangeBy)
+    {
+        baseEP += epChangeBy;
+        currentEP += epChangeBy;
+    }
+
+    /// <summary>
+    /// Get the increaseEP value of the player
+    /// </summary>
+    /// <returns></returns>
+    public int GetIncreaseEP()
+    {
+        return increaseEP;
     }
 
     /// <summary>

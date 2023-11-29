@@ -22,6 +22,7 @@ public class GameOverScreen : MonoBehaviour
         enemyDefeatedScreenPanel.SetActive(false);
         gameObject.SetActive(false);
         continueButton.onClick.AddListener(CollectLoot);
+        restartGameButton.onClick.AddListener(RestartGame);
     }
 
     public enum ScreenType
@@ -41,8 +42,10 @@ public class GameOverScreen : MonoBehaviour
         {
             case ScreenType.GameOver:
                 gameOverScreenPanel.SetActive(true);
+                enemyDefeatedScreenPanel.SetActive(false);
                 break;
             case ScreenType.CollectLoot:
+                gameOverScreenPanel.SetActive(false);
                 enemyDefeatedScreenPanel.SetActive(true);
                 gearPartsAmountText.text = gearPartGain.ToString();
                 energyPointAmountText.text = energyPointGain.ToString();
@@ -55,5 +58,11 @@ public class GameOverScreen : MonoBehaviour
     {
         gameObject.SetActive(false);
         CombatManager.GetInstance().ReturnToChamber();
+    }
+
+    void RestartGame()
+    {
+        gameObject.SetActive(false);
+        CombatManager.GetInstance().RestartGame();
     }
 }

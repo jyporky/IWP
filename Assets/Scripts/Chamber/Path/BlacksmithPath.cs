@@ -6,6 +6,6 @@ public class BlacksmithPath : PathInfo
 {
     public override void PathSelected()
     {
-        ChamberManager.GetInstance().InteractWithPath(PathType.BLACKSMITH);
+        ChamberManager.GetInstance().InteractWithPath(PathType.UPGRADE_STATION);
     }
 }

@@ -7,6 +7,17 @@ using TMPro;
 
 public class CombatManager : MonoBehaviour
 {
+    /// <summary>
+    /// The enum that dictates whos turn it is. Depending on whether it is the player or the enemy turn,
+    /// Some interactions make be locked or unlocked.
+    /// </summary>
+    private enum Turn
+    {
+        PLAYER_TURN,
+        ENEMY_TURN,
+        NONE,
+    }
+
     [Header("Prefab References")]
     [SerializeField] GameObject playerGameplayReference;
     [SerializeField] GameObject selectedCardPrefab;
@@ -22,7 +33,9 @@ public class CombatManager : MonoBehaviour
     [SerializeField] GameOverScreen gameOverScreen;
 
     private GameObject selectedCard;
+    private GameObject enemyCard;
     Coroutine draggingCards;
+    Coroutine enemyPlayingCards;
 
     public delegate void OnDragging(bool changeIsSelected);
     public OnDragging onDragging;
@@ -38,7 +51,7 @@ public class CombatManager : MonoBehaviour
     private GameObject enemy;
     private Vector2 enemyMinHitbox;
     private Vector2 enemyMaxHitbox;
-    private Turn currentTurn = Turn.PLAYER_TURN;
+    private Turn currentTurn;
 
     // Loot earned by player if enemy is successfully defeated.
     private int gearPartAmountGain;
@@ -67,22 +80,9 @@ public class CombatManager : MonoBehaviour
 
     private void Start()
     {
-        // create the player and enemy reference
-        player = Instantiate(playerGameplayReference, playerArea);
-        // add the enemy reference into a list. Should an enemy die, the next one will be loaded in
-        GameObject enemyReference = EnemyManager.GetInstance().GetEnemyPrefab();
-        GameObject newEnemy = Instantiate(enemyReference, enemyArea);
-
-        EnemySO enemySOReference = EnemyManager.GetInstance().GetEnemySO();
-        newEnemy.GetComponent<EnemyBase>().LoadStatsAndDeck(enemySOReference);
-        gearPartAmountGain = enemySOReference.gearPartsDrop;
-        energyPointAmountGain = enemySOReference.energyPointDrop;
-        enemy = newEnemy;
-        enemy.SetActive(true);
-        SetEnemyHitbox();
-        TurnStart();
         endTurnButton.onClick.AddListener(EndPlayerTurn);
-        reshuffledDeckButton.onClick.AddListener(ReshuflePlayerDeck);
+        reshuffledDeckButton.onClick.AddListener(ReshufflePlayerDeck);
+        StartGame();
     }
 
     /// <summary>
@@ -99,7 +99,7 @@ public class CombatManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Update the selectedCard gameObject according to the CardSO and transform of the Card that calls this function.
+    /// Update the selectedCard gameObject according to the CardSO and transform of the Card that calls this function. <br/>
     /// Also Increase the scale of the selectedCard and render on top of it.
     /// </summary>
     public void SelectCard(CardSO card, Transform objectPos)
@@ -112,25 +112,36 @@ public class CombatManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Begin the dragging state, disable all PointerEnter and PointerExit for all cards. Decrease the scale of the selectedGameobject and
-    /// allow the selectedCard to follow the cursor.
+    /// Begin the dragging state, disable all PointerEnter and PointerExit for all cards. <br/>
+    /// Decrease the scale of the selectedGameobject and allow the selectedCard to follow the cursor. <br/>
+    /// Can only be called if its the player turn.
     /// </summary>
     public void StartDrag()
     {
+        if (currentTurn != Turn.PLAYER_TURN)
+            return;
+
         onDragging?.Invoke(true);
         selectedCard.transform.localScale = new Vector3(1, 1, 1);
         draggingCards = StartCoroutine(DraggingCard());
     }
 
     /// <summary>
-    /// End the dragging state, enable all PointerEnter and PointerExit for all cards. Stop the process of updating the card position
-    /// according to the mouse position.
+    /// End the dragging state, enable all PointerEnter and PointerExit for all cards. <br/>
+    /// Stop the process of updating the card position according to the mouse position. <br/>
+    /// Can only be called if its the player turn.
     /// </summary>
     public void EndDrag()
     {
-        onDragging?.Invoke(false);
-        StopCoroutine(draggingCards);
-        draggingCards = null;
+        if (currentTurn != Turn.PLAYER_TURN)
+            return;
+
+        if (draggingCards != null)
+        {
+            onDragging?.Invoke(false);
+            StopCoroutine(draggingCards);
+            draggingCards = null;
+        }
     }
 
     /// <summary>
@@ -157,7 +168,7 @@ public class CombatManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Update the selectedCard position according to the mouse position
+    /// Update the selectedCard position according to the mouse position.
     /// </summary>
     IEnumerator DraggingCard()
     {
@@ -171,33 +182,52 @@ public class CombatManager : MonoBehaviour
     /// <summary>
     /// 
     /// </summary>
-    public IEnumerator EnemyPlayCard(CardSO cardPlayed, Transform playArea)
+    public void EnemyPlayCard(CardSO cardPlayed, Transform playArea)
     {
+        if (enemyPlayingCards != null)
+        {
+            StopCoroutine(enemyPlayingCards);
+            enemyPlayingCards = null;
+        }
+        enemyPlayingCards = StartCoroutine(EnemyPlayingCard(cardPlayed, playArea));
+    }
+
+    /// <summary>
+    /// Do the animation of the enemy playing their cards. (Might be temporary)
+    /// </summary>
+    IEnumerator EnemyPlayingCard(CardSO cardPlayed, Transform playArea)
+    {
+        GameObject enemyActiveCard = Instantiate(selectedCardPrefab, reshuffledDeckButton.transform);
+        enemyCard = enemyActiveCard;
+        enemyCard.SetActive(false);
+
         yield return new WaitForSeconds(2);
-        selectedCard.transform.position = playArea.position;
-        selectedCard.GetComponent<SelectedCard>().UpdateCardDetails(cardPlayed);
+        enemyCard.transform.position = playArea.position;
+        enemyCard.GetComponent<SelectedCard>().UpdateCardDetails(cardPlayed);
         enemy.GetComponent<Entity>().PlayCard(cardPlayed);
         CardManager.GetInstance().ExecuteCard(cardPlayed, enemy.GetComponent<Entity>(), player.GetComponent<Entity>());
-        selectedCard.SetActive(true);
+        enemyCard.SetActive(true);
         yield return new WaitForSeconds(2);
-        selectedCard.SetActive(false);
+        enemyCard.SetActive(false);
+        Destroy(enemyCard);
         onEnemyPlay?.Invoke();
     }
 
     /// <summary>
-    /// Forcefully reshuffled the player deck
+    /// Forcefully reshuffled the player deck.
     /// </summary>
-    void ReshuflePlayerDeck()
+    void ReshufflePlayerDeck()
     {
         player.GetComponent<Player>().ReshuffleDeck();
         EndPlayerTurn();
     }
 
     /// <summary>
-    /// End the player turn. Call the TurnStart() function aftwards.
+    /// End the player turn. Call the TurnStart() function aftwards. Force any card dragging action to stop.
     /// </summary>
     public void EndPlayerTurn()
     {
+        EndDrag();
         currentTurn = Turn.ENEMY_TURN;
         player.GetComponent<Entity>().EndTurn();
         TurnStart();
@@ -223,28 +253,16 @@ public class CombatManager : MonoBehaviour
             case Turn.PLAYER_TURN:
                 endTurnButton.interactable = true;
                 reshuffledDeckButton.interactable = true;
-                onDragging?.Invoke(false);
                 player.GetComponent<Entity>().StartTurn();
                 break;
 
             case Turn.ENEMY_TURN:
                 endTurnButton.interactable = false;
                 reshuffledDeckButton.interactable = false;
-                onDragging?.Invoke(true);
                 enemy.GetComponent<Entity>().StartTurn();
                 onEnemyPlay?.Invoke();
                 break;
         }
-    }
-
-    /// <summary>
-    /// The enum that dictates whos turn it is. Depending on whether it is the player or the enemy turn,
-    /// Some interactions make be locked or unlocked.
-    /// </summary>
-    private enum Turn
-    {
-        PLAYER_TURN,
-        ENEMY_TURN,
     }
 
     /// <summary>
@@ -290,6 +308,28 @@ public class CombatManager : MonoBehaviour
                 gameOverScreen.DisplayScreen(GameOverScreen.ScreenType.CollectLoot, gearPartAmountGain, energyPointAmountGain);
                 break;
         }
+        StopGame();
+    }
+
+    /// <summary>
+    /// Stop the game completely, prevent anything from running in background as well as disabling all interaction.
+    /// </summary>
+    public void StopGame()
+    {
+        currentTurn = Turn.NONE;
+        onDragging?.Invoke(true);
+
+        if (draggingCards != null)
+        {
+            StopCoroutine(draggingCards);
+            draggingCards = null;
+        }
+
+        if (enemyPlayingCards != null)
+        {
+            StopCoroutine(enemyPlayingCards);
+            enemyPlayingCards = null;
+        }
     }
 
     /// <summary>
@@ -316,5 +356,48 @@ public class CombatManager : MonoBehaviour
         ChamberManager.GetInstance().ClearRoom();
         onGameEnd?.Invoke();
         Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Instiate all the objects needed for the game to run.
+    /// </summary>
+    void StartGame()
+    {
+        // create the player and enemy reference
+        player = Instantiate(playerGameplayReference, playerArea);
+        // add the enemy reference into a list. Should an enemy die, the next one will be loaded in
+        GameObject enemyReference = EnemyManager.GetInstance().GetEnemyPrefab();
+        GameObject newEnemy = Instantiate(enemyReference, enemyArea);
+
+        EnemySO enemySOReference = EnemyManager.GetInstance().GetEnemySO();
+        newEnemy.GetComponent<EnemyBase>().LoadStatsAndDeck(enemySOReference);
+        gearPartAmountGain = enemySOReference.gearPartsDrop;
+        energyPointAmountGain = enemySOReference.energyPointDrop;
+        enemy = newEnemy;
+        enemy.SetActive(true);
+        SetEnemyHitbox();
+
+        currentTurn = Turn.PLAYER_TURN;
+        TurnStart();
+    }
+
+    /// <summary>
+    /// Destroy all the gameobject involved in the combat, start another game afterward.
+    /// </summary>
+    public void RestartGame()
+    {
+        Destroy(enemyCard);
+        selectedCard.SetActive(false);
+        onGameEnd?.Invoke();
+        Destroy(player);
+        Destroy(enemy);
+        StartCoroutine(DelayStartGame());
+    }
+
+    IEnumerator DelayStartGame()
+    {
+        yield return null;
+
+        StartGame();
     }
 }

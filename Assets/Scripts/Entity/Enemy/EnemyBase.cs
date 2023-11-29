@@ -29,6 +29,7 @@ public class EnemyBase : Entity
         ChangeHealth(0);
         ChangeShieldPoint(0);
         CombatManager.GetInstance().onEnemyPlay += ExecuteTurn;
+        CombatManager.GetInstance().onGameEnd += UnSubscribeAll;
         UpdateDeckAndDiscardAmountDisplay();
     }
 
@@ -60,6 +61,7 @@ public class EnemyBase : Entity
         healthValue.text = currentHP.ToString() + "/" + maxHP.ToString();
         if (currentHP <= 0)
         {
+            CombatManager.GetInstance().StopGame();
             StartCoroutine(EnemyDefeated());
         }
     }
@@ -90,7 +92,7 @@ public class EnemyBase : Entity
         {
             int cardToPlay = Random.Range(0, cardsInHandList.Count);
             CardSO cardPlayed = cardsInHandList[cardToPlay];
-            gm.StartCoroutine(gm.EnemyPlayCard(cardPlayed, enemyPlayCardArea));
+            gm.EnemyPlayCard(cardPlayed, enemyPlayCardArea);
         }
         else
         {
@@ -132,5 +134,14 @@ public class EnemyBase : Entity
         CombatManager.GetInstance().SetGameOver(false);
         CombatManager.GetInstance().onEnemyPlay -= ExecuteTurn;
         Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Unsubscribe from all invoke functions.
+    /// </summary>
+    void UnSubscribeAll()
+    {
+        CombatManager.GetInstance().onEnemyPlay -= ExecuteTurn;
+        CombatManager.GetInstance().onGameEnd -= UnSubscribeAll;
     }
 }

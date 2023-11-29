@@ -203,8 +203,8 @@ public class ChamberManager : MonoBehaviour
                 Debug.Log("Shop");
                 break;
 
-            case PathType.BLACKSMITH:
-                pathSelected = PathType.BLACKSMITH;
+            case PathType.UPGRADE_STATION:
+                pathSelected = PathType.UPGRADE_STATION;
                 Debug.Log("Blacksmith");
                 break;
 
@@ -241,6 +241,10 @@ public class ChamberManager : MonoBehaviour
             case PathType.SHOP:
                 GameplayManager.GetInstance().CreateUI(PathType.SHOP);
                 Debug.Log("Enter Shop");
+                break;
+            case PathType.UPGRADE_STATION:
+                GameplayManager.GetInstance().CreateUI(PathType.UPGRADE_STATION);
+                Debug.Log("Enter Upgrade Station");
                 break;
             default:
                 ClearRoom();

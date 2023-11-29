@@ -6,7 +6,7 @@ public enum PathType
 {
     ENEMY,
     SHOP,
-    BLACKSMITH,
+    UPGRADE_STATION,
     EVENT,
     STARTING,
     ELITE,
@@ -83,7 +83,7 @@ public class PathManager : MonoBehaviour
 
                 List<PathType> tempRandomList = new List<PathType>
                 {
-                    PathType.BLACKSMITH,
+                    PathType.UPGRADE_STATION,
                     PathType.SHOP
                 };
 
@@ -92,7 +92,7 @@ public class PathManager : MonoBehaviour
 
             case Room_Type.REST_ROOM:
                 includedPathList.Add(PathType.SHOP);
-                includedPathList.Add(PathType.BLACKSMITH);
+                includedPathList.Add(PathType.UPGRADE_STATION);
                 includedPathList.Add(PathType.EVENT);
                 break;
 

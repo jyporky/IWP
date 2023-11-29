@@ -99,12 +99,47 @@ public class PlayerManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Get the increase hp of the player from the playerInfo.
+    /// </summary>
+    /// <returns></returns>
+    public int GetIncreaseHP()
+    {
+        return playerInfo.GetIncreaseHP();
+    }
+
+    /// <summary>
+    /// Update the increase hp of the player from the playerInfo.
+    /// </summary>
+    /// <returns></returns>
+    public void ModifyIncreaseHP(int changeBy)
+    {
+        playerInfo.ModifyIncreaseHP(changeBy);
+    }
+
+    /// <summary>
     /// Get the max ep of the player from the playerInfo.
     /// </summary>
     /// <returns></returns>
     public int GetMaxEP()
     {
         return playerInfo.GetMaxEP();
+    }
+
+    /// <summary>
+    /// Get the increase ep of the player of the playerInfo.
+    /// </summary>
+    public int SetIncreaseEP()
+    {
+        return playerInfo.GetIncreaseEP();
+    }
+
+    /// <summary>
+    /// Update the increase ep of the player from the playerInfo.
+    /// </summary>
+    /// <returns></returns>
+    public void ModifyIncreaseEP(int changeBy)
+    {
+        playerInfo.ModifyIncreaseEP(changeBy);
     }
 
     /// <summary>
