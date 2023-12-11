@@ -641,13 +641,16 @@ MonoBehaviour:
   statusHolder: {fileID: 3226111219738118666}
   entitySprite: {fileID: 0}
   entityNameDisplay: {fileID: 0}
+  virusBlockCardSO: {fileID: 11400000, guid: bd46190556ecc744e8cf54fb412c16b9, type: 2}
+  wormBlockCardSO: {fileID: 11400000, guid: 504266219eb34ba43ac4496f63406955, type: 2}
+  trojanBlockCardSO: {fileID: 11400000, guid: 5a900b878b59a5746a0743c5c612dcb1, type: 2}
   healthBarSlider: {fileID: 2105578971231365523}
   healthValue: {fileID: 2105578971159194433}
   shieldPointBarSlider: {fileID: 2105578972226063402}
   shieldPointValue: {fileID: 2105578972695400676}
-  lightShieldButton: {fileID: 2105578972464131768}
-  normalShieldButton: {fileID: 2105578972750428833}
-  heavyShieldButton: {fileID: 2105578972292801545}
+  virusShieldButton: {fileID: 2105578972464131768}
+  wormShieldButton: {fileID: 2105578972750428833}
+  trojanShieldButton: {fileID: 2105578972292801545}
   deckListUIPrefab: {fileID: 5739207525857651362, guid: 3aac2fe99d3a77e46a3dbcb5c61e43e0, type: 3}
   deckListButton: {fileID: 4486880793502290242}
   discardListButton: {fileID: 5077257427746473155}
@@ -1251,7 +1254,7 @@ GameObject:
   - component: {fileID: 2105578972292801544}
   - component: {fileID: 2105578972292801545}
   m_Layer: 5
-  m_Name: Heavy Block Button
+  m_Name: Trojan Block Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1305,7 +1308,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e94eca459736c2f4a95d17d67675330c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9b3441cd3de0e8344bec04e90844dbb3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1372,7 +1375,7 @@ GameObject:
   - component: {fileID: 2105578972464131775}
   - component: {fileID: 2105578972464131768}
   m_Layer: 5
-  m_Name: Light Block Button
+  m_Name: Virus Block Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1426,7 +1429,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 258c0c9241e71e84c916d59d6f56beab, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b1e04b28082107f419b3aa2dcc90888c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1704,7 +1707,7 @@ GameObject:
   - component: {fileID: 2105578972750428832}
   - component: {fileID: 2105578972750428833}
   m_Layer: 5
-  m_Name: Normal Block Button
+  m_Name: Worm Block Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1758,7 +1761,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: aa1d700f3d9068e4589d034411ddf3f5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2edb809c892d939478e965a07c3a0c0b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

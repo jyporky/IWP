@@ -9,16 +9,16 @@ public enum UpgradeType
     TOTAL,
 }
 
+[System.Serializable]
+public class StatsUpgrade
+{
+    public UpgradeType upgradeType;
+    public int modifyValueBy;
+    public int amountPurchase;
+}
+
 public class UpgradeStationManager : MonoBehaviour
 {
-    [System.Serializable]
-    private class UpgradeAmount
-    {
-        public UpgradeType upgradeType;
-        public int modifyValueBy;
-        public int amountPurchase;
-    }
-
     private static UpgradeStationManager instance;
     public static UpgradeStationManager GetInstance()
     {
@@ -38,17 +38,25 @@ public class UpgradeStationManager : MonoBehaviour
         }
     }
 
-    [SerializeField] List<UpgradeAmount> upgradeAmountList;
+    [SerializeField] UpgradeStationSO upgradeStationSO;
+    private List<StatsUpgrade> statsUpgradeList;
+    private List<UpgradeCardSO> cardUpgradesList;
+
+    private void Start()
+    {
+        statsUpgradeList = new(upgradeStationSO.statsUpgradeList);
+        cardUpgradesList = new(upgradeStationSO.upgradeCardList);
+    }
 
     /// <summary>
     /// Get the amount of upgrade made on the upgradeType parameter
     /// </summary>
     public int GetUpgradeAmount(UpgradeType whichUpgradeType)
     {
-        for (int i = 0; i < upgradeAmountList.Count; i++)
+        for (int i = 0; i < statsUpgradeList.Count; i++)
         {
-            if (whichUpgradeType == upgradeAmountList[i].upgradeType)
-                return upgradeAmountList[i].amountPurchase;
+            if (whichUpgradeType == statsUpgradeList[i].upgradeType)
+                return statsUpgradeList[i].amountPurchase;
         }
         return 0;
     }
@@ -58,16 +66,30 @@ public class UpgradeStationManager : MonoBehaviour
     /// </summary>
     public void IncreaseUpgradeAmount(UpgradeType whichUpgradeType)
     {
-        for (int i = 0; i < upgradeAmountList.Count; i++)
+        for (int i = 0; i < statsUpgradeList.Count; i++)
         {
-            if (whichUpgradeType == upgradeAmountList[i].upgradeType)
+            if (whichUpgradeType == statsUpgradeList[i].upgradeType)
             {
-                upgradeAmountList[i].amountPurchase++;
-                ExecuteUpgradeEffect(whichUpgradeType, upgradeAmountList[i].modifyValueBy);
+                statsUpgradeList[i].amountPurchase++;
+                ExecuteUpgradeEffect(whichUpgradeType, statsUpgradeList[i].modifyValueBy);
                 break;
             }
-                
         }
+    }
+
+    /// <summary>
+    /// Get the upgradeSO according to the upgradable card.
+    /// </summary>
+    public UpgradeCardSO GetUpgradeCardSO(CardSO card)
+    {
+        for (int i = 0; i < cardUpgradesList.Count; i++)
+        {
+            if (card == cardUpgradesList[i].baseCard)
+            {
+                return cardUpgradesList[i];
+            }
+        }
+        return null;
     }
 
     /// <summary>

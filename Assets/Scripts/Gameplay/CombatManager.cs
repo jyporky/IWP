@@ -154,16 +154,19 @@ public class CombatManager : MonoBehaviour
     }
 
     /// <summary>
-    /// If the card is played on the enemy, play the card.
+    /// If the card is played on the enemy, play the card. Only works if its your turn.
     /// </summary>
     void CheckIfPlayCard()
     {
+        if (currentTurn != Turn.PLAYER_TURN)
+            return;
+
         Vector2 selectedCardPos = new Vector2(selectedCard.transform.position.x, selectedCard.transform.position.y);
         if ((selectedCardPos.x >= enemyMinHitbox.x && selectedCardPos.x <= enemyMaxHitbox.x) && (selectedCardPos.y >= enemyMinHitbox.y && selectedCardPos.y <= enemyMaxHitbox.y))
         {
             CardSO selectedCardSO = selectedCard.GetComponent<SelectedCard>().GetCardSO();
             player.GetComponent<Player>().PlayCard(selectedCardSO);
-            CardManager.GetInstance().ExecuteCard(selectedCardSO, player.GetComponent<Entity>(), enemy.GetComponent<Entity>());
+            CardManager.GetInstance().ExecuteCard(selectedCardSO, player.GetComponent<Entity>());
         }
     }
 
@@ -205,7 +208,7 @@ public class CombatManager : MonoBehaviour
         enemyCard.transform.position = playArea.position;
         enemyCard.GetComponent<SelectedCard>().UpdateCardDetails(cardPlayed);
         enemy.GetComponent<Entity>().PlayCard(cardPlayed);
-        CardManager.GetInstance().ExecuteCard(cardPlayed, enemy.GetComponent<Entity>(), player.GetComponent<Entity>());
+        CardManager.GetInstance().ExecuteCard(cardPlayed, enemy.GetComponent<Entity>());
         enemyCard.SetActive(true);
         yield return new WaitForSeconds(2);
         enemyCard.SetActive(false);
@@ -274,7 +277,7 @@ public class CombatManager : MonoBehaviour
         switch (statusInfo.inflictSelf)
         {
             case true:
-                CardManager.GetInstance().ExecuteKeywordEffect(statusInfo, caster, caster);
+                CardManager.GetInstance().ExecuteKeywordEffect(statusInfo, caster);
                 break;
 
             // if it is not self inflict, find who the caster is and slot the target accordingly.
@@ -282,11 +285,11 @@ public class CombatManager : MonoBehaviour
                 {
                     if (caster.gameObject.GetComponent<Player>())
                     {
-                        CardManager.GetInstance().ExecuteKeywordEffect(statusInfo, player.GetComponent<Entity>(), enemy.GetComponent<Entity>());
+                        CardManager.GetInstance().ExecuteKeywordEffect(statusInfo, player.GetComponent<Entity>());
                     }
                     else
                     {
-                        CardManager.GetInstance().ExecuteKeywordEffect(statusInfo, enemy.GetComponent<Entity>(), player.GetComponent<Entity>());
+                        CardManager.GetInstance().ExecuteKeywordEffect(statusInfo, enemy.GetComponent<Entity>());
                     }
                 }
                 break;
@@ -376,6 +379,8 @@ public class CombatManager : MonoBehaviour
         enemy = newEnemy;
         enemy.SetActive(true);
         SetEnemyHitbox();
+
+        CardManager.GetInstance().SetPlayerEnemyReference(player.GetComponent<Entity>(), enemy.GetComponent<Entity>());
 
         currentTurn = Turn.PLAYER_TURN;
         TurnStart();

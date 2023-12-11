@@ -8,9 +8,10 @@ public class CardSO : ScriptableObject
 {
     public Sprite cardSprite;
     public CardType cardType;
-    public AttackCardType attackCardType;
     public string cardName;
     [TextArea]
     public string cardDescription;
+    public bool isUpgraded;
+    public bool upgradable = true;
     public List<Keyword> keywordsList;
 }

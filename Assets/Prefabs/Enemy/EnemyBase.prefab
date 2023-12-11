@@ -726,6 +726,9 @@ MonoBehaviour:
   statusHolder: {fileID: 4036056095912517655}
   entitySprite: {fileID: 7632028742214338976}
   entityNameDisplay: {fileID: 7632028740596983799}
+  virusBlockCardSO: {fileID: 11400000, guid: bd46190556ecc744e8cf54fb412c16b9, type: 2}
+  wormBlockCardSO: {fileID: 11400000, guid: 504266219eb34ba43ac4496f63406955, type: 2}
+  trojanBlockCardSO: {fileID: 11400000, guid: 5a900b878b59a5746a0743c5c612dcb1, type: 2}
   healthBarSlider: {fileID: 7632028741511803774}
   healthValue: {fileID: 7632028740996387311}
   shieldPointBarSlider: {fileID: 7632028742249515795}

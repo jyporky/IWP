@@ -3,7 +3,16 @@ guid: eb8be94e1d6757641aecd803cb3d61e6
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - virusIcon: {instanceID: 0}
+  - wormIcon: {instanceID: 0}
+  - trojanIcon: {instanceID: 0}
+  - cardTypeIcon: {instanceID: 0}
+  - cardName: {instanceID: 0}
+  - cardSprite: {instanceID: 0}
+  - cardDescription: {instanceID: 0}
+  - keywordPrefab: {instanceID: 0}
+  - keywordSpawnArea: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

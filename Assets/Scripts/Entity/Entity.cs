@@ -37,6 +37,12 @@ public class Entity : MonoBehaviour
     [SerializeField] protected Image entitySprite;
     [SerializeField] protected TextMeshProUGUI entityNameDisplay;
 
+    [Header("Block Card Reference")]
+    [SerializeField] CardSO virusBlockCardSO;
+    [SerializeField] CardSO wormBlockCardSO;
+    [SerializeField] CardSO trojanBlockCardSO;
+
+
     public delegate void OnEntityStartTurn();
     /// <summary>
     /// This is called when the entity starts their turn. Reduce the turn value by 1.
@@ -183,25 +189,59 @@ public class Entity : MonoBehaviour
     }
 
     /// <summary>
+    /// Block the card type if applicable. Reduce a shield charge for that.
+    /// </summary>
+    /// <returns></returns>
+    public bool BlockCardEffect(CardType cardType)
+    {
+        KeywordType whichType;
+        switch (cardType)
+        {
+            case CardType.Virus:
+                whichType = KeywordType.Block_Virus;
+                break;
+            case CardType.Worm:
+                whichType = KeywordType.Block_Worm;
+                break;
+            case CardType.Trojan:
+                whichType = KeywordType.Block_Trojan;
+                break;
+            default:
+                whichType = KeywordType.NONE;
+                break;
+        }
+        if (statusEffectList.ContainsKey(whichType))
+        {
+            for (int i = 0; i < statusEffectList[whichType].Count;)
+            {
+                statusEffectList[whichType][i].GetComponent<StatusEffect>().DecreaseValue();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Play the card, as of whether to do the computing here or not will see first.
     /// But the cards played will be moved to the discardList. If the card has the "Glitch" Keyword,
     /// Do not add it into the discard tile and simply remove it
     /// </summary>
     public void PlayCard(CardSO cardPlayed)
     {
-        for (int i = 0; i < cardPlayed.keywordsList.Count; i++)
-        {
-            if (cardPlayed.keywordsList[i].keywordType == KeywordType.Glitch)
-            {
-                RemoveCardObject(cardPlayed);
-                return;
-            }
-        }
-
         TriggerEffect(true);
         onEntityPlayCard?.Invoke();
         RemoveCardObject(cardPlayed);
         DisplayCardList();
+
+        for (int i = 0; i < cardPlayed.keywordsList.Count; i++)
+        {
+            if (cardPlayed.keywordsList[i].keywordType == KeywordType.Glitch)
+            {
+                return;
+            }
+        }
+
         MoveToDifferentList(cardsInHandList, cardsInDiscardList, cardPlayed);
     }
 
@@ -525,5 +565,24 @@ public class Entity : MonoBehaviour
 
         statusEffectList.Clear();
         ReshuffleDeck();
+    }
+
+    /// <summary>
+    /// Block the next card effect according to the virusType.
+    /// </summary>
+    public virtual void DoBlockEffect(CardType blockWhatCardType)
+    {
+        switch (blockWhatCardType)
+        {
+            case CardType.Virus:
+                CardManager.GetInstance().ExecuteCard(virusBlockCardSO, this);
+                break;
+            case CardType.Worm:
+                CardManager.GetInstance().ExecuteCard(wormBlockCardSO, this);
+                break;
+            case CardType.Trojan:
+                CardManager.GetInstance().ExecuteCard(trojanBlockCardSO, this);
+                break;
+        }
     }
 }

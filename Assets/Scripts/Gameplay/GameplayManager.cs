@@ -27,10 +27,14 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] GameObject combatUIPrefab;
     [SerializeField] GameObject shopUIPrefab;
     [SerializeField] GameObject upgradeStationPrefab;
+    [SerializeField] GameObject eventUIPrefab;
     private Transform gameplayUISpawnArea;
 
     [Header("Currency UI Display")]
     [SerializeField] TextMeshProUGUI gearPartsAmountText;
+
+    [Header("RoomDisplayList")]
+    [SerializeField] TextMeshProUGUI roomClearedAmountText;
 
 
     private void Start()
@@ -56,6 +60,9 @@ public class GameplayManager : MonoBehaviour
             case PathType.UPGRADE_STATION:
                 uiToReferenceTo = upgradeStationPrefab;
                 break;
+            case PathType.EVENT:
+                uiToReferenceTo = eventUIPrefab;
+                break;
         }
 
         Instantiate(uiToReferenceTo, gameplayUISpawnArea);
@@ -75,5 +82,10 @@ public class GameplayManager : MonoBehaviour
         energyPointBarSlider.value = (float)currEP / maxEP;
         energyPointValue.text = currEP + "/" + maxEP;
         gearPartsAmountText.text = PlayerManager.GetInstance().GetGearPartsAmount().ToString();
+    }
+
+    public void UpdateRoomCleared(int currentRoomIndex, int totalAmountOfRooms)
+    {
+        roomClearedAmountText.text = currentRoomIndex.ToString() + "/" + totalAmountOfRooms.ToString() + " Rooms Cleared";
     }
 }

@@ -46,6 +46,14 @@ public class PlayerManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Remove the sekected card from the playerInfo card list
+    /// </summary>
+    public void RemoveFromCardList(CardSO card)
+    {
+        playerInfo.RemoveFromListOfCards(card);
+    }
+
+    /// <summary>
     /// Get the current health of the player.
     /// </summary>
     /// <returns></returns>

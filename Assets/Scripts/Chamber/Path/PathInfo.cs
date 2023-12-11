@@ -26,6 +26,22 @@ public class PathInfo : MonoBehaviour
     }
 
     /// <summary>
+    /// Set the path to active.
+    /// </summary>
+    public void Showpath()
+    {
+        gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// Set the path to inactive.
+    /// </summary>
+    public void Hidepath()
+    {
+        gameObject.SetActive(false);
+    }
+
+    /// <summary>
     /// Execute this function when a path has been chosen. This function will call the relevant path
     /// event from the ChamberManager accordingly.
     /// </summary>

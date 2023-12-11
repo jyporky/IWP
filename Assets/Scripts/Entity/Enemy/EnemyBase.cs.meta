@@ -3,7 +3,23 @@ guid: bdccda3a14e701b45b08e144c5a33950
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - cardPrefab: {instanceID: 0}
+  - deckAmt: {instanceID: 0}
+  - discardAmt: {instanceID: 0}
+  - statusPrefab: {instanceID: 0}
+  - statusHolder: {instanceID: 0}
+  - entitySprite: {instanceID: 0}
+  - entityNameDisplay: {instanceID: 0}
+  - virusBlockCardSO: {fileID: 11400000, guid: bd46190556ecc744e8cf54fb412c16b9, type: 2}
+  - wormBlockCardSO: {fileID: 11400000, guid: 504266219eb34ba43ac4496f63406955, type: 2}
+  - trojanBlockCardSO: {fileID: 11400000, guid: 5a900b878b59a5746a0743c5c612dcb1, type: 2}
+  - healthBarSlider: {instanceID: 0}
+  - healthValue: {instanceID: 0}
+  - shieldPointBarSlider: {instanceID: 0}
+  - shieldPointValue: {instanceID: 0}
+  - enemyName: {instanceID: 0}
+  - enemyPlayCardArea: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

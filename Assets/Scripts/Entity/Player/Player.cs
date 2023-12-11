@@ -11,9 +11,9 @@ public class Player : Entity
     [SerializeField] TextMeshProUGUI healthValue;
     [SerializeField] Slider shieldPointBarSlider;
     [SerializeField] TextMeshProUGUI shieldPointValue;
-    [SerializeField] Button lightShieldButton;
-    [SerializeField] Button normalShieldButton;
-    [SerializeField] Button heavyShieldButton;
+    [SerializeField] Button virusShieldButton;
+    [SerializeField] Button wormShieldButton;
+    [SerializeField] Button trojanShieldButton;
 
     [Header("Deck List Reference")]
     [SerializeField] GameObject deckListUIPrefab;
@@ -32,6 +32,9 @@ public class Player : Entity
         UISpawnArea = GameObject.FindGameObjectWithTag("GameplayUISpawn").transform;
         deckListButton.onClick.AddListener(OpenDeckUIPanel);
         discardListButton.onClick.AddListener(OpenDiscardUIPanel);
+        virusShieldButton.onClick.AddListener(delegate { DoBlockEffect(CardType.Virus); });
+        wormShieldButton.onClick.AddListener(delegate { DoBlockEffect(CardType.Worm); });
+        trojanShieldButton.onClick.AddListener(delegate { DoBlockEffect(CardType.Trojan); });
     }
 
     private void OnEnable()

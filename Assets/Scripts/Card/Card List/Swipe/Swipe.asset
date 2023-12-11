@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7b32ee111c73144a9dbe8273ce71f8d, type: 3}
+  m_Name: Swipe
+  m_EditorClassIdentifier: 
+  cardSprite: {fileID: 21300000, guid: 1644ac38aac3104429b3ff4c4c4af212, type: 3}
+  cardType: 0
+  cardName: Swipe
+  cardDescription: Do 3 damage, heal 3 afterwards.
+  isUpgraded: 0
+  upgradable: 1
+  keywordsList:
+  - keywordType: 1
+    value: 3
+    inflictSelf: 0
+    duration: 0
+    durationByTurn: 0
+    statusSO: {fileID: 11400000, guid: b02df4c662204cf44bcc7c0e1da0004d, type: 2}
+    cardDelay:
+      statusInfo: {fileID: 0}
+      duration: 0
+      durationByTurn: 0
+  - keywordType: 3
+    value: 3
+    inflictSelf: 1
+    duration: 0
+    durationByTurn: 0
+    statusSO: {fileID: 11400000, guid: 9b88811f4e784fe428e6d549ed77ce22, type: 2}
+    cardDelay:
+      statusInfo: {fileID: 0}
+      duration: 0
+      durationByTurn: 0

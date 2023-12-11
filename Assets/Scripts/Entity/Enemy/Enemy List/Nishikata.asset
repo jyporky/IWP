@@ -15,7 +15,7 @@ MonoBehaviour:
   enemyName: Nishikata
   enemyDescription: .Takkkagiiiiii sannnn?
   enemySprite: {fileID: 21300000, guid: e738a1edf5be4034492b2edcdb2b6aad, type: 3}
-  enemyHP: 120
+  enemyHP: 10
   level: 42069
   enemySP: 0
   enemyDeck:

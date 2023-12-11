@@ -326,7 +326,7 @@ RectTransform:
   m_GameObject: {fileID: 2590759196675869020}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.1, y: 1.1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3186392747653164904}
@@ -393,9 +393,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e9fc4884f0fa9c46bcea99971714162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  virusIcon: {fileID: 21300000, guid: 21fa9f3e5d047994e83c00ee0b508fc7, type: 3}
+  wormIcon: {fileID: 21300000, guid: c4f065f74f31e3c47bcdb8d6e6292d5c, type: 3}
+  trojanIcon: {fileID: 21300000, guid: 4a40c2ae3f8b5a7498a0a521e1b10879, type: 3}
+  cardTypeIcon: {fileID: 8326366295329920817}
   cardName: {fileID: 1761587278451440068}
   cardSprite: {fileID: 1741216234090417763}
   cardDescription: {fileID: 1712095896379627782}
+  nonUpgradedColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  upgradedColor:
+    serializedVersion: 2
+    rgba: 4278255360
   keywordPrefab: {fileID: 1500410147494345248, guid: 295291eafa9c27348b09aad18ea8854a, type: 3}
   keywordSpawnArea: {fileID: 5309295191323891218}
   boughtOverlay: {fileID: 5513954951149928660}
@@ -549,14 +559,14 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8879585748106524337}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -100, y: 150}
+  m_AnchoredPosition: {x: -107.4, y: 149.8}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &6664714363894592574

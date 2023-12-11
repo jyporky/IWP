@@ -3,7 +3,17 @@ guid: 16a7f37aada523d48b45333bbaea62c3
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - virusIcon: {instanceID: 0}
+  - wormIcon: {instanceID: 0}
+  - trojanIcon: {instanceID: 0}
+  - cardTypeIcon: {instanceID: 0}
+  - cardName: {instanceID: 0}
+  - cardSprite: {instanceID: 0}
+  - cardDescription: {instanceID: 0}
+  - self: {instanceID: 0}
+  - amountDisplay: {instanceID: 0}
+  - amountText: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

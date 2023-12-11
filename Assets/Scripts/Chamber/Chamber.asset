@@ -12,13 +12,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f7a459b24dca06449c2b73733e8a080, type: 3}
   m_Name: Chamber
   m_EditorClassIdentifier: 
-  rooms: 0100000002000000030000000200000004000000050000000000000000000000000000000400000006000000
-  minimumAmountOfRoomsList: []
+  amountOfRooms: 12
+  fixedRooms:
+  - roomType: 0
+    roomIndex: 0
+  - roomType: 4
+    roomIndex: 6
+  - roomType: 3
+    roomIndex: 10
+  - roomType: 5
+    roomIndex: 11
+  minimumAmountOfRoomsList:
+  - roomType: 1
+    minAmount: 2
+    maxAmount: 8
+  - roomType: 2
+    minAmount: 1
+    maxAmount: 8
+  - roomType: 3
+    minAmount: 1
+    maxAmount: 4
   possibleEnemyToAppearList:
   - {fileID: 11400000, guid: 4a8e2b3045a461e4d96ffa5eebc02e38, type: 2}
   - {fileID: 11400000, guid: 56e55c0eea9c0214c9b6331b8d730244, type: 2}
   avaliableShopItemList:
-  - {fileID: 11400000, guid: 5a73e9289f67e1a42b605239c5191dfb, type: 2}
-  - {fileID: 11400000, guid: be5d70651f155e845be4cf8481c3a92a, type: 2}
+  - {fileID: 11400000, guid: ba1edc3ecadfac54da230eb5aac990ec, type: 2}
   - {fileID: 11400000, guid: 642c93ccf4944dc41a17f0559d7e27c5, type: 2}
+  - {fileID: 11400000, guid: 926f4474f7e7548409f5e787d6eb6152, type: 2}
+  - {fileID: 11400000, guid: 29680832f117841499bb8b511e8ca18e, type: 2}
+  - {fileID: 11400000, guid: be5d70651f155e845be4cf8481c3a92a, type: 2}
+  - {fileID: 11400000, guid: fa6419d2c17175b41923855e3fe7ab7b, type: 2}
+  - {fileID: 11400000, guid: 053e3118d1539dc4497eada61a75e52b, type: 2}
   - {fileID: 11400000, guid: 3bcaf5615755d0f4eb7285a71908df84, type: 2}
+  - {fileID: 11400000, guid: 5a73e9289f67e1a42b605239c5191dfb, type: 2}
+  avaliableEventList:
+  - {fileID: 11400000, guid: 3fb4a3b6a5ccbd445b46302e349a7655, type: 2}
+  - {fileID: 11400000, guid: c3bb44889a1bb114b9bc6a25e9a7c403, type: 2}

@@ -277,7 +277,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 258c0c9241e71e84c916d59d6f56beab, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9948c72e97399894e8099388c474dbfd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -348,15 +348,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb8be94e1d6757641aecd803cb3d61e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardAttackTypeSprite: {fileID: 7079238223681056490}
+  virusIcon: {fileID: 21300000, guid: 21fa9f3e5d047994e83c00ee0b508fc7, type: 3}
+  wormIcon: {fileID: 21300000, guid: c4f065f74f31e3c47bcdb8d6e6292d5c, type: 3}
+  trojanIcon: {fileID: 21300000, guid: 4a40c2ae3f8b5a7498a0a521e1b10879, type: 3}
+  cardTypeIcon: {fileID: 7079238223681056490}
   cardName: {fileID: 3112153132133193072}
   cardSprite: {fileID: 5512084774399379274}
   cardDescription: {fileID: 1691017691815101248}
-  ignoreStatusList:
-  - {fileID: 11400000, guid: b02df4c662204cf44bcc7c0e1da0004d, type: 2}
-  - {fileID: 11400000, guid: a0e5ee247cf204543a12f17d07011c9d, type: 2}
-  - {fileID: 11400000, guid: c8abbee8653542246871b7bc5714208a, type: 2}
-  - {fileID: 11400000, guid: 9b88811f4e784fe428e6d549ed77ce22, type: 2}
+  nonUpgradedColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  upgradedColor:
+    serializedVersion: 2
+    rgba: 4278255360
   keywordPrefab: {fileID: 1500410147494345248, guid: 295291eafa9c27348b09aad18ea8854a, type: 3}
   keywordSpawnArea: {fileID: 899113483839159858}
 --- !u!225 &8058819995839111962

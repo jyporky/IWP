@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using static UnityEngine.GraphicsBuffer;
 
 [System.Serializable]
 public class Keyword
@@ -98,22 +99,17 @@ public enum KeywordType
     Weaken,
     Glitch,
     Trojan,
-    Armor,
+    Block_Virus,
+    Block_Worm,
+    Block_Trojan,
 }
 
 public enum CardType
 {
-    Offensive,
-    Defensive,
-    Utility,
-}
-
-public enum AttackCardType
-{
-    NONE,
-    Light,
-    Normal,
-    Heavy,
+    Virus,
+    Worm,
+    Trojan,
+    None,
 }
 
 public class CardManager : MonoBehaviour
@@ -135,6 +131,18 @@ public class CardManager : MonoBehaviour
         }
     }
 
+    private Entity playerEntity;
+    private Entity enemyEntity;
+
+    /// <summary>
+    /// Set the player and enemy reference. MAKE SURE TO CALL THIS WHEN COMBAT STARTS.
+    /// </summary>
+    public void SetPlayerEnemyReference(Entity playerRef, Entity enemyRef)
+    {
+        playerEntity = playerRef;
+        enemyEntity = enemyRef;
+    }
+
     /// <summary>
     /// this will be set to true if the forcestop function is called. It will stop any ongoing card effect if there is any.
     /// </summary>
@@ -143,8 +151,11 @@ public class CardManager : MonoBehaviour
     /// <summary>
     /// Execute the card. The caster is the one who is attacking, and the target is the one receivng the attack
     /// </summary>
-    public void ExecuteCard(CardSO card, Entity caster, Entity target)
+    public void ExecuteCard(CardSO card, Entity caster)
     {
+        if (CheckIfCardNegated(caster, card))
+            return;
+
         for (int i = 0; i < card.keywordsList.Count; i++)
         {
             if (card.keywordsList[i].keywordType == KeywordType.Glitch)
@@ -153,7 +164,7 @@ public class CardManager : MonoBehaviour
             if (forceStop)
                 break;
 
-            ExecuteKeywordEffect(card.keywordsList[i], caster, target);
+            ExecuteKeywordEffect(card.keywordsList[i], caster);
         }
         forceStop = false;
     }
@@ -161,7 +172,7 @@ public class CardManager : MonoBehaviour
     /// <summary>
     /// Execute the keywordType effect given the keyword class.
     /// </summary>
-    public void ExecuteKeywordEffect(Keyword keyword, Entity caster, Entity target)
+    public void ExecuteKeywordEffect(Keyword keyword, Entity caster)
     {
         int kwValue = keyword.value;
         KeywordType kw = keyword.keywordType;
@@ -169,7 +180,7 @@ public class CardManager : MonoBehaviour
         bool inflictSelf = keyword.inflictSelf;
         bool delay = (keyword.cardDelay.statusInfo != null);
 
-        Entity targetEntity = GetTarget(caster, target, inflictSelf);
+        Entity targetEntity = GetTarget(caster, inflictSelf);
 
         // duration being 0 means it is instant, and no status effect is applied. However there must not be a delay
         if (duration == 0 && !delay)
@@ -217,11 +228,37 @@ public class CardManager : MonoBehaviour
     /// <summary>
     /// Get which entity is the one receving the card effect
     /// </summary>
-    public Entity GetTarget(Entity caster, Entity target, bool inflictSelf)
+    public Entity GetTarget(Entity caster, bool inflictSelf)
     {
-        if (inflictSelf)
-            return caster;
-        else
-            return target;
+        switch (caster)
+        {
+            case Player p:
+                if (inflictSelf)
+                    return playerEntity;
+                else
+                    return enemyEntity;
+
+            case EnemyBase e:
+                if (inflictSelf)
+                    return enemyEntity;
+                else
+                    return playerEntity;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Check to see if the card can be negated.
+    /// </summary>
+    bool CheckIfCardNegated(Entity caster, CardSO cardReference)
+    {
+        Entity oppositionEntity = GetTarget(caster, false);
+        if (oppositionEntity.BlockCardEffect(cardReference.cardType))
+        {
+            return true;
+        }
+
+        return false;
     }
 }

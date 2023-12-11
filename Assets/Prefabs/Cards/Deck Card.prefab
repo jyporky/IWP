@@ -704,7 +704,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 258c0c9241e71e84c916d59d6f56beab, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9948c72e97399894e8099388c474dbfd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -775,10 +775,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16a7f37aada523d48b45333bbaea62c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardAttackTypeSprite: {fileID: 7156319076089041485}
+  virusIcon: {fileID: 21300000, guid: 21fa9f3e5d047994e83c00ee0b508fc7, type: 3}
+  wormIcon: {fileID: 21300000, guid: c4f065f74f31e3c47bcdb8d6e6292d5c, type: 3}
+  trojanIcon: {fileID: 21300000, guid: 4a40c2ae3f8b5a7498a0a521e1b10879, type: 3}
+  cardTypeIcon: {fileID: 7156319076089041485}
   cardName: {fileID: 287210318871313469}
   cardSprite: {fileID: 4989736578487395684}
   cardDescription: {fileID: 2516197360277416677}
+  nonUpgradedColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  upgradedColor:
+    serializedVersion: 2
+    rgba: 4278255360
   self: {fileID: 145018533537633328}
   amountDisplay: {fileID: 2594998631813181709}
   amountText: {fileID: 8733791991901875123}

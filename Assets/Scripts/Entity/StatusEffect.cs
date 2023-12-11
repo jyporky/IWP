@@ -26,7 +26,7 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         textBoxDescription.SetActive(false);
         // Assign the references
         entityReference = entity;
-        statusEffectInfo = statusInfo;
+        statusEffectInfo = new(statusInfo);
 
         // assign the duration value as well as the status information display according to whether it is delay or not
         switch (statusEffectInfo.cardDelay.statusInfo == null)
@@ -104,6 +104,21 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     }
 
     /// <summary>
+    /// Decrease the value of the keyword by 1, should it hit 0, destroy this status.
+    /// </summary>
+    public void DecreaseValue()
+    {
+        statusEffectInfo.value--;
+
+        if (statusEffectInfo.value <= 0)
+        {
+            Unsubscribe();
+            Destroy(gameObject);
+            entityReference.RemoveStatusEffect(statusEffectInfo.keywordType, gameObject);
+        }
+    }
+
+    /// <summary>
     /// Set the modified description to fetch from. The modified description is based on the based description and how the value is changed.
     /// </summary>
     void SetModifiedDescription()
@@ -112,7 +127,7 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         {
             if (baseDescription[i] == 'n')
             {
-                if (i + 1 != baseDescription.Length && baseDescription[i + 1] == ' ')
+                if (i + 1 != baseDescription.Length && i != 0 && baseDescription[i + 1] == ' ' && baseDescription[i - 1] == ' ')
                 {
                     string front = baseDescription.Substring(0, i);
 
@@ -149,6 +164,8 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         }
         UpdateText();
     }
+
+
 
     /// <summary>
     /// Get the value of the status.
@@ -202,9 +219,7 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
         if (statusDuration <= 0)
         {
-            entityReference.onEntityStartTurn -= DecreaseDuration;
-            entityReference.onEntityPlayCard -= DecreaseDuration;
-            entityReference.onEntityEndTurn -= EndTurn;
+            Unsubscribe();
             Destroy(gameObject);
             entityReference.RemoveStatusEffect(statusEffectInfo.keywordType, gameObject);
 
