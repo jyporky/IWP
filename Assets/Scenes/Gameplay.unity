@@ -1968,14 +1968,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   starterCardList:
-  - {fileID: 11400000, guid: 5cf828bb5275db84683c2a708dcf59d0, type: 2}
-  - {fileID: 11400000, guid: 5cf828bb5275db84683c2a708dcf59d0, type: 2}
-  - {fileID: 11400000, guid: eac260bc79fbd814aa85ca504f84a4b0, type: 2}
-  - {fileID: 11400000, guid: eac260bc79fbd814aa85ca504f84a4b0, type: 2}
-  - {fileID: 11400000, guid: 619cd9347b4da7741a65a46040bfd139, type: 2}
-  - {fileID: 11400000, guid: b8e6d7be8b7a7114fa6fd597ad338df0, type: 2}
-  - {fileID: 11400000, guid: 73794f0a4883f5849b6726577009f5e4, type: 2}
-  - {fileID: 11400000, guid: ac30f058b0cf9694a98bee443e68743b, type: 2}
+  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
+  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
+  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
+  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: c6d5fb2a7a7041143bb025d820033352, type: 2}
 --- !u!114 &1601993928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1989,9 +1987,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyList:
-  - enemySO: {fileID: 11400000, guid: 4a8e2b3045a461e4d96ffa5eebc02e38, type: 2}
+  - enemySO: {fileID: 11400000, guid: e1a6abc250e6a264cae41b888d96b872, type: 2}
     enemyPrefab: {fileID: 5181077990269078069, guid: 7d28780be81fdf04a99adb7c6dcc30fb, type: 3}
-  - enemySO: {fileID: 11400000, guid: 56e55c0eea9c0214c9b6331b8d730244, type: 2}
+  - enemySO: {fileID: 11400000, guid: 84de9cef300b1fc4d8d064a803bab220, type: 2}
+    enemyPrefab: {fileID: 5181077990269078069, guid: 7d28780be81fdf04a99adb7c6dcc30fb, type: 3}
+  - enemySO: {fileID: 11400000, guid: 137e779ecd14a8747a57a05a62daf0b4, type: 2}
+    enemyPrefab: {fileID: 5181077990269078069, guid: 7d28780be81fdf04a99adb7c6dcc30fb, type: 3}
+  - enemySO: {fileID: 11400000, guid: ea461c0a7629496448e8f848beb96c81, type: 2}
+    enemyPrefab: {fileID: 5181077990269078069, guid: 7d28780be81fdf04a99adb7c6dcc30fb, type: 3}
+  - enemySO: {fileID: 11400000, guid: 996a9b66f8b0a7f41b46ff89480c8165, type: 2}
+    enemyPrefab: {fileID: 5181077990269078069, guid: 7d28780be81fdf04a99adb7c6dcc30fb, type: 3}
+  - enemySO: {fileID: 11400000, guid: 1755dc865cfa8354d9221450295cb80e, type: 2}
     enemyPrefab: {fileID: 5181077990269078069, guid: 7d28780be81fdf04a99adb7c6dcc30fb, type: 3}
 --- !u!114 &1601993929
 MonoBehaviour:

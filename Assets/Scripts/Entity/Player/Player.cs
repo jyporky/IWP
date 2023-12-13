@@ -105,4 +105,27 @@ public class Player : Entity
         GameObject newDiscardListPanel = Instantiate(deckListUIPrefab, UISpawnArea);
         newDiscardListPanel.GetComponent<DeckList>().SetupDeckList(cardsInDiscardList, "Discard List");
     }
+
+    /// <summary>
+    /// Subscribe this to the combat manager, enable and disable the shield button when invoke differently.
+    /// </summary>
+    public void SubscribeCombatManager()
+    {
+        CombatManager.GetInstance().onPlayerTurn += EnableShield;
+    }
+
+    /// <summary>
+    /// Enable the ability for player to use shield
+    /// </summary>
+    void EnableShield(bool enableShield)
+    {
+        virusShieldButton.interactable = enableShield;
+        wormShieldButton.interactable = enableShield;
+        trojanShieldButton.interactable = enableShield;
+    }
+
+    private void OnDestroy()
+    {
+        CombatManager.GetInstance().onPlayerTurn -= EnableShield;
+    }
 }

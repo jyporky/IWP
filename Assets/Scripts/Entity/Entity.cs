@@ -238,6 +238,7 @@ public class Entity : MonoBehaviour
         {
             if (cardPlayed.keywordsList[i].keywordType == KeywordType.Glitch)
             {
+                cardsInHandList.Remove(cardPlayed);
                 return;
             }
         }
@@ -583,6 +584,37 @@ public class Entity : MonoBehaviour
             case CardType.Trojan:
                 CardManager.GetInstance().ExecuteCard(trojanBlockCardSO, this);
                 break;
+        }
+    }
+
+    /// <summary>
+    /// Get the list of card in the entity according to which type is needed.
+    /// </summary>
+    public List<CardSO> GetCardList(ModifyByAmountOfCardsType whichType)
+    {
+        switch (whichType)
+        {
+            case ModifyByAmountOfCardsType.BY_CARDS_IN_DRAW_PILE:
+                return cardsInDeckList;
+
+            case ModifyByAmountOfCardsType.BY_CARDS_IN_HANDS:
+                return cardsInHandList;
+
+            case ModifyByAmountOfCardsType.BY_CARDS_IN_DISCARDS:
+                return cardsInDiscardList;
+
+            case ModifyByAmountOfCardsType.BY_DECK:
+                List<CardSO> deckCardList = new List<CardSO>();
+                foreach (CardSO card in cardsInDeckList)
+                    deckCardList.Add(card);
+                foreach (CardSO card in cardsInHandList)
+                    deckCardList.Add(card);
+                foreach (CardSO card in cardsInDiscardList)
+                    deckCardList.Add(card);
+                return deckCardList;
+
+            default:
+                return null;
         }
     }
 }

@@ -77,12 +77,7 @@ public class UpgradeStationManagerUI : MonoBehaviour
     void LoadCardList()
     {
         upgradableCardsList.Clear();
-        List<CardSO> cardList = PlayerManager.GetInstance().GetCardList();
-        for (int i = 0; i < cardList.Count; i++)
-        {
-            if (!cardList[i].isUpgraded && cardList[i].upgradable)
-                upgradableCardsList.Add(cardList[i]);
-        }
+        upgradableCardsList = usm.GetUpgradableCards(pm.GetCardList());
     }
 
     /// <summary>

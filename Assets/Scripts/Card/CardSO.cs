@@ -12,6 +12,5 @@ public class CardSO : ScriptableObject
     [TextArea]
     public string cardDescription;
     public bool isUpgraded;
-    public bool upgradable = true;
     public List<Keyword> keywordsList;
 }

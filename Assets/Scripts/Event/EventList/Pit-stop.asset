@@ -30,6 +30,13 @@ MonoBehaviour:
     - eventOutcomeType: 2
       amtChanged: 2
       cardReferenceIfAny: {fileID: 0}
+  - outcomeDesription: Scavenge the area. [Get 4 gear parts].
+    outcomeChosenDialogue: You found some spare parts you can use at the pit stop.
+      You grab it and continue your journey.
+    listOfOutcomeEffects:
+    - eventOutcomeType: 5
+      amtChanged: 4
+      cardReferenceIfAny: {fileID: 0}
   - outcomeDesription: I shall not rest. [Nothing happens]
     outcomeChosenDialogue: You decided that it is not worth stopping for a pit-stop,
       you continue your joruney.

@@ -22,10 +22,22 @@ MonoBehaviour:
   upgradeCardList:
   - {fileID: 11400000, guid: 89cce3e3b091c8f469fba10b135a47c4, type: 2}
   - {fileID: 11400000, guid: 24570254a60453045903f760b6e80129, type: 2}
+  - {fileID: 11400000, guid: e4172b9ae8edd5c48bc163da894d856f, type: 2}
+  - {fileID: 11400000, guid: f290d98d5e2479748b5d8622d95bcc90, type: 2}
   - {fileID: 11400000, guid: c37f254d9744feb42a3b9bdb38d4beae, type: 2}
   - {fileID: 11400000, guid: 82351947d0ba63f49a77364e707ee3c1, type: 2}
+  - {fileID: 11400000, guid: 27b0aa0385b0de548bbf6ca3a1b719bc, type: 2}
   - {fileID: 11400000, guid: acfed04c6847618428ba720a7695b397, type: 2}
   - {fileID: 11400000, guid: 9313178178b2ccb46b0d42d27e853941, type: 2}
   - {fileID: 11400000, guid: ecd52e9f64b9ec848a7900efff4e6be9, type: 2}
+  - {fileID: 11400000, guid: c0df8a2321b587149bec8b39fe39e4c4, type: 2}
   - {fileID: 11400000, guid: 85df612983142a54fbc8bc44593fcac9, type: 2}
   - {fileID: 11400000, guid: 81c8655c93a55e145890102db94f5504, type: 2}
+  - {fileID: 11400000, guid: ac2f94c22ade29d41ad572c2e41a1d87, type: 2}
+  - {fileID: 11400000, guid: b48670a9f465e934d89bd201a653b258, type: 2}
+  - {fileID: 11400000, guid: 439883ef2104c9d4a92497b861e790c6, type: 2}
+  - {fileID: 11400000, guid: a7a0325c410df1f48adc11869724d9d4, type: 2}
+  - {fileID: 11400000, guid: 40b208cdacf2f7543bffb115fb72ecfb, type: 2}
+  - {fileID: 11400000, guid: 5a240c0445db87545b6e24ef4408ad8e, type: 2}
+  - {fileID: 11400000, guid: 04f84e6308c01814b9ef27b6911fdf07, type: 2}
+  - {fileID: 11400000, guid: f19cc5301f933f34988edeffac578981, type: 2}

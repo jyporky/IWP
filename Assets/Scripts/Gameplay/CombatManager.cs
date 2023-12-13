@@ -64,6 +64,12 @@ public class CombatManager : MonoBehaviour
     /// </summary>
     public OnEnemyPlay onEnemyPlay;
 
+    public delegate void OnPlayerTurn(bool isPlayerTurn);
+    /// <summary>
+    /// Delegate event to indicate whether its player turn or not. Gets invoke when its player turn or their turn end.
+    /// </summary>
+    public OnPlayerTurn onPlayerTurn;
+
     private static CombatManager instance;
     public static CombatManager GetInstance()
     {
@@ -230,6 +236,7 @@ public class CombatManager : MonoBehaviour
     /// </summary>
     public void EndPlayerTurn()
     {
+        onPlayerTurn?.Invoke(false);
         EndDrag();
         currentTurn = Turn.ENEMY_TURN;
         player.GetComponent<Entity>().EndTurn();
@@ -257,6 +264,7 @@ public class CombatManager : MonoBehaviour
                 endTurnButton.interactable = true;
                 reshuffledDeckButton.interactable = true;
                 player.GetComponent<Entity>().StartTurn();
+                onPlayerTurn?.Invoke(true);
                 break;
 
             case Turn.ENEMY_TURN:
@@ -320,6 +328,7 @@ public class CombatManager : MonoBehaviour
     public void StopGame()
     {
         currentTurn = Turn.NONE;
+        onPlayerTurn?.Invoke(false);
         onDragging?.Invoke(true);
 
         if (draggingCards != null)
@@ -368,6 +377,7 @@ public class CombatManager : MonoBehaviour
     {
         // create the player and enemy reference
         player = Instantiate(playerGameplayReference, playerArea);
+        player.GetComponent<Player>().SubscribeCombatManager();
         // add the enemy reference into a list. Should an enemy die, the next one will be loaded in
         GameObject enemyReference = EnemyManager.GetInstance().GetEnemyPrefab();
         GameObject newEnemy = Instantiate(enemyReference, enemyArea);

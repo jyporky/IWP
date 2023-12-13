@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7b32ee111c73144a9dbe8273ce71f8d, type: 3}
+  m_Name: VirusDefender
+  m_EditorClassIdentifier: 
+  cardSprite: {fileID: 21300000, guid: b1e04b28082107f419b3aa2dcc90888c, type: 3}
+  cardType: 0
+  cardName: Virus Defender
+  cardDescription: Cost 1 Energy. Block the next virus card the enemy play.
+  isUpgraded: 0
+  upgradable: 0
+  keywordsList:
+  - keywordType: 4
+    value: -1
+    inflictSelf: 1
+    duration: 0
+    durationByTurn: 0
+    statusSO: {fileID: 11400000, guid: c8abbee8653542246871b7bc5714208a, type: 2}
+    cardDelay:
+      statusInfo: {fileID: 0}
+      duration: 0
+      durationByTurn: 0
+    modifyEffectByAmountOfCards:
+      modifyByAmountOfCardType: 0
+      bywhatCardType: 0
+      value: 0
+  - keywordType: 10
+    value: 1
+    inflictSelf: 1
+    duration: 1
+    durationByTurn: 1
+    statusSO: {fileID: 11400000, guid: 8e370013080b9e84d9c940ee66ec464d, type: 2}
+    cardDelay:
+      statusInfo: {fileID: 0}
+      duration: 0
+      durationByTurn: 0
+    modifyEffectByAmountOfCards:
+      modifyByAmountOfCardType: 0
+      bywhatCardType: 0
+      value: 0

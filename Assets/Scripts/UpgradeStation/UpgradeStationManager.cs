@@ -44,8 +44,38 @@ public class UpgradeStationManager : MonoBehaviour
 
     private void Start()
     {
-        statsUpgradeList = new(upgradeStationSO.statsUpgradeList);
+        statsUpgradeList = new List<StatsUpgrade>();
+        foreach (StatsUpgrade upgrade in upgradeStationSO.statsUpgradeList)
+        {
+            StatsUpgrade newStatUpgrade = new StatsUpgrade();
+            newStatUpgrade.upgradeType = upgrade.upgradeType;
+            newStatUpgrade.modifyValueBy = upgrade.modifyValueBy;
+            newStatUpgrade.amountPurchase = upgrade.amountPurchase;
+            statsUpgradeList.Add(newStatUpgrade);
+        }
         cardUpgradesList = new(upgradeStationSO.upgradeCardList);
+    }
+
+    /// <summary>
+    /// Get the list of upgradable cards given a list of cardSO. <br/>
+    /// The card can be upgraded if an upgradecardSO exist within the cardUpgradesList.
+    /// </summary>
+    /// <returns></returns>
+    public List<CardSO> GetUpgradableCards(List<CardSO> listToCheck)
+    {
+        List<CardSO> listToReturn = new List<CardSO>();
+        foreach(CardSO card in listToCheck)
+        {
+            for (int i = 0; i < cardUpgradesList.Count; i++)
+            {
+                if (cardUpgradesList[i].baseCard == card)
+                {
+                    listToReturn.Add(card);
+                    break;
+                }
+            }
+        }
+        return listToReturn;
     }
 
     /// <summary>

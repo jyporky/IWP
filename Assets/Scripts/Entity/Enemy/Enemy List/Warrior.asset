@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3644211d70345fa498b07bf7cc591a9c, type: 3}
+  m_Name: Warrior
+  m_EditorClassIdentifier: 
+  enemyName: Warrior
+  enemyDescription: Test your true skill. The hardest foe to face here.
+  enemySprite: {fileID: 21300000, guid: c06d08cfe045c9942adc1c57fa94b0b6, type: 3}
+  enemyHP: 69
+  level: 69
+  enemySP: 3
+  enemyDeck:
+  - {fileID: 11400000, guid: a280a8c58cc663f4b8096d012b2cce76, type: 2}
+  - {fileID: 11400000, guid: 90564d57347558749b235448214cd0e1, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: f35cc667ca0f3814aaae8d36dd34259d, type: 2}
+  - {fileID: 11400000, guid: c6d5fb2a7a7041143bb025d820033352, type: 2}
+  - {fileID: 11400000, guid: 63ac5a62df48c8748abb98d5597d798c, type: 2}
+  - {fileID: 11400000, guid: b8e6d7be8b7a7114fa6fd597ad338df0, type: 2}
+  - {fileID: 11400000, guid: 1742ca6dfe60baa4e8c31b8134070112, type: 2}
+  - {fileID: 11400000, guid: cd508b2f4e2ea1c4e9717f9aecc9954b, type: 2}
+  - {fileID: 11400000, guid: cd508b2f4e2ea1c4e9717f9aecc9954b, type: 2}
+  - {fileID: 11400000, guid: cd508b2f4e2ea1c4e9717f9aecc9954b, type: 2}
+  - {fileID: 11400000, guid: cd508b2f4e2ea1c4e9717f9aecc9954b, type: 2}
+  - {fileID: 11400000, guid: cd508b2f4e2ea1c4e9717f9aecc9954b, type: 2}
+  gearPartsDrop: 72
+  energyPointDrop: 8
