@@ -100,7 +100,6 @@ public class UpgradeStationManagerUI : MonoBehaviour
         UITransition.GetInstance().BeginTransition(result =>
         {
             ChamberManager.GetInstance().ClearRoom();
-            Destroy(gameObject);
         });
     }
 

@@ -21,10 +21,26 @@ public class Player : Entity
     [SerializeField] Button discardListButton;
     private Transform UISpawnArea;
 
-    private void Awake()
+    [Header("Hack Information")]
+    [SerializeField] GameObject hackDisplayPrefab;
+    [SerializeField] Transform hackListTransform;
+
+    [Header("Hacking Counter")]
+    [SerializeField] GameObject cardTypeDisplayPrefab;
+    [SerializeField] Transform cardTypeIconListReference;
+
+    private HackingManager hm;
+    HackDisplay[] hackDisplayList = null;
+    private List<CardType> hackCounterList = new List<CardType>();
+    private List<GameObject> iconDisplayList = new List<GameObject>();
+
+    protected override void Awake()
     {
+        base.Awake();
         // Link the cardspawnarea
         cardSpawnArea = GameObject.FindGameObjectWithTag("PlayerCardSpawn").transform;
+        hm = HackingManager.GetInstance();
+        cardPrefab = am.GetEnemyCardPrefab(false);
     }
 
     private void Start()
@@ -44,6 +60,57 @@ public class Player : Entity
         ChangeHealth(0);
         ChangeShieldPoint(0);
         UpdateDeckAndDiscardAmountDisplay();
+
+        GameObject newHackInfo = Instantiate(hackDisplayPrefab, hackListTransform);
+        newHackInfo.GetComponent<HackDisplay>().SetHackType(HackType.More_Nexus_Core, this);
+
+        // Get the list of hacks in the combat
+        hackDisplayList = hackListTransform.GetComponentsInChildren<HackDisplay>();
+    }
+
+    /// <summary>
+    /// Play the selected card, add the card type into the counter.
+    /// </summary>
+    /// <param name="cardPlayed"></param>
+    public override void PlayCard(CardSO cardPlayed)
+    {
+        base.PlayCard(cardPlayed);
+        hackCounterList.Add(cardPlayed.cardType);
+        GameObject iconDisplay = Instantiate(cardTypeDisplayPrefab, cardTypeIconListReference.transform);
+        iconDisplay.GetComponent<Image>().sprite = am.GetCardSprite(cardPlayed.cardType);
+        iconDisplayList.Add(iconDisplay);
+
+
+        foreach (var r in hackDisplayList)
+        {
+            r.AttemptHack(hackCounterList);
+        }
+    }
+
+    public override void StartTurn()
+    {
+        base.StartTurn();
+
+        foreach(var r in hackDisplayList)
+        {
+            ExecuteHackEffect(r.GetHackType(), r.GetHackLvl());
+            r.ReduceDuration();
+        }
+    }
+
+    public override void EndTurn()
+    {
+        base.EndTurn();
+        hackCounterList.Clear();
+        for (int i = iconDisplayList.Count - 1; i >= 0; i--)
+        {
+            Destroy(iconDisplayList[i]);
+        }
+
+        foreach (var r in hackDisplayList)
+        {
+            r.AttemptHack(hackCounterList);
+        }
     }
 
     /// <summary>
@@ -56,6 +123,11 @@ public class Player : Entity
         {
             cardsInDeckList.Add(cardList[i]);
         }
+    }
+
+    protected override void DisplayCardList(float yOffset = 0)
+    {
+        base.DisplayCardList(-Screen.height/2 + cardPrefab.GetComponent<RectTransform>().rect.height * 0.25f);
     }
 
     /// <summary>
@@ -124,8 +196,42 @@ public class Player : Entity
         trojanShieldButton.interactable = enableShield;
     }
 
+    /// <summary>
+    /// Remove the counter from the list according to the list provided
+    /// </summary>
+    public void HackExecuted(List<CardType> cardTypeList)
+    {
+        foreach(CardType cardType in cardTypeList)
+        {
+            hackCounterList.Remove(cardType);
+            GameObject removedIcon = iconDisplayList[0];
+            iconDisplayList.Remove(removedIcon);
+            Destroy(removedIcon);
+        }
+    }
+    
     private void OnDestroy()
     {
         CombatManager.GetInstance().onPlayerTurn -= EnableShield;
+    }
+
+    /// <summary>
+    /// Apply the hack effect according to the level and the hack effect inputted.
+    /// If the lvl is 0, ignore this whole function.
+    /// </summary>
+    void ExecuteHackEffect(HackType hackType, int hackLvl)
+    {
+        if (hackLvl == 0)
+            return;
+
+        HackTypeSO hack = hm.GetHackTypeSO(hackType, hackLvl);
+
+        switch (hackType)
+        {
+            case HackType.More_Nexus_Core:
+                currentNexusCoreAmount += hack.amount;
+                UpdateNexusCoreDisplay();
+                break;
+        }
     }
 }

@@ -64,7 +64,6 @@ public class DeckList : MonoBehaviour
     public void DisplaySelectedCard(CardSO selectedCardSO)
     {
         GameObject newSelectedCard = Instantiate(selectedCardPrefab, outsideAreaZone.transform);
-        newSelectedCard.transform.localPosition = new Vector3(0, -100, 0);
         newSelectedCard.transform.localScale = new Vector3(2, 2, 1);
         newSelectedCard.GetComponent<SelectedCard>().UpdateCardDetails(selectedCardSO);
         EnableDisableOutsideZone(true);

@@ -24,15 +24,23 @@ public class ShopManagerUI : MonoBehaviour
 
     private void Start()
     {
+        playerManager = PlayerManager.GetInstance();
+        refreshShopButton.onClick.AddListener(RefreshShop);
+        leaveShopButton.onClick.AddListener(CloseShop);
+    }
+
+    /// <summary>
+    /// After setting this panel active, call this function to reset the shop.
+    /// </summary>
+    public void LoadToShop()
+    {
+        possibleShopItemList.Clear();
         List<ShopItemSO> loadedShopItemList = ShopManager.GetInstance().GetShopItemList();
         for (int i = 0; i < loadedShopItemList.Count; i++)
         {
             possibleShopItemList.Add(loadedShopItemList[i]);
         }
-        playerManager = PlayerManager.GetInstance();
         refreshShopCost = 0;
-        refreshShopButton.onClick.AddListener(RefreshShop);
-        leaveShopButton.onClick.AddListener(CloseShop);
         RefreshShop();
     }
 
@@ -136,7 +144,6 @@ public class ShopManagerUI : MonoBehaviour
         UITransition.GetInstance().BeginTransition(result =>
         {
             ChamberManager.GetInstance().ClearRoom();
-            Destroy(gameObject);
         });
     }
 }

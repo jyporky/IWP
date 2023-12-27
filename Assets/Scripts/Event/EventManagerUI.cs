@@ -25,6 +25,13 @@ public class EventManagerUI : MonoBehaviour
     {
         eventManager = EventManager.GetInstance();
         continueButton.onClick.AddListener(ExitEvent);
+    }
+
+    /// <summary>
+    /// When loading into the event panel, call this function to reset the event.
+    /// </summary>
+    public void LoadToEvent()
+    {
         continueButton.gameObject.SetActive(false);
         LoadEvent();
     }
@@ -130,7 +137,6 @@ public class EventManagerUI : MonoBehaviour
         UITransition.GetInstance().BeginTransition(result =>
         {
             ChamberManager.GetInstance().ClearRoom();
-            Destroy(gameObject);
         });
     }
 }

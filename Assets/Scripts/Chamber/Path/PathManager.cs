@@ -11,6 +11,7 @@ public enum PathType
     STARTING,
     ELITE,
     BOSS,
+    NONE,
 }
 
 public class PathManager : MonoBehaviour

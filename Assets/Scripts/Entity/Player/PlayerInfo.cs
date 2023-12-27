@@ -37,6 +37,8 @@ public class PlayerInfo
     /// </summary>
     private int gearPartsAmount;
 
+    private Dictionary<HackType, int> hackLevelList = new Dictionary<HackType, int>();
+
     public PlayerInfo(int BaseHp, int BaseSP, int startingGearPartsAmount)
     {
         baseHp = BaseHp;
@@ -184,5 +186,42 @@ public class PlayerInfo
         gearPartsAmount += gearPartsChange;
         if (gearPartsAmount < 0)
             gearPartsAmount = 0;
+    }
+
+    /// <summary>
+    /// Add a new hacktype into the player dictionary. <br/>
+    /// If the hacktype already exist, ignore instead.
+    /// </summary>
+    public void AddNewHackType(HackType hackType, int level)
+    {
+        if (!hackLevelList.ContainsKey(hackType))
+        {
+            hackLevelList.Add(hackType, level);
+        }
+        else
+        {
+            Debug.LogWarning("The hackType: " + hackType.ToString() + " that you are attempting to add has already exist.");
+        }
+    }
+
+    /// <summary>
+    /// Increase an exisiting hacktype level in the player dictionary.
+    /// </summary>
+    public void IncreaseExistingHackTypeLevel(HackType hackType)
+    {
+        if (hackLevelList.ContainsKey(hackType))
+        {
+            hackLevelList[hackType]++;
+        }
+    }
+
+    public int GetHackTypeMaxLevel(HackType hackType)
+    {
+        foreach(var d in hackLevelList)
+        {
+            if (hackType == d.Key)
+                return d.Value;
+        }
+        return 0;
     }
 }

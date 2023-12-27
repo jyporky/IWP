@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardSprite: {fileID: 21300000, guid: 83fd4bd53c3cfc64a849c7e7febd4873, type: 3}
   cardType: 2
+  cardCost: 1
   cardName: Processing
   cardDescription: Draw 2 cards
   isUpgraded: 0
-  upgradable: 1
   keywordsList:
   - keywordType: 2
     value: 2
@@ -33,3 +33,4 @@ MonoBehaviour:
       modifyByAmountOfCardType: 0
       bywhatCardType: 0
       value: 0
+      cardReferenceIfAny: {fileID: 0}

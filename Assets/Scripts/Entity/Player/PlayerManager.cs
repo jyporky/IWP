@@ -29,6 +29,11 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        playerInfo.AddNewHackType(HackType.More_Nexus_Core, 3);
+    }
+
     /// <summary>
     /// Get the card List from the playerInfo
     /// </summary>
@@ -165,5 +170,29 @@ public class PlayerManager : MonoBehaviour
     public void ChangeCurrentGearAmount(int gearPartChangeAmount)
     {
         playerInfo.ChangeGearPartsAmount(gearPartChangeAmount);
+    }
+
+    /// <summary>
+    /// Add a new hackType to the player. By default, the base level is 0.
+    /// </summary>
+    public void AddNewHackType(HackType hackType, int baseLevel = 1)
+    {
+        playerInfo.AddNewHackType(hackType, baseLevel);
+    }
+
+    /// <summary>
+    /// Increase the level of an existing hackType the player has.
+    /// </summary>
+    public void IncreaseHackTypeLevel(HackType hackType, int increaseBy = 1)
+    {
+        for (int i = 0; i < increaseBy; i++)
+        {
+            playerInfo.IncreaseExistingHackTypeLevel(hackType);
+        }
+    }
+
+    public int GetHackTypeMaxLevel(HackType hackType)
+    {
+        return playerInfo.GetHackTypeMaxLevel(hackType);
     }
 }

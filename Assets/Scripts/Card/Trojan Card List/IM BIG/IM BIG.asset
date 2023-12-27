@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardSprite: {fileID: 21300000, guid: f1b2b0864fe92924f8c524403afda34a, type: 3}
   cardType: 3
+  cardCost: 1
   cardName: IM BIG
   cardDescription: Do 20 damage if this is the only trojan card in your hand.
   isUpgraded: 0

@@ -15,13 +15,15 @@ public class Entity : MonoBehaviour
     protected List<CardSO> cardsInHandList = new List<CardSO>();
     protected List<CardSO> cardsInDeckList = new List<CardSO>();
     protected List<CardSO> cardsInDiscardList = new List<CardSO>();
+    protected AssetManager am;
+
     [Header("OffSet")]
     [SerializeField] float xOffSetMargin = 200; // Define the min/max x margin. Use +ve pls
     [SerializeField] float yOffSetMargin = 40; // Define the min/max y margin. Use +ve pls
     [SerializeField] float zRotationOffSetMargin = 10; // Define the min/max margin. Use +ve pls
 
     [Header("Prefab Reference")]
-    [SerializeField] GameObject cardPrefab;
+    protected GameObject cardPrefab;
     protected Transform cardSpawnArea;
 
     [Header("DeckAndDiscard")]
@@ -30,18 +32,15 @@ public class Entity : MonoBehaviour
     [SerializeField] TextMeshProUGUI discardAmt;
 
     [Header("StatusEffect")]
-    [SerializeField] GameObject statusPrefab;
+    protected GameObject statusPrefab;
     [SerializeField] Transform statusHolder;
 
-    [Header("Entity Information")]
-    [SerializeField] protected Image entitySprite;
-    [SerializeField] protected TextMeshProUGUI entityNameDisplay;
+    [Header("Nexus Core Point Reference")]
+    [SerializeField] TextMeshProUGUI currentNexusCoreText;
+    [SerializeField] TextMeshProUGUI maximumNexusCoreText;
 
-    [Header("Block Card Reference")]
-    [SerializeField] CardSO virusBlockCardSO;
-    [SerializeField] CardSO wormBlockCardSO;
-    [SerializeField] CardSO trojanBlockCardSO;
-
+    protected int currentNexusCoreAmount;
+    private int maximumNexusCore = 3;
 
     public delegate void OnEntityStartTurn();
     /// <summary>
@@ -66,6 +65,12 @@ public class Entity : MonoBehaviour
     /// If the value reaches 0, that effect no longer exist and will be removed.
     /// </summary>
     protected Dictionary<KeywordType, List<GameObject>> statusEffectList = new Dictionary<KeywordType, List<GameObject>>();
+
+    protected virtual void Awake()
+    {
+        am = AssetManager.GetInstance();
+        statusPrefab = am.GetStatusPrefab();
+    }
 
     /// <summary>
     /// Get the max HP of the Entity
@@ -138,17 +143,19 @@ public class Entity : MonoBehaviour
     /// <summary>
     /// Trigger the start turn effect of the entity, such as drawing cards and triggering any start turn effect.
     /// </summary>
-    public void StartTurn()
+    public virtual void StartTurn()
     {
         TriggerEffect(false);
         DrawCardFromDeck(startTurnDrawAmt);
         onEntityStartTurn?.Invoke();
+        currentNexusCoreAmount = maximumNexusCore;
+        UpdateNexusCoreDisplay();
     }
 
     /// <summary>
     /// Trigger the end turn effect of the entity, such as drawing cards and triggering any start turn effect.
     /// </summary>
-    public void EndTurn()
+    public virtual void EndTurn()
     {
         CheckIfNeedReshuffle();
         onEntityEndTurn?.Invoke();
@@ -227,23 +234,29 @@ public class Entity : MonoBehaviour
     /// But the cards played will be moved to the discardList. If the card has the "Glitch" Keyword,
     /// Do not add it into the discard tile and simply remove it
     /// </summary>
-    public void PlayCard(CardSO cardPlayed)
+    public virtual void PlayCard(CardSO cardPlayed)
     {
         TriggerEffect(true);
         onEntityPlayCard?.Invoke();
         RemoveCardObject(cardPlayed);
         DisplayCardList();
 
+        bool isCardGlitch = false;
         for (int i = 0; i < cardPlayed.keywordsList.Count; i++)
         {
             if (cardPlayed.keywordsList[i].keywordType == KeywordType.Glitch)
             {
                 cardsInHandList.Remove(cardPlayed);
-                return;
+                isCardGlitch = true;
+                break;
             }
         }
+        if (!isCardGlitch)
+            MoveToDifferentList(cardsInHandList, cardsInDiscardList, cardPlayed);
 
-        MoveToDifferentList(cardsInHandList, cardsInDiscardList, cardPlayed);
+        CardManager.GetInstance().ExecuteCard(cardPlayed, this);
+        currentNexusCoreAmount -= cardPlayed.cardCost;
+        UpdateNexusCoreDisplay();
     }
 
     /// <summary>
@@ -279,7 +292,7 @@ public class Entity : MonoBehaviour
     }
 
     /// <summary>
-    /// Shuffle all cards from discard list as well as cards on hand back to the deck
+    /// Shuffle all cards from discard list as well as cards on hand back to the deck.
     /// </summary>
     public void ReshuffleDeck()
     {
@@ -289,6 +302,18 @@ public class Entity : MonoBehaviour
         }
         MoveToDifferentList(cardsInHandList, cardsInDeckList);
         MoveToDifferentList(cardsInDiscardList, cardsInDeckList);
+    }
+
+    /// <summary>
+    /// Discard the cards on hand.
+    /// </summary>
+    void DiscardHand()
+    {
+        for (int i = cardList.Count - 1; i >= 0; i--)
+        {
+            RemoveCardObject(cardList[i].GetComponent<CardBase>().GetCardSO());
+        }
+        MoveToDifferentList(cardsInHandList, cardsInDiscardList);
     }
 
     /// <summary>
@@ -332,7 +357,7 @@ public class Entity : MonoBehaviour
     /// <summary>
     /// Rearrange the cards to make it more beautiful
     /// </summary>
-    void DisplayCardList()
+    protected virtual void DisplayCardList(float yOffset = 0)
     {
         int totalCard = cardList.Count;
 
@@ -365,17 +390,20 @@ public class Entity : MonoBehaviour
                 yPos = 0;
             }
 
-            cardList[i].transform.localPosition = new Vector3(xPos, yPos, cardList[i].transform.localPosition.z);
+            cardList[i].transform.localPosition = new Vector3(xPos, yPos + yOffset, cardList[i].transform.localPosition.z);
             cardList[i].transform.eulerAngles = new Vector3(0, 0, zRot);
         }
     }
 
     /// <summary>
-    /// Check to see if the entity deck needs to be reshuffled. Deck will be automatically
-    /// reshuffle if entity has no cards left in their deck
+    /// Shuffle the player cards on hand to the discard pile. <br/>
+    /// Check to see if the entity deck needs to be reshuffled. <br/>
+    /// Deck will be automatically reshuffle if entity has no cards left in their deck.
     /// </summary>
     void CheckIfNeedReshuffle()
     {
+        DiscardHand();
+
         if (cardsInDeckList.Count == 0)
         {
             ReshuffleDeck();
@@ -573,18 +601,7 @@ public class Entity : MonoBehaviour
     /// </summary>
     public virtual void DoBlockEffect(CardType blockWhatCardType)
     {
-        switch (blockWhatCardType)
-        {
-            case CardType.Virus:
-                CardManager.GetInstance().ExecuteCard(virusBlockCardSO, this);
-                break;
-            case CardType.Worm:
-                CardManager.GetInstance().ExecuteCard(wormBlockCardSO, this);
-                break;
-            case CardType.Trojan:
-                CardManager.GetInstance().ExecuteCard(trojanBlockCardSO, this);
-                break;
-        }
+        CardManager.GetInstance().ExecuteCard(am.GetCardShieldSO(blockWhatCardType), this);
     }
 
     /// <summary>
@@ -615,6 +632,29 @@ public class Entity : MonoBehaviour
 
             default:
                 return null;
+        }
+    }
+
+    /// <summary>
+    /// Get the current nexus core the entity has.
+    /// </summary>
+    /// <returns></returns>
+    public int GetCurrentNexusCore()
+    {
+        return currentNexusCoreAmount;
+    }
+
+    /// <summary>
+    /// Update the nexus core display for the entity.
+    /// </summary>
+    protected void UpdateNexusCoreDisplay()
+    {
+        currentNexusCoreText.text = currentNexusCoreAmount.ToString();
+        maximumNexusCoreText.text = maximumNexusCore.ToString();
+
+        foreach (GameObject card in cardList)
+        {
+            card.GetComponent<CardBase>()?.UpdatePlayableState(currentNexusCoreAmount);
         }
     }
 }

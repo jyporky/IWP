@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardSprite: {fileID: 21300000, guid: 00bcf3c73ebea734bb4035926d83963e, type: 3}
   cardType: 2
+  cardCost: 1
   cardName: Reboot+
   cardDescription: Heal 5 for every reboot card you have in your deck.
   isUpgraded: 1

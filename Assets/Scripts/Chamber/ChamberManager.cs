@@ -225,6 +225,7 @@ public class ChamberManager : MonoBehaviour
     /// </summary>
     public void ClearRoom()
     {
+        GameplayManager.GetInstance().SetPanelActive(PathType.NONE);
         if (clearChamber)
             return;
 
@@ -256,7 +257,7 @@ public class ChamberManager : MonoBehaviour
     {
         UITransition.GetInstance().BeginTransition(result =>
         {
-            SpawnPathUI();
+            SetPathActive();
         });
 
         switch (pathType)
@@ -293,24 +294,24 @@ public class ChamberManager : MonoBehaviour
     /// <summary>
     /// Spawn the path UI according to the path selected. Can bring up enemy, shop, blacksmith UI. Might bring up event if needed.
     /// </summary>
-    void SpawnPathUI()
+    void SetPathActive()
     {
         switch (pathSelected)
         {
             case PathType.ENEMY:
-                GameplayManager.GetInstance().CreateUI(PathType.ENEMY);
+                GameplayManager.GetInstance().SetPanelActive(PathType.ENEMY);
                 Debug.Log("Engage with battle");
                 break;
             case PathType.SHOP:
-                GameplayManager.GetInstance().CreateUI(PathType.SHOP);
+                GameplayManager.GetInstance().SetPanelActive(PathType.SHOP);
                 Debug.Log("Enter Shop");
                 break;
             case PathType.UPGRADE_STATION:
-                GameplayManager.GetInstance().CreateUI(PathType.UPGRADE_STATION);
+                GameplayManager.GetInstance().SetPanelActive(PathType.UPGRADE_STATION);
                 Debug.Log("Enter Upgrade Station");
                 break;
             case PathType.EVENT:
-                GameplayManager.GetInstance().CreateUI(PathType.EVENT);
+                GameplayManager.GetInstance().SetPanelActive(PathType.EVENT);
                 Debug.Log("Enter Event");
                 break;
             default:

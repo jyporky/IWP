@@ -16,6 +16,8 @@ MonoBehaviour:
   fixedRooms:
   - roomType: 0
     roomIndex: 0
+  - roomType: 1
+    roomIndex: 1
   - roomType: 4
     roomIndex: 16
   - roomType: 3
@@ -61,6 +63,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 768736af26fb2904e9363bcbe25eaac0, type: 2}
   - {fileID: 11400000, guid: fd21b47ddc832924cb522252b08a34f3, type: 2}
   - {fileID: 11400000, guid: 9b64692ea9c9235458bb19c37d56f455, type: 2}
+  - {fileID: 11400000, guid: 616a1e307cb3a204ca3a1d01b7d3ae26, type: 2}
   avaliableEventList:
   - {fileID: 11400000, guid: 3fb4a3b6a5ccbd445b46302e349a7655, type: 2}
   - {fileID: 11400000, guid: c3bb44889a1bb114b9bc6a25e9a7c403, type: 2}

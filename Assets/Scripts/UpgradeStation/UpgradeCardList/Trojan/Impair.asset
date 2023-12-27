@@ -9,12 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3629fa356144f6542ac4c27a56db4390, type: 3}
-  m_Name: Markled
+  m_Script: {fileID: 11500000, guid: a38b68d83bb91ff4b9dba46f2ba6f4bb, type: 3}
+  m_Name: Impair
   m_EditorClassIdentifier: 
-  statusName: Marked
-  statusDescription: Take n more damage.
-  statusSprite: {fileID: 21300000, guid: 2a3f9064f4fbe3d45ba6e330b6c66903, type: 3}
-  keyword: 5
-  durationByTurn: 1
-  delay: 0
+  baseCard: {fileID: 11400000, guid: 2dcbe8687cebbf3448629f9e64f11fa9, type: 2}
+  upgradedCard: {fileID: 11400000, guid: 54bdcb71376b28f42bf3aeabf5a5e3cf, type: 2}
+  upgradeCost: 16

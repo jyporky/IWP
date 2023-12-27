@@ -27,7 +27,6 @@ public class CombatManager : MonoBehaviour
     [SerializeField] Transform playerArea;
     [SerializeField] Transform enemyArea;
     [SerializeField] Button endTurnButton;
-    [SerializeField] Button reshuffledDeckButton;
 
     [Header("Gameover Screen")]
     [SerializeField] GameOverScreen gameOverScreen;
@@ -35,7 +34,6 @@ public class CombatManager : MonoBehaviour
     private GameObject selectedCard;
     private GameObject enemyCard;
     Coroutine draggingCards;
-    Coroutine enemyPlayingCards;
 
     public delegate void OnDragging(bool changeIsSelected);
     public OnDragging onDragging;
@@ -80,15 +78,21 @@ public class CombatManager : MonoBehaviour
         instance = this;
 
         // create the selectedCard gameobject
-        selectedCard = Instantiate(selectedCardPrefab, reshuffledDeckButton.transform);
+        selectedCard = Instantiate(selectedCardPrefab, selectedCardSpawnTransform.transform);
         selectedCard.SetActive(false);
     }
 
     private void Start()
     {
         endTurnButton.onClick.AddListener(EndPlayerTurn);
-        reshuffledDeckButton.onClick.AddListener(ReshufflePlayerDeck);
-        StartGame();
+    }
+
+    /// <summary>
+    /// Start the game.
+    /// </summary>
+    public void StartCombat()
+    {
+        RestartGame();
     }
 
     /// <summary>
@@ -99,7 +103,7 @@ public class CombatManager : MonoBehaviour
         GameObject imageRef = enemy.GetComponentInChildren<Image>().gameObject;
         float widthScale = imageRef.GetComponent<RectTransform>().rect.width / 2;
         float heightScale = imageRef.GetComponent<RectTransform>().rect.height / 2;
-        Vector3 pos = imageRef.transform.position;
+        Vector3 pos = imageRef.GetComponent<RectTransform>().anchoredPosition;
         enemyMinHitbox = new Vector2(pos.x - widthScale, pos.y - heightScale);
         enemyMaxHitbox = new Vector2(pos.x + widthScale, pos.y + heightScale);
     }
@@ -108,10 +112,11 @@ public class CombatManager : MonoBehaviour
     /// Update the selectedCard gameObject according to the CardSO and transform of the Card that calls this function. <br/>
     /// Also Increase the scale of the selectedCard and render on top of it.
     /// </summary>
-    public void SelectCard(CardSO card, Transform objectPos)
+    public void SelectCard(CardSO card, RectTransform objectPos)
     {
         selectedCard.GetComponent<SelectedCard>().UpdateCardDetails(card);
-        selectedCard.transform.position = new Vector3(objectPos.position.x, objectPos.position.y + 100, objectPos.position.z);
+        selectedCard.GetComponent<CardBase>().UpdatePlayableState(player.GetComponent<Entity>().GetCurrentNexusCore());
+        selectedCard.GetComponent<RectTransform>().anchoredPosition = new Vector3(objectPos.anchoredPosition.x, objectPos.anchoredPosition.y + 100, objectPos.position.z);
         selectedCard.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
 
         selectedCard.SetActive(true);
@@ -167,12 +172,11 @@ public class CombatManager : MonoBehaviour
         if (currentTurn != Turn.PLAYER_TURN)
             return;
 
-        Vector2 selectedCardPos = new Vector2(selectedCard.transform.position.x, selectedCard.transform.position.y);
+        Vector2 selectedCardPos = new Vector2(selectedCard.GetComponent<RectTransform>().anchoredPosition.x, selectedCard.GetComponent<RectTransform>().anchoredPosition.y);
         if ((selectedCardPos.x >= enemyMinHitbox.x && selectedCardPos.x <= enemyMaxHitbox.x) && (selectedCardPos.y >= enemyMinHitbox.y && selectedCardPos.y <= enemyMaxHitbox.y))
         {
             CardSO selectedCardSO = selectedCard.GetComponent<SelectedCard>().GetCardSO();
             player.GetComponent<Player>().PlayCard(selectedCardSO);
-            CardManager.GetInstance().ExecuteCard(selectedCardSO, player.GetComponent<Entity>());
         }
     }
 
@@ -183,52 +187,10 @@ public class CombatManager : MonoBehaviour
     {
         while (true)
         {
-            selectedCard.transform.position = Input.mousePosition;
+            Vector3 mousePos = Input.mousePosition;
+            selectedCard.GetComponent<RectTransform>().anchoredPosition = new Vector2(mousePos.x - Screen.width/2, mousePos.y - Screen.height/2);
             yield return null;
         }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public void EnemyPlayCard(CardSO cardPlayed, Transform playArea)
-    {
-        if (enemyPlayingCards != null)
-        {
-            StopCoroutine(enemyPlayingCards);
-            enemyPlayingCards = null;
-        }
-        enemyPlayingCards = StartCoroutine(EnemyPlayingCard(cardPlayed, playArea));
-    }
-
-    /// <summary>
-    /// Do the animation of the enemy playing their cards. (Might be temporary)
-    /// </summary>
-    IEnumerator EnemyPlayingCard(CardSO cardPlayed, Transform playArea)
-    {
-        GameObject enemyActiveCard = Instantiate(selectedCardPrefab, reshuffledDeckButton.transform);
-        enemyCard = enemyActiveCard;
-        enemyCard.SetActive(false);
-
-        yield return new WaitForSeconds(2);
-        enemyCard.transform.position = playArea.position;
-        enemyCard.GetComponent<SelectedCard>().UpdateCardDetails(cardPlayed);
-        enemy.GetComponent<Entity>().PlayCard(cardPlayed);
-        CardManager.GetInstance().ExecuteCard(cardPlayed, enemy.GetComponent<Entity>());
-        enemyCard.SetActive(true);
-        yield return new WaitForSeconds(2);
-        enemyCard.SetActive(false);
-        Destroy(enemyCard);
-        onEnemyPlay?.Invoke();
-    }
-
-    /// <summary>
-    /// Forcefully reshuffled the player deck.
-    /// </summary>
-    void ReshufflePlayerDeck()
-    {
-        player.GetComponent<Player>().ReshuffleDeck();
-        EndPlayerTurn();
     }
 
     /// <summary>
@@ -262,14 +224,12 @@ public class CombatManager : MonoBehaviour
         {
             case Turn.PLAYER_TURN:
                 endTurnButton.interactable = true;
-                reshuffledDeckButton.interactable = true;
                 player.GetComponent<Entity>().StartTurn();
                 onPlayerTurn?.Invoke(true);
                 break;
 
             case Turn.ENEMY_TURN:
                 endTurnButton.interactable = false;
-                reshuffledDeckButton.interactable = false;
                 enemy.GetComponent<Entity>().StartTurn();
                 onEnemyPlay?.Invoke();
                 break;
@@ -336,12 +296,7 @@ public class CombatManager : MonoBehaviour
             StopCoroutine(draggingCards);
             draggingCards = null;
         }
-
-        if (enemyPlayingCards != null)
-        {
-            StopCoroutine(enemyPlayingCards);
-            enemyPlayingCards = null;
-        }
+        enemy.GetComponent<EnemyBase>().ForceStopPlayingCard();
     }
 
     /// <summary>
@@ -367,7 +322,6 @@ public class CombatManager : MonoBehaviour
     {
         ChamberManager.GetInstance().ClearRoom();
         onGameEnd?.Invoke();
-        Destroy(gameObject);
     }
 
     /// <summary>
@@ -375,6 +329,12 @@ public class CombatManager : MonoBehaviour
     /// </summary>
     void StartGame()
     {
+        // delete the previous player and enemy reference if any.
+        if (player != null)
+            Destroy(player);
+        if (enemy != null)
+            Destroy(enemy);
+
         // create the player and enemy reference
         player = Instantiate(playerGameplayReference, playerArea);
         player.GetComponent<Player>().SubscribeCombatManager();

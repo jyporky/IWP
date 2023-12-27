@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using static CombatManager;
 
 public class EnemyBase : Entity
 {
@@ -12,16 +13,33 @@ public class EnemyBase : Entity
     [SerializeField] Slider shieldPointBarSlider;
     [SerializeField] TextMeshProUGUI shieldPointValue;
     [SerializeField] TextMeshProUGUI enemyName;
+
     [Header("Enemy stuff references")]
     [SerializeField] Transform enemyPlayCardArea;
+    protected GameObject enemycardPrefab;
+
+    [Header("Entity Information")]
+    [SerializeField] Image entitySprite;
+    [SerializeField] TextMeshProUGUI entityNameDisplay;
+
+    [Header("Perk Information")]
+    [SerializeField] bool havePerk = true;
+    [SerializeField] Transform perkSpawnArea;
+    [SerializeField] Sprite perkSprite;
+    [SerializeField] string perkDescription;
 
     private EnemySO enemySO;
     protected int level;
 
-    private void Awake()
+    private Coroutine enemyPlayingCard;
+
+    protected override void Awake()
     {
+        base.Awake();
         // Link the cardspawnarea
         cardSpawnArea = GameObject.FindGameObjectWithTag("EnemyCardSpawn").transform;
+        cardPrefab = am.GetEnemyCardPrefab(true);
+        enemycardPrefab = am.GetSelectedCardPrefab();
     }
 
     private void Start()
@@ -31,6 +49,12 @@ public class EnemyBase : Entity
         CombatManager.GetInstance().onEnemyPlay += ExecuteTurn;
         CombatManager.GetInstance().onGameEnd += UnSubscribeAll;
         UpdateDeckAndDiscardAmountDisplay();
+
+        if (havePerk)
+        {
+            GameObject perk = Instantiate(am.GetPerkPrefab(), perkSpawnArea);
+            perk.GetComponent<EnemyPerkDisplay>().UpdatePerkDisplay(perkSprite, perkDescription);
+        }
     }
 
     /// <summary>
@@ -87,17 +111,47 @@ public class EnemyBase : Entity
     /// </summary>
     void ExecuteTurn()
     {
-        CombatManager gm = CombatManager.GetInstance();
         if (cardsInHandList.Count > 0)
         {
             int cardToPlay = Random.Range(0, cardsInHandList.Count);
             CardSO cardPlayed = cardsInHandList[cardToPlay];
-            gm.EnemyPlayCard(cardPlayed, enemyPlayCardArea);
+
+            if (enemyPlayingCard == null)
+            {
+                enemyPlayingCard = StartCoroutine(EnemyPlayCard(cardPlayed, enemyPlayCardArea));
+            }
         }
         else
         {
-            gm.EndEnemyTurn();
+            CombatManager.GetInstance().EndEnemyTurn();
         }
+    }
+
+    /// <summary>
+    /// Force the enemy to stop playing their cards.
+    /// </summary>
+    public void ForceStopPlayingCard()
+    {
+        if (enemyPlayingCard != null)
+            StopCoroutine(enemyPlayingCard);
+    }
+
+    /// <summary>
+    /// Do the animation of the enemy playing their cards. (Might be temporary)
+    /// </summary>
+    IEnumerator EnemyPlayCard(CardSO cardPlayed, Transform playArea)
+    {
+        GameObject enemyActiveCard = Instantiate(enemycardPrefab, gameObject.transform);
+        enemyActiveCard.SetActive(false);
+        yield return new WaitForSeconds(2);
+        enemyActiveCard.transform.position = playArea.position;
+        enemyActiveCard.GetComponent<SelectedCard>().UpdateCardDetails(cardPlayed);
+        base.PlayCard(cardPlayed);
+        enemyActiveCard.SetActive(true);
+        yield return new WaitForSeconds(2);
+        Destroy(enemyActiveCard);
+        enemyPlayingCard = null;
+        ExecuteTurn();
     }
 
     /// <summary>

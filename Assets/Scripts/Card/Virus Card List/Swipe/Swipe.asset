@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardSprite: {fileID: 21300000, guid: 1644ac38aac3104429b3ff4c4c4af212, type: 3}
   cardType: 1
+  cardCost: 1
   cardName: Swipe
   cardDescription: Do 3 damage, heal 3 afterwards.
   isUpgraded: 0
-  upgradable: 1
   keywordsList:
   - keywordType: 1
     value: 3
@@ -33,6 +33,7 @@ MonoBehaviour:
       modifyByAmountOfCardType: 0
       bywhatCardType: 0
       value: 0
+      cardReferenceIfAny: {fileID: 0}
   - keywordType: 3
     value: 3
     inflictSelf: 1
@@ -47,3 +48,4 @@ MonoBehaviour:
       modifyByAmountOfCardType: 0
       bywhatCardType: 0
       value: 0
+      cardReferenceIfAny: {fileID: 0}

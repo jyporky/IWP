@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class InteractableCard : CardBase, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     private bool selected = false;
+    private bool playable = false;
 
     private void Start()
     {
@@ -20,7 +21,7 @@ public class InteractableCard : CardBase, IPointerEnterHandler, IPointerExitHand
         if (!selected)
         {
             GetComponent<CanvasGroup>().alpha = 0;
-            CombatManager.GetInstance().SelectCard(card, transform);
+            CombatManager.GetInstance().SelectCard(card, GetComponent<RectTransform>());
         }
     }
 
@@ -34,12 +35,15 @@ public class InteractableCard : CardBase, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        CombatManager.GetInstance().StartDrag();
+        if (playable)
+            CombatManager.GetInstance().StartDrag();
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        CombatManager.GetInstance().EndDrag();
+        if (playable)
+            CombatManager.GetInstance().EndDrag();
+
         Deselected();
     }
 
@@ -61,5 +65,24 @@ public class InteractableCard : CardBase, IPointerEnterHandler, IPointerExitHand
     {
         CombatManager.GetInstance().onDragging -= SetSelected;
         CombatManager.GetInstance().onGameEnd -= Unsubscribe;
+    }
+
+    /// <summary>
+    /// Execute the parent, afterwards if player lacks the amount to play the card, do not allow the player to sart dragging the card.
+    /// </summary>
+    /// <param name="entityNexusAmt"></param>
+    public override void UpdatePlayableState(int entityNexusAmt)
+    {
+        base.UpdatePlayableState(entityNexusAmt);
+
+        // Set the card to a playable state or not depending on the amount.
+        if (entityNexusAmt >= card.cardCost)
+        {
+            playable = true;
+        }
+        else
+        {
+            playable = false;
+        }
     }
 }

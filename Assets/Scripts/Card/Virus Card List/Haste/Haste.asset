@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardSprite: {fileID: 21300000, guid: 89b67295fdd2a234996662f68474baaf, type: 3}
   cardType: 1
+  cardCost: 1
   cardName: Haste
   cardDescription: Do 1 damage, draw a card
   isUpgraded: 0
-  upgradable: 1
   keywordsList:
   - keywordType: 1
     value: 1
@@ -33,6 +33,7 @@ MonoBehaviour:
       modifyByAmountOfCardType: 0
       bywhatCardType: 0
       value: 0
+      cardReferenceIfAny: {fileID: 0}
   - keywordType: 2
     value: 1
     inflictSelf: 1
@@ -47,3 +48,4 @@ MonoBehaviour:
       modifyByAmountOfCardType: 0
       bywhatCardType: 0
       value: 0
+      cardReferenceIfAny: {fileID: 0}

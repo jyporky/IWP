@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardSprite: {fileID: 21300000, guid: 7170c851d32041745b682bc9b814a49b, type: 3}
   cardType: 1
+  cardCost: 1
   cardName: Press The Attack
   cardDescription: Do 20 damage, reduce damage by 2 for every virus card type in
     your draw pile.

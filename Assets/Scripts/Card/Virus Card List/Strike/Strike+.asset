@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardSprite: {fileID: 21300000, guid: e0cf85a07879ada4ab6d915950166a42, type: 3}
   cardType: 1
+  cardCost: 1
   cardName: Strike+
   cardDescription: Do 5 damage
   isUpgraded: 1
-  upgradable: 1
   keywordsList:
   - keywordType: 1
     value: 5
@@ -33,3 +33,4 @@ MonoBehaviour:
       modifyByAmountOfCardType: 0
       bywhatCardType: 0
       value: 0
+      cardReferenceIfAny: {fileID: 0}

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -15,57 +16,84 @@ public class GameplayManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        combatUIPanel.SetActive(false);
+        shopUIPanel.SetActive(false);
+        upgradeStationPanel.SetActive(false);
+        eventUIPanel.SetActive(false);
+        chamberPanel.SetActive(true);
     }
 
     [Header("Player Stats UI Display")]
+    [SerializeField] GameObject playerStatsUIDisplay;
     [SerializeField] Slider healthBarSlider;
     [SerializeField] TextMeshProUGUI healthValue;
     [SerializeField] Slider energyPointBarSlider;
     [SerializeField] TextMeshProUGUI energyPointValue;
 
     [Header("UI Display Reference")]
-    [SerializeField] GameObject combatUIPrefab;
-    [SerializeField] GameObject shopUIPrefab;
-    [SerializeField] GameObject upgradeStationPrefab;
-    [SerializeField] GameObject eventUIPrefab;
-    private Transform gameplayUISpawnArea;
+    [SerializeField] GameObject combatUIPanel;
+    [SerializeField] GameObject shopUIPanel;
+    [SerializeField] GameObject upgradeStationPanel;
+    [SerializeField] GameObject eventUIPanel;
+    [SerializeField] GameObject chamberPanel;
+    private GameObject[] panelArray;
 
     [Header("Currency UI Display")]
     [SerializeField] TextMeshProUGUI gearPartsAmountText;
 
     [Header("RoomDisplayList")]
-    [SerializeField] TextMeshProUGUI roomClearedAmountText;
-
+    [SerializeField] TextMeshProUGUI roomClearedAmountText;   
 
     private void Start()
     {
-        gameplayUISpawnArea = GameObject.FindGameObjectWithTag("GameplayUISpawn").transform;
+        SetPanelActive(PathType.NONE);
         UpdatePlayerStatsDisplay();
     }
 
     /// <summary>
-    /// Create the combatUI as well as its manager from the prefab.
+    /// Set the selected panel active, if the pathtype is none, set all active panel inactive and display the chamber panel.
     /// </summary>
-    public void CreateUI(PathType whichpathType)
+    public void SetPanelActive(PathType whichpathType)
     {
-        GameObject uiToReferenceTo = null;
         switch (whichpathType)
         {
             case PathType.ENEMY:
-                uiToReferenceTo = combatUIPrefab;
+                combatUIPanel.SetActive(true);
+                StartCoroutine(DelayOneFrame(result => combatUIPanel.GetComponent<CombatManager>().StartCombat()));
+                chamberPanel.SetActive(false);
+                TogglePlayerStatsDisplay(false);
                 break;
             case PathType.SHOP:
-                uiToReferenceTo = shopUIPrefab;
+                shopUIPanel.SetActive(true);
+                StartCoroutine(DelayOneFrame(result => shopUIPanel.GetComponent<ShopManagerUI>().LoadToShop()));
+                chamberPanel.SetActive(false);
                 break;
             case PathType.UPGRADE_STATION:
-                uiToReferenceTo = upgradeStationPrefab;
+                upgradeStationPanel.SetActive(true);
+                chamberPanel.SetActive(false);
                 break;
             case PathType.EVENT:
-                uiToReferenceTo = eventUIPrefab;
+                eventUIPanel.SetActive(true);
+                StartCoroutine(DelayOneFrame(result => eventUIPanel.GetComponent<EventManagerUI>().LoadToEvent()));
+                chamberPanel.SetActive(false);
+                break;
+            case PathType.NONE:
+                chamberPanel.SetActive(true);
+                combatUIPanel.SetActive(false);
+                shopUIPanel.SetActive(false);
+                upgradeStationPanel.SetActive(false);
+                eventUIPanel.SetActive(false);
+                TogglePlayerStatsDisplay(true);
                 break;
         }
+    }
 
-        Instantiate(uiToReferenceTo, gameplayUISpawnArea);
+    /// <summary>
+    /// Control whether the player stats display is active or not.
+    /// </summary>
+    void TogglePlayerStatsDisplay(bool toggle)
+    {
+        playerStatsUIDisplay.SetActive(toggle);
     }
 
     /// <summary>
@@ -87,5 +115,11 @@ public class GameplayManager : MonoBehaviour
     public void UpdateRoomCleared(int currentRoomIndex, int totalAmountOfRooms)
     {
         roomClearedAmountText.text = currentRoomIndex.ToString() + "/" + totalAmountOfRooms.ToString() + " Rooms Cleared";
+    }
+
+    IEnumerator DelayOneFrame(Action<bool> callback)
+    {
+        yield return null;
+        callback(true);
     }
 }
