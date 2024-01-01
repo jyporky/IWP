@@ -191,8 +191,22 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Get the max level of an existing hacktype.
+    /// </summary>
+    /// <param name="hackType"></param>
+    /// <returns></returns>
     public int GetHackTypeMaxLevel(HackType hackType)
     {
         return playerInfo.GetHackTypeMaxLevel(hackType);
+    }
+
+    /// <summary>
+    /// Get the list of existing hacktype.
+    /// </summary>
+    /// <returns></returns>
+    public List<HackType> GetListOfHackType()
+    {
+        return playerInfo.GetListOfHackType();
     }
 }

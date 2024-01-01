@@ -80,22 +80,6 @@ public class AssetManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Get the card prefab, this depends on whether it is player or enemy. <br/>
-    /// Return player card if bool is false. <br/>
-    /// Return enemy card if bool is true. <br/>
-    /// </summary>
-    public GameObject GetEnemyCardPrefab(bool isEnemy)
-    {
-        switch (isEnemy)
-        {
-            case true:
-                return enemyCardPrefab;
-            case false:
-                return interactableCardPrefab;
-        }
-    }
-
-    /// <summary>
     /// Get the perk prefab.
     /// </summary>
     public GameObject GetPerkPrefab()
@@ -109,13 +93,5 @@ public class AssetManager : MonoBehaviour
     public GameObject GetStatusPrefab()
     {
         return statusPrefab;
-    }
-
-    /// <summary>
-    /// Get the Selected Card Prefab, the one that displays the keywords of a card.
-    /// </summary>
-    public GameObject GetSelectedCardPrefab()
-    {
-        return selectedCardPrefab;
     }
 }

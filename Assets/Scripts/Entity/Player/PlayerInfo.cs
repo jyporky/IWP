@@ -215,6 +215,11 @@ public class PlayerInfo
         }
     }
 
+    /// <summary>
+    /// Get the max level of an existing hackType. Return 0 if it does not exist.
+    /// </summary>
+    /// <param name="hackType"></param>
+    /// <returns></returns>
     public int GetHackTypeMaxLevel(HackType hackType)
     {
         foreach(var d in hackLevelList)
@@ -223,5 +228,21 @@ public class PlayerInfo
                 return d.Value;
         }
         return 0;
+    }
+
+    /// <summary>
+    /// Get the list of existing hackType in the playerInfo script.
+    /// </summary>
+    /// <returns></returns>
+    public List<HackType> GetListOfHackType()
+    {
+        List<HackType> listOfHackType = new List<HackType>();
+
+        foreach(var h in hackLevelList)
+        {
+            listOfHackType.Add(h.Key);
+        }
+
+        return listOfHackType;
     }
 }

@@ -222,7 +222,7 @@ public class CardManager : MonoBehaviour
                     targetEntity.ChangeHealth(kwValue);
                     break;
                 case KeywordType.Gain_Energy_Point:
-                    targetEntity.ChangeShieldPoint(kwValue);
+                    targetEntity.ChangeEnergyPoint(kwValue);
                     break;
             }
         }

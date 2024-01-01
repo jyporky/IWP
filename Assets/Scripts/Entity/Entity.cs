@@ -9,36 +9,15 @@ public class Entity : MonoBehaviour
 {
     protected int maxHP;
     protected int currentHP;
-    protected int maxSP;
-    protected int currentSP;
-    private List<GameObject> cardList = new List<GameObject>();
+    protected int maxEP;
+    protected int currentEP;
     protected List<CardSO> cardsInHandList = new List<CardSO>();
     protected List<CardSO> cardsInDeckList = new List<CardSO>();
     protected List<CardSO> cardsInDiscardList = new List<CardSO>();
     protected AssetManager am;
+    protected CombatManagerUI cm;
 
-    [Header("OffSet")]
-    [SerializeField] float xOffSetMargin = 200; // Define the min/max x margin. Use +ve pls
-    [SerializeField] float yOffSetMargin = 40; // Define the min/max y margin. Use +ve pls
-    [SerializeField] float zRotationOffSetMargin = 10; // Define the min/max margin. Use +ve pls
-
-    [Header("Prefab Reference")]
-    protected GameObject cardPrefab;
-    protected Transform cardSpawnArea;
-
-    [Header("DeckAndDiscard")]
     [SerializeField] int startTurnDrawAmt;
-    [SerializeField] TextMeshProUGUI deckAmt;
-    [SerializeField] TextMeshProUGUI discardAmt;
-
-    [Header("StatusEffect")]
-    protected GameObject statusPrefab;
-    [SerializeField] Transform statusHolder;
-
-    [Header("Nexus Core Point Reference")]
-    [SerializeField] TextMeshProUGUI currentNexusCoreText;
-    [SerializeField] TextMeshProUGUI maximumNexusCoreText;
-
     protected int currentNexusCoreAmount;
     private int maximumNexusCore = 3;
 
@@ -64,12 +43,12 @@ public class Entity : MonoBehaviour
     /// Store the list of status effect the entity has. Postive value suggest turns, negative value suggest by cards played.
     /// If the value reaches 0, that effect no longer exist and will be removed.
     /// </summary>
-    protected Dictionary<KeywordType, List<GameObject>> statusEffectList = new Dictionary<KeywordType, List<GameObject>>();
+    protected Dictionary<KeywordType, List<StatusEffect>> statusEffectList = new Dictionary<KeywordType, List<StatusEffect>>();
 
     protected virtual void Awake()
     {
         am = AssetManager.GetInstance();
-        statusPrefab = am.GetStatusPrefab();
+        cm = CombatManagerUI.GetInstance();
     }
 
     /// <summary>
@@ -107,37 +86,41 @@ public class Entity : MonoBehaviour
         {
             currentHP = maxHP;
         }
-    }
 
-    /// <summary>
-    /// Change the value of the current health. Put negative values for minus of health, and vice versa.
-    /// Note that player health cannot go above the maximum limit
-    /// </summary>
-    public virtual void ChangeShieldPoint(int shieldPointChanged)
-    {
-        currentSP += shieldPointChanged;
-
-        if (currentSP > maxSP)
-        {
-            currentSP = maxSP;
-        }
+        cm.UpdateHealthDisplay(this, currentHP, maxHP);
     }
 
     /// <summary>
     /// Get the max SP of the Entity
     /// </summary>
-    public int GetMaxSP()
+    public int GetmaxEP()
     {
-        return maxSP;
+        return maxEP;
     }
 
     /// <summary>
     /// Get the current SP of the Entity
     /// </summary>
     /// <returns></returns>
-    public int GetCurrentSP()
+    public int GetcurrentEP()
     {
-        return currentSP;
+        return currentEP;
+    }
+
+    /// <summary>
+    /// Change the value of the current health. Put negative values for minus of health, and vice versa.
+    /// Note that player health cannot go above the maximum limit
+    /// </summary>
+    public virtual void ChangeEnergyPoint(int shieldPointChanged)
+    {
+        currentEP += shieldPointChanged;
+
+        if (currentEP > maxEP)
+        {
+            currentEP = maxEP;
+        }
+
+        cm.UpdateEnergyDisplay(this, currentEP, maxEP);
     }
 
     /// <summary>
@@ -177,7 +160,7 @@ public class Entity : MonoBehaviour
         int cardIndexToGetFrom = Random.Range(0, cardsInDeckList.Count);
         if (cardsInDeckList.Count != 0)
         {
-            StartCoroutine(DrawCard(cardsInDeckList[cardIndexToGetFrom]));
+            cm.CreateCard(this, cardsInDeckList[cardIndexToGetFrom]);
             MoveToDifferentList(cardsInDeckList, cardsInHandList, cardsInDeckList[cardIndexToGetFrom]);
         }
         else
@@ -239,7 +222,6 @@ public class Entity : MonoBehaviour
         TriggerEffect(true);
         onEntityPlayCard?.Invoke();
         RemoveCardObject(cardPlayed);
-        DisplayCardList();
 
         bool isCardGlitch = false;
         for (int i = 0; i < cardPlayed.keywordsList.Count; i++)
@@ -264,22 +246,7 @@ public class Entity : MonoBehaviour
     /// </summary>
     void RemoveCardObject(CardSO theCard)
     {
-        for (int i = 0; i < cardList.Count; i++)
-        {
-            if (cardList[i].GetComponent<CardBase>()?.GetCardSO() == theCard)
-            {
-                Destroy(cardList[i]);
-                cardList.RemoveAt(i);
-                break;
-            }
-
-            else if (cardList[i].GetComponent<EnemyCard>()?.GetCardSO() == theCard)
-            {
-                Destroy(cardList[i]);
-                cardList.RemoveAt(i);
-                break;
-            }
-        }
+        cm.DeleteCard(this, theCard);
     }
 
     /// <summary>
@@ -296,9 +263,9 @@ public class Entity : MonoBehaviour
     /// </summary>
     public void ReshuffleDeck()
     {
-        for (int i = cardList.Count - 1; i >= 0; i--)
+        for (int i = cardsInHandList.Count - 1; i >= 0; i--)
         {
-            RemoveCardObject(cardList[i].GetComponent<CardBase>().GetCardSO());
+            RemoveCardObject(cardsInHandList[i]);
         }
         MoveToDifferentList(cardsInHandList, cardsInDeckList);
         MoveToDifferentList(cardsInDiscardList, cardsInDeckList);
@@ -309,9 +276,9 @@ public class Entity : MonoBehaviour
     /// </summary>
     void DiscardHand()
     {
-        for (int i = cardList.Count - 1; i >= 0; i--)
+        for (int i = cardsInHandList.Count - 1; i >= 0; i--)
         {
-            RemoveCardObject(cardList[i].GetComponent<CardBase>().GetCardSO());
+            RemoveCardObject(cardsInHandList[i]);
         }
         MoveToDifferentList(cardsInHandList, cardsInDiscardList);
     }
@@ -341,61 +308,6 @@ public class Entity : MonoBehaviour
     }
 
     /// <summary>
-    /// Draw a card and add it into the list
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator DrawCard(CardSO cardDrawn)
-    {
-        GameObject newCard = Instantiate(cardPrefab, cardSpawnArea);
-        newCard.GetComponent<CardBase>()?.UpdateCardDetails(cardDrawn);
-        newCard.GetComponent<EnemyCard>()?.SetCardSO(cardDrawn);
-        cardList.Add(newCard);
-        DisplayCardList();
-        yield return null;
-    }
-
-    /// <summary>
-    /// Rearrange the cards to make it more beautiful
-    /// </summary>
-    protected virtual void DisplayCardList(float yOffset = 0)
-    {
-        int totalCard = cardList.Count;
-
-        float xDistanceBetweenInterval = xOffSetMargin * 2 / (totalCard + 1);
-        float yDistanceBetweenInterval = yOffSetMargin / ((totalCard + 2) / 2);
-
-        float rotationBetweenInterval = zRotationOffSetMargin * 2 / (totalCard + 1);
-
-        float xPos = -xOffSetMargin;
-        float yPos = -yOffSetMargin;
-        float zRot = zRotationOffSetMargin;
-
-        for (int i = 0; i < totalCard; i++)
-        {
-            // move to the next interval and then assign the position and rotation accordingly
-            xPos += xDistanceBetweenInterval;
-            zRot -= rotationBetweenInterval;
-
-            // if the i value is below half of total, increase the yPos value, otherwise decrease it instead
-            if (i > totalCard / 2)
-            {
-                yPos -= yDistanceBetweenInterval;
-            }
-            else if (i < totalCard / 2)
-            {
-                yPos += yDistanceBetweenInterval;
-            }
-            else if (totalCard % 2 != 0)
-            {
-                yPos = 0;
-            }
-
-            cardList[i].transform.localPosition = new Vector3(xPos, yPos + yOffset, cardList[i].transform.localPosition.z);
-            cardList[i].transform.eulerAngles = new Vector3(0, 0, zRot);
-        }
-    }
-
-    /// <summary>
     /// Shuffle the player cards on hand to the discard pile. <br/>
     /// Check to see if the entity deck needs to be reshuffled. <br/>
     /// Deck will be automatically reshuffle if entity has no cards left in their deck.
@@ -411,12 +323,11 @@ public class Entity : MonoBehaviour
     }
 
     /// <summary>
-    /// Update the display for the amount of cards in the deck and the discard pile.
+    /// Update the display for the amount of cards in the deck and the discard pile inside the combat manager.
     /// </summary>
     protected void UpdateDeckAndDiscardAmountDisplay()
     {
-        deckAmt.text = cardsInDeckList.Count.ToString();
-        discardAmt.text = cardsInDiscardList.Count.ToString();
+        cm.UpdateDeckAndDiscardAmountDisplay(this, cardsInDeckList.Count, cardsInDiscardList.Count);
     }
 
     /// <summary>
@@ -429,14 +340,16 @@ public class Entity : MonoBehaviour
         // check to see if the status effect with that gameobject exist. If it exist and has the same duration, stack the value.
         if (statusEffectList.ContainsKey(newKeyword.keywordType) && GetExistingStatusEffect(newKeyword) != null)
         {
-            GameObject statusReference = GetExistingStatusEffect(newKeyword);
-            statusReference.GetComponent<StatusEffect>().UpdateValue(newKeyword.value);
+            StatusEffect statusReference = GetExistingStatusEffect(newKeyword);
+            statusReference.UpdateValue(newKeyword.value);
         }
 
         else
         {
-            GameObject newStatus = Instantiate(statusPrefab, statusHolder);
-            newStatus.GetComponent<StatusEffect>().SetStatus(this, newKeyword);
+            // Create the new status in the combatmanager ui, and tell it to return the StatusEffect reference.
+            StatusEffect newStatus = cm.CreateStatusEffect(this);
+
+            newStatus.SetStatus(this, newKeyword);
 
             // if there is already a list in that key, simply add the new status to that list
             if (statusEffectList.ContainsKey(newKeyword.keywordType))
@@ -446,20 +359,22 @@ public class Entity : MonoBehaviour
             // if there is no list in that key, create the new status, then create a dictionary list and add it to the statuseffectList.
             else
             {
-                List<GameObject> newStatusList = new List<GameObject>();
-                newStatusList.Add(newStatus);
+                List<StatusEffect> newStatusList = new List<StatusEffect>()
+                {
+                    newStatus,
+                };
                 statusEffectList.Add(newKeyword.keywordType, newStatusList);
             }
         }
     }
 
     /// <summary>
-    /// Get any existing gameobject with the status effect IF the duration matches as well as whether they are delayed.
+    /// Get any existing status effect script with the status effect IF the duration matches as well as whether they are delayed.
     /// </summary>
     /// <returns></returns>
-    GameObject GetExistingStatusEffect(Keyword statusEffect)
+    StatusEffect GetExistingStatusEffect(Keyword statusEffect)
     {
-        List<GameObject> statusList = statusEffectList[statusEffect.keywordType];
+        List<StatusEffect> statusList = statusEffectList[statusEffect.keywordType];
         for (int i = 0; i < statusList.Count; i++)
         {
             StatusEffect se = statusList[i].GetComponent<StatusEffect>();
@@ -477,9 +392,9 @@ public class Entity : MonoBehaviour
     /// When a status effect expire, call this function to remove the object from the keyword status list. If that keyword status list is empty. Delete
     /// that keyword from the dictionary.
     /// </summary>
-    public void RemoveStatusEffect(KeywordType removeWhatStatus, GameObject objectReference)
+    public void RemoveStatusEffect(KeywordType removeWhatStatus, StatusEffect statusReference)
     {
-        statusEffectList[removeWhatStatus].Remove(objectReference);
+        statusEffectList[removeWhatStatus].Remove(statusReference);
         if (statusEffectList[removeWhatStatus].Count == 0)
         {
             statusEffectList.Remove(removeWhatStatus);
@@ -573,7 +488,7 @@ public class Entity : MonoBehaviour
                     continue;
                 if (statusEffect.IsDurationByTurn() && !byCardPlayed || !statusEffect.IsDurationByTurn() && byCardPlayed)
                 {
-                    ChangeShieldPoint(statusEffect.GetValue());
+                    ChangeEnergyPoint(statusEffect.GetValue());
                 }
             }
         }
@@ -584,11 +499,11 @@ public class Entity : MonoBehaviour
     /// </summary>
     public void RefreshStatusAndDeck()
     {
-        foreach (KeyValuePair<KeywordType, List<GameObject>> kw in statusEffectList)
+        foreach (KeyValuePair<KeywordType, List<StatusEffect>> kw in statusEffectList)
         {
             for (int i = 0; i < kw.Value.Count; i = 0)
             {
-                Destroy(kw.Value[0]);
+                Destroy(kw.Value[0].gameObject);
             }
         }
 
@@ -645,16 +560,10 @@ public class Entity : MonoBehaviour
     }
 
     /// <summary>
-    /// Update the nexus core display for the entity.
+    /// Update the nexus core display for the entity by calling the combatmanagerUI accordingly.
     /// </summary>
     protected void UpdateNexusCoreDisplay()
     {
-        currentNexusCoreText.text = currentNexusCoreAmount.ToString();
-        maximumNexusCoreText.text = maximumNexusCore.ToString();
-
-        foreach (GameObject card in cardList)
-        {
-            card.GetComponent<CardBase>()?.UpdatePlayableState(currentNexusCoreAmount);
-        }
+        cm.UpdateNexusCoreDisplay(this, currentNexusCoreAmount, maximumNexusCore);
     }
 }

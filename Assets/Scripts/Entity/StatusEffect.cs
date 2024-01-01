@@ -114,7 +114,7 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         {
             Unsubscribe();
             Destroy(gameObject);
-            entityReference.RemoveStatusEffect(statusEffectInfo.keywordType, gameObject);
+            entityReference.RemoveStatusEffect(statusEffectInfo.keywordType, this);
         }
     }
 
@@ -221,7 +221,7 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         {
             Unsubscribe();
             Destroy(gameObject);
-            entityReference.RemoveStatusEffect(statusEffectInfo.keywordType, gameObject);
+            entityReference.RemoveStatusEffect(statusEffectInfo.keywordType, this);
 
             if (isStatusDelay)
             {
@@ -240,7 +240,7 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         entityReference.onEntityPlayCard -= DecreaseDuration;
         entityReference.onEntityEndTurn -= EndTurn;
-        entityReference.RemoveStatusEffect(statusEffectInfo.keywordType, gameObject);
+        entityReference.RemoveStatusEffect(statusEffectInfo.keywordType, this);
         Destroy(gameObject);
     }
 

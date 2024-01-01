@@ -18,26 +18,33 @@ public class CombatManager : MonoBehaviour
         NONE,
     }
 
-    [Header("Prefab References")]
-    [SerializeField] GameObject playerGameplayReference;
-    [SerializeField] GameObject selectedCardPrefab;
-
     [Header("Object Reference")]
     [SerializeField] Transform selectedCardSpawnTransform;
+    [SerializeField] Button endTurnButton;
+
+    [Header("Player and Enemy Spawn Area")]
     [SerializeField] Transform playerArea;
     [SerializeField] Transform enemyArea;
-    [SerializeField] Button endTurnButton;
 
     [Header("Gameover Screen")]
     [SerializeField] GameOverScreen gameOverScreen;
 
+    [Header("Player and Enemy Reference")]
+    [SerializeField] GameObject playerPrefab;
+
+    [Header("Card Prefab Reference")]
+    [SerializeField] GameObject selectedCardPrefab;
+
+    // Reference to the selected card for the player and the enemy
     private GameObject selectedCard;
     private GameObject enemyCard;
-    Coroutine draggingCards;
 
+    // For dragging of cards
+    Coroutine draggingCards;
     public delegate void OnDragging(bool changeIsSelected);
     public OnDragging onDragging;
 
+    // For unsubscring event
     public delegate void OnGameEnd();
     /// <summary>
     /// A delegate event that will unsubscribe any subscription made to any delegate event.
@@ -45,28 +52,25 @@ public class CombatManager : MonoBehaviour
     /// </summary>
     public OnGameEnd onGameEnd;
 
-    private GameObject player;
-    private GameObject enemy;
+    // Player and entity references
+    private Entity player;
+    private Entity enemy;
     private Vector2 enemyMinHitbox;
     private Vector2 enemyMaxHitbox;
+
+    // the current turn for the combat
     private Turn currentTurn;
 
     // Loot earned by player if enemy is successfully defeated.
     private int gearPartAmountGain;
     private int energyPointAmountGain;
 
-
+    // Delegate event for enemy executing their turn
     public delegate void OnEnemyPlay();
     /// <summary>
     /// Delegate event meant for enemy to execute their turn.
     /// </summary>
     public OnEnemyPlay onEnemyPlay;
-
-    public delegate void OnPlayerTurn(bool isPlayerTurn);
-    /// <summary>
-    /// Delegate event to indicate whether its player turn or not. Gets invoke when its player turn or their turn end.
-    /// </summary>
-    public OnPlayerTurn onPlayerTurn;
 
     private static CombatManager instance;
     public static CombatManager GetInstance()
@@ -100,7 +104,7 @@ public class CombatManager : MonoBehaviour
     /// </summary>
     void SetEnemyHitbox()
     {
-        GameObject imageRef = enemy.GetComponentInChildren<Image>().gameObject;
+        GameObject imageRef = CombatManagerUI.GetInstance().GetEnemyImageReference().gameObject;
         float widthScale = imageRef.GetComponent<RectTransform>().rect.width / 2;
         float heightScale = imageRef.GetComponent<RectTransform>().rect.height / 2;
         Vector3 pos = imageRef.GetComponent<RectTransform>().anchoredPosition;
@@ -114,8 +118,8 @@ public class CombatManager : MonoBehaviour
     /// </summary>
     public void SelectCard(CardSO card, RectTransform objectPos)
     {
-        selectedCard.GetComponent<SelectedCard>().UpdateCardDetails(card);
-        selectedCard.GetComponent<CardBase>().UpdatePlayableState(player.GetComponent<Entity>().GetCurrentNexusCore());
+        selectedCard.GetComponent<CardBase>().UpdateCardDetails(card);
+        selectedCard.GetComponent<CardBase>().UpdatePlayableState(player.GetCurrentNexusCore());
         selectedCard.GetComponent<RectTransform>().anchoredPosition = new Vector3(objectPos.anchoredPosition.x, objectPos.anchoredPosition.y + 100, objectPos.position.z);
         selectedCard.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
 
@@ -176,7 +180,7 @@ public class CombatManager : MonoBehaviour
         if ((selectedCardPos.x >= enemyMinHitbox.x && selectedCardPos.x <= enemyMaxHitbox.x) && (selectedCardPos.y >= enemyMinHitbox.y && selectedCardPos.y <= enemyMaxHitbox.y))
         {
             CardSO selectedCardSO = selectedCard.GetComponent<SelectedCard>().GetCardSO();
-            player.GetComponent<Player>().PlayCard(selectedCardSO);
+            player.PlayCard(selectedCardSO);
         }
     }
 
@@ -198,10 +202,10 @@ public class CombatManager : MonoBehaviour
     /// </summary>
     public void EndPlayerTurn()
     {
-        onPlayerTurn?.Invoke(false);
+        CombatManagerUI.GetInstance().EnableShield(false);
         EndDrag();
         currentTurn = Turn.ENEMY_TURN;
-        player.GetComponent<Entity>().EndTurn();
+        player.EndTurn();
         TurnStart();
     }
 
@@ -211,7 +215,7 @@ public class CombatManager : MonoBehaviour
     public void EndEnemyTurn()
     {
         currentTurn = Turn.PLAYER_TURN;
-        enemy.GetComponent<Entity>().EndTurn();
+        enemy.EndTurn();
         TurnStart();
     }
 
@@ -224,13 +228,13 @@ public class CombatManager : MonoBehaviour
         {
             case Turn.PLAYER_TURN:
                 endTurnButton.interactable = true;
-                player.GetComponent<Entity>().StartTurn();
-                onPlayerTurn?.Invoke(true);
+                player.StartTurn();
+                CombatManagerUI.GetInstance().EnableShield(true);
                 break;
 
             case Turn.ENEMY_TURN:
                 endTurnButton.interactable = false;
-                enemy.GetComponent<Entity>().StartTurn();
+                enemy.StartTurn();
                 onEnemyPlay?.Invoke();
                 break;
         }
@@ -241,27 +245,7 @@ public class CombatManager : MonoBehaviour
     /// </summary>
     public void ExecuteCardFromDelay(Entity caster, Keyword statusInfo)
     {
-        // if it is self inflict, execute the effect to itself
-        switch (statusInfo.inflictSelf)
-        {
-            case true:
-                CardManager.GetInstance().ExecuteKeywordEffect(statusInfo, caster);
-                break;
-
-            // if it is not self inflict, find who the caster is and slot the target accordingly.
-            case false:
-                {
-                    if (caster.gameObject.GetComponent<Player>())
-                    {
-                        CardManager.GetInstance().ExecuteKeywordEffect(statusInfo, player.GetComponent<Entity>());
-                    }
-                    else
-                    {
-                        CardManager.GetInstance().ExecuteKeywordEffect(statusInfo, enemy.GetComponent<Entity>());
-                    }
-                }
-                break;
-        }
+        CardManager.GetInstance().ExecuteKeywordEffect(statusInfo, caster);
     }
 
     /// <summary>
@@ -288,7 +272,7 @@ public class CombatManager : MonoBehaviour
     public void StopGame()
     {
         currentTurn = Turn.NONE;
-        onPlayerTurn?.Invoke(false);
+        CombatManagerUI.GetInstance().EnableShield(false);
         onDragging?.Invoke(true);
 
         if (draggingCards != null)
@@ -296,7 +280,8 @@ public class CombatManager : MonoBehaviour
             StopCoroutine(draggingCards);
             draggingCards = null;
         }
-        enemy.GetComponent<EnemyBase>().ForceStopPlayingCard();
+
+        CombatManagerUI.GetInstance().ForceStopEnemyPlayingCard();
     }
 
     /// <summary>
@@ -305,8 +290,8 @@ public class CombatManager : MonoBehaviour
     public void ReturnToChamber()
     {
         PlayerManager pm = PlayerManager.GetInstance();
-        pm.SetCurrentHealth(player.GetComponent<Player>().GetCurrentHP());
-        pm.SetCurrentEnergyPoint(player.GetComponent<Player>().GetCurrentSP() + energyPointAmountGain);
+        pm.SetCurrentHealth(player.GetCurrentHP());
+        pm.SetCurrentEnergyPoint(player.GetcurrentEP() + energyPointAmountGain);
         pm.ChangeCurrentGearAmount(gearPartAmountGain);
 
         UITransition.GetInstance().BeginTransition(result =>
@@ -329,31 +314,29 @@ public class CombatManager : MonoBehaviour
     /// </summary>
     void StartGame()
     {
-        // delete the previous player and enemy reference if any.
-        if (player != null)
-            Destroy(player);
-        if (enemy != null)
-            Destroy(enemy);
-
         // create the player and enemy reference
-        player = Instantiate(playerGameplayReference, playerArea);
-        player.GetComponent<Player>().SubscribeCombatManager();
-        // add the enemy reference into a list. Should an enemy die, the next one will be loaded in
+        player = Instantiate(playerPrefab, playerArea).GetComponent<Entity>();
+        Player p = player as Player;
+
         GameObject enemyReference = EnemyManager.GetInstance().GetEnemyPrefab();
         GameObject newEnemy = Instantiate(enemyReference, enemyArea);
 
         EnemySO enemySOReference = EnemyManager.GetInstance().GetEnemySO();
         newEnemy.GetComponent<EnemyBase>().LoadStatsAndDeck(enemySOReference);
+
         gearPartAmountGain = enemySOReference.gearPartsDrop;
         energyPointAmountGain = enemySOReference.energyPointDrop;
-        enemy = newEnemy;
-        enemy.SetActive(true);
+        enemy = newEnemy.GetComponent<Entity>();
+
+        // Define the player and the enemy for the combat manager UI
+        CombatManagerUI.GetInstance().SetPlayerAndEntity(player, enemy);
+
+        // Set the hitbox of the enemy
         SetEnemyHitbox();
 
-        CardManager.GetInstance().SetPlayerEnemyReference(player.GetComponent<Entity>(), enemy.GetComponent<Entity>());
+        CardManager.GetInstance().SetPlayerEnemyReference(player, enemy);
 
-        currentTurn = Turn.PLAYER_TURN;
-        TurnStart();
+        StartCoroutine(DelaySettingTurn());
     }
 
     /// <summary>
@@ -364,8 +347,14 @@ public class CombatManager : MonoBehaviour
         Destroy(enemyCard);
         selectedCard.SetActive(false);
         onGameEnd?.Invoke();
-        Destroy(player);
-        Destroy(enemy);
+
+        if (player != null)
+            Destroy(player.gameObject);
+        if (enemy != null)
+            Destroy(enemy.gameObject);
+
+        CombatManagerUI.GetInstance().RefreshAll();
+
         StartCoroutine(DelayStartGame());
     }
 
@@ -374,5 +363,12 @@ public class CombatManager : MonoBehaviour
         yield return null;
 
         StartGame();
+    }
+
+    IEnumerator DelaySettingTurn()
+    {
+        yield return null;
+        currentTurn = Turn.PLAYER_TURN;
+        TurnStart();
     }
 }
