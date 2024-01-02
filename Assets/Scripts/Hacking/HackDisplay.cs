@@ -226,6 +226,17 @@ public class HackDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     /// <summary>
+    /// Reset the duration and the level of the hack.
+    /// </summary>
+    public void ResetHack()
+    {
+        hackLvl = 0;
+        duration = 0;
+        ToggleHackUpgrade(false);
+        UpdateHackDisplay();
+    }
+
+    /// <summary>
     /// Get the current level of this hack info.
     /// </summary>
     /// <returns></returns>

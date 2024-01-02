@@ -45,6 +45,7 @@ public class AssetManager : MonoBehaviour
     [SerializeField] GameObject selectedCardPrefab;
     [SerializeField] GameObject perkPrefab;
     [SerializeField] GameObject statusPrefab;
+    [SerializeField] Keyword overloadedEffect;
 
 
     /// <summary>
@@ -93,5 +94,17 @@ public class AssetManager : MonoBehaviour
     public GameObject GetStatusPrefab()
     {
         return statusPrefab;
+    }
+
+    /// <summary>
+    /// Get the overloaded Keyword, able to further modify the duration of the overload in turns.
+    /// </summary>
+    public Keyword GetOverloadedEffect(int duration)
+    {
+        Keyword returnKeyword = new Keyword(overloadedEffect);
+
+        returnKeyword.duration = duration;
+
+        return returnKeyword;
     }
 }

@@ -228,8 +228,8 @@ public class CombatManager : MonoBehaviour
         {
             case Turn.PLAYER_TURN:
                 endTurnButton.interactable = true;
-                player.StartTurn();
                 CombatManagerUI.GetInstance().EnableShield(true);
+                player.StartTurn();
                 break;
 
             case Turn.ENEMY_TURN:

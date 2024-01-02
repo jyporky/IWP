@@ -114,7 +114,7 @@ public enum KeywordType
     Strength,
     Weaken,
     Glitch,
-    Trojan,
+    Overload,
     Block_Virus,
     Block_Worm,
     Block_Trojan,

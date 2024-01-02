@@ -121,6 +121,21 @@ public class Entity : MonoBehaviour
         }
 
         cm.UpdateEnergyDisplay(this, currentEP, maxEP);
+
+        // If the entity energy amount is lesser than 0, overload the entity. For now it is fixed at 3 turns.
+        if (currentEP < 0)
+        {
+            AddStatusEffect(am.GetOverloadedEffect(3));
+            currentNexusCoreAmount = 0;
+            UpdateNexusCoreDisplay();
+
+            foreach (var r in cardsInHandList)
+            {
+                RemoveCardObject(r);
+            }
+
+            MoveToDifferentList(cardsInHandList, cardsInDiscardList);
+        }
     }
 
     /// <summary>
@@ -129,9 +144,14 @@ public class Entity : MonoBehaviour
     public virtual void StartTurn()
     {
         TriggerEffect(false);
-        DrawCardFromDeck(startTurnDrawAmt);
         onEntityStartTurn?.Invoke();
-        currentNexusCoreAmount = maximumNexusCore;
+
+        // if the player is not overloaded, draw cards and regenerate nexus point.
+        if (!statusEffectList.ContainsKey(KeywordType.Overload))
+        {
+            DrawCardFromDeck(startTurnDrawAmt);
+            currentNexusCoreAmount = maximumNexusCore;
+        }
         UpdateNexusCoreDisplay();
     }
 
@@ -390,7 +410,8 @@ public class Entity : MonoBehaviour
 
     /// <summary>
     /// When a status effect expire, call this function to remove the object from the keyword status list. If that keyword status list is empty. Delete
-    /// that keyword from the dictionary.
+    /// that keyword from the dictionary. <br/>
+    /// If the status being removed is overloaded, restore the entity energy to 0.
     /// </summary>
     public void RemoveStatusEffect(KeywordType removeWhatStatus, StatusEffect statusReference)
     {
@@ -398,6 +419,12 @@ public class Entity : MonoBehaviour
         if (statusEffectList[removeWhatStatus].Count == 0)
         {
             statusEffectList.Remove(removeWhatStatus);
+
+            if (removeWhatStatus == KeywordType.Overload)
+            {
+                currentEP = 0;
+                cm.UpdateEnergyDisplay(this, currentEP, maxEP);
+            }
         }
     }
 

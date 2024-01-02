@@ -123,6 +123,8 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     /// </summary>
     void SetModifiedDescription()
     {
+        bool containvalue = false;
+
         for (int i = 0; i < baseDescription.Length; i++)
         {
             if (baseDescription[i] == 'n')
@@ -158,10 +160,16 @@ public class StatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
                     string back = baseDescription.Substring(i + 1, baseDescription.Length - (i + 1));
 
                     modifiedDescription = front + value + back;
+                    containvalue = true;
                     break;
                 }
             }
         }
+        if (!containvalue)
+        {
+            modifiedDescription = baseDescription;
+        }
+
         UpdateText();
     }
 

@@ -52,6 +52,12 @@ public class Player : Entity
     {
         base.StartTurn();
 
+        // If the player is overloaded, disable the player shield.
+        if (statusEffectList.ContainsKey(KeywordType.Overload))
+        {
+            cm.EnableShield(false);
+        }
+
         foreach (var r in hackDisplayList)
         {
             ExecuteHackEffect(r.GetHackType(), r.GetHackLvl());
@@ -108,6 +114,18 @@ public class Player : Entity
     public override void ChangeEnergyPoint(int shieldPointChanged)
     {
         base.ChangeEnergyPoint(shieldPointChanged);
+
+        // If the player has less than 0 energy, clear the hack counter, reset all hacks, disable the players ability to use shield.
+        if (currentEP < 0)
+        {
+            foreach(var hack in hackDisplayList)
+            {
+                cm.EnableShield(false);
+                hack.ResetHack();
+                hackCounterList.Clear();
+                cm.ClearHackCounter();
+            }
+        }    
     }
 
     /// <summary>

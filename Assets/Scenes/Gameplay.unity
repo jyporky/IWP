@@ -3212,6 +3212,22 @@ MonoBehaviour:
   selectedCardPrefab: {fileID: 8231392379871932407, guid: 41f8ce43f57d60a4ea15924080735f6b, type: 3}
   perkPrefab: {fileID: 3496963563264326347, guid: 44ae189045aad114e9a64b026bef9347, type: 3}
   statusPrefab: {fileID: 8552563035882802448, guid: 150a5216b18df47499ce7b0d40cdf2dc, type: 3}
+  overloadedEffect:
+    keywordType: 9
+    value: 0
+    inflictSelf: 1
+    duration: 0
+    durationByTurn: 1
+    statusSO: {fileID: 11400000, guid: 7708b97e956487440818f025cb419636, type: 2}
+    cardDelay:
+      statusInfo: {fileID: 0}
+      duration: 0
+      durationByTurn: 0
+    modifyEffectByAmountOfCards:
+      modifyByAmountOfCardType: 0
+      bywhatCardType: 0
+      value: 0
+      cardReferenceIfAny: {fileID: 0}
 --- !u!1 &1692947563
 GameObject:
   m_ObjectHideFlags: 0
@@ -3802,7 +3818,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -759.99994, y: 0}
+  m_AnchoredPosition: {x: -760, y: 0}
   m_SizeDelta: {x: -1520, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &4839361809917255829
