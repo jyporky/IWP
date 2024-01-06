@@ -100,6 +100,7 @@ public class Player : Entity
         currentHP = pm.GetCurrentHealth();
         maxEP = pm.GetMaxEP();
         currentEP = pm.GetCurrentEP();
+        startTurnDrawAmt = 3;
     }
     
     public override void ChangeHealth(int healthChanged)

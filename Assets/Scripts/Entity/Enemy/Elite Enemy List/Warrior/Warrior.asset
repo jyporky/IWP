@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3644211d70345fa498b07bf7cc591a9c, type: 3}
+  m_Name: Warrior
+  m_EditorClassIdentifier: 
+  enemyName: Warrior
+  enemyDescription: A warrior? Seems like he might go berserk.
+  enemySprite: {fileID: 21300000, guid: c06d08cfe045c9942adc1c57fa94b0b6, type: 3}
+  enemyHP: 70
+  level: 4
+  enemySP: 1
+  drawCardAmt: 1
+  enemyDeck:
+  - {fileID: 11400000, guid: 4a4a806abac8ee646a5bc617bc0f30db, type: 2}
+  - {fileID: 11400000, guid: 171fa175dd0f6e24cad2d0e629db8c0e, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: ff5a9279041e5614b9025fe516639526, type: 2}
+  - {fileID: 11400000, guid: ff5a9279041e5614b9025fe516639526, type: 2}
+  - {fileID: 11400000, guid: c24451ae38aaed24ca3ecaa84c98423c, type: 2}
+  - {fileID: 11400000, guid: c24451ae38aaed24ca3ecaa84c98423c, type: 2}
+  gearPartsDrop: 40
+  energyPointDrop: 6

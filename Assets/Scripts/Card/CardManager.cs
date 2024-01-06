@@ -118,6 +118,8 @@ public enum KeywordType
     Block_Virus,
     Block_Worm,
     Block_Trojan,
+    Gain_Nexus_Core,
+    Add_Card,
 }
 
 public enum CardType
@@ -223,6 +225,12 @@ public class CardManager : MonoBehaviour
                     break;
                 case KeywordType.Gain_Energy_Point:
                     targetEntity.ChangeEnergyPoint(kwValue);
+                    break;
+                case KeywordType.Gain_Nexus_Core:
+                    targetEntity.AddNexusCore(kwValue);
+                    break;
+                case KeywordType.Add_Card:
+                    AddCard(targetEntity, keyword);
                     break;
             }
         }
@@ -350,5 +358,34 @@ public class CardManager : MonoBehaviour
 
         // return the value according to the counter multiply by the indicated value.
         return returnValue;
+    }
+
+    /// <summary>
+    /// Call this if the card effect type is add card. <br/>
+    /// Add the card into enemy draw/hand/discard according to the modifyByAmountOfCardType as where it should go. <br/>
+    /// Put cardReferenceIfAny for the cardSO reference. <br/>
+    /// Specify the value for how much to add.
+    /// </summary>
+    void AddCard(Entity targetEntity, Keyword cardEffect)
+    {
+        targetEntity.AddCardsToPile(cardEffect.modifyEffectByAmountOfCards.modifyByAmountOfCardType, cardEffect.modifyEffectByAmountOfCards.cardReferenceIfAny, cardEffect.value);
+    }
+
+    /// <summary>
+    /// Get the player reference.
+    /// </summary>
+    /// <returns></returns>
+    public Entity GetPlayerReference()
+    {
+        return playerEntity;
+    }
+
+    /// <summary>
+    /// Get the enemy reference.
+    /// </summary>
+    /// <returns></returns>
+    public Entity GetEnemyReference()
+    {
+        return enemyEntity;
     }
 }

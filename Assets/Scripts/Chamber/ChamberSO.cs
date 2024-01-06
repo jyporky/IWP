@@ -27,6 +27,16 @@ public class ChamberSO : ScriptableObject
     public List<EnemySO> possibleEnemyToAppearList;
 
     /// <summary>
+    /// Get the list of elites that can spawn in this chamber.
+    /// </summary>
+    public List<EnemySO> possibleElitesToAppearList;
+
+    /// <summary>
+    /// The boss of the chamber
+    /// </summary>
+    public EnemySO bossReference;
+
+    /// <summary>
     /// Add it to the possible shop item player can encounter. Remains even when going to next chamber.
     /// </summary>
     public List<ShopItemSO> avaliableShopItemList;

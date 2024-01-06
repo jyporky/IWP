@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3644211d70345fa498b07bf7cc591a9c, type: 3}
+  m_Name: R2D2
+  m_EditorClassIdentifier: 
+  enemyName: R2D2
+  enemyDescription: He might shock you to death.
+  enemySprite: {fileID: 21300000, guid: 72ec4bfd2bb43b94d9bfcbfc1b5c813b, type: 3}
+  enemyHP: 50
+  level: 4
+  enemySP: 3
+  drawCardAmt: 1
+  enemyDeck:
+  - {fileID: 11400000, guid: 4ba403edb37358c44a004631271db9d3, type: 2}
+  - {fileID: 11400000, guid: 4ba403edb37358c44a004631271db9d3, type: 2}
+  - {fileID: 11400000, guid: 4ba403edb37358c44a004631271db9d3, type: 2}
+  - {fileID: 11400000, guid: 4ba403edb37358c44a004631271db9d3, type: 2}
+  - {fileID: 11400000, guid: 4ba403edb37358c44a004631271db9d3, type: 2}
+  - {fileID: 11400000, guid: 4ba403edb37358c44a004631271db9d3, type: 2}
+  - {fileID: 11400000, guid: 023ce6f387995a44e87a262b87ba52e0, type: 2}
+  - {fileID: 11400000, guid: 023ce6f387995a44e87a262b87ba52e0, type: 2}
+  - {fileID: 11400000, guid: 023ce6f387995a44e87a262b87ba52e0, type: 2}
+  - {fileID: 11400000, guid: cfedb01b6c4664a43af023b2266c382a, type: 2}
+  - {fileID: 11400000, guid: cfedb01b6c4664a43af023b2266c382a, type: 2}
+  - {fileID: 11400000, guid: cfedb01b6c4664a43af023b2266c382a, type: 2}
+  gearPartsDrop: 40
+  energyPointDrop: 6

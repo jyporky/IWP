@@ -22,7 +22,7 @@ public class EnemyBase : Entity
         //cardSpawnArea = GameObject.FindGameObjectWithTag("EnemyCardSpawn").transform;
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         ChangeHealth(0);
         ChangeEnergyPoint(0);
@@ -41,6 +41,7 @@ public class EnemyBase : Entity
     /// </summary>
     public void LoadStatsAndDeck(EnemySO enemySOInfo)
     {
+        startTurnDrawAmt = enemySOInfo.drawCardAmt;
         enemySO = enemySOInfo;
         maxHP = enemySOInfo.enemyHP;
         currentHP = maxHP;

@@ -17,7 +17,7 @@ public class Entity : MonoBehaviour
     protected AssetManager am;
     protected CombatManagerUI cm;
 
-    [SerializeField] int startTurnDrawAmt;
+    protected int startTurnDrawAmt;
     protected int currentNexusCoreAmount;
     private int maximumNexusCore = 3;
 
@@ -593,4 +593,44 @@ public class Entity : MonoBehaviour
     {
         cm.UpdateNexusCoreDisplay(this, currentNexusCoreAmount, maximumNexusCore);
     }
+
+    /// <summary>
+    /// Add the indicated nexus core amount. Can exceed the maximum
+    /// </summary>
+    /// <param name="nexusAmtAdded"></param>
+    public void AddNexusCore(int nexusAmtAdded)
+    {
+        currentNexusCoreAmount += nexusAmtAdded;
+    }
+
+    /// <summary>
+    /// Add the cardRef into the entity draw/hand/discard pile. State the cardRef, amount is optional (set to 1 by default).
+    /// </summary>
+    /// <param name="cardsType"></param>
+    public void AddCardsToPile(ModifyByAmountOfCardsType cardsType, CardSO cardRef, int amount = 1)
+    {
+        switch (cardsType)
+        {
+            case ModifyByAmountOfCardsType.BY_CARDS_IN_DRAW_PILE:
+                for (int i = 0; i < amount; i++)
+                {
+                    cardsInDeckList.Add(cardRef);
+                }
+                break;
+            case ModifyByAmountOfCardsType.BY_CARDS_IN_HANDS:
+                for (int i = 0; i < amount; i++)
+                {
+                    cardsInHandList.Add(cardRef);
+                    cm.CreateCard(this, cardRef);
+                }
+                break;
+            case ModifyByAmountOfCardsType.BY_CARDS_IN_DISCARDS:
+                for (int i = 0; i < amount; i++)
+                {
+                    cardsInDiscardList.Add(cardRef);
+                }
+                break;
+        }
+        cm.UpdateDeckAndDiscardAmountDisplay(this, cardsInDeckList.Count, cardsInDiscardList.Count);
+    }    
 }

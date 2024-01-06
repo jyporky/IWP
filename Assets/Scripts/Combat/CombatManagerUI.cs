@@ -540,6 +540,7 @@ public class CombatManagerUI : MonoBehaviour
         }
 
         (enemy as EnemyBase).EnemyDefeat();
+        enemyDying = null;
     }
 
     /// <summary>
@@ -606,5 +607,8 @@ public class CombatManagerUI : MonoBehaviour
         {
             Destroy(perkList[i].gameObject);
         }
+
+        CanvasGroup enemySpriteCG = enemySprite.GetComponent<CanvasGroup>();
+        enemySpriteCG.alpha = 1;
     }
 }

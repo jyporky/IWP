@@ -12,6 +12,7 @@ public class EnemySO : ScriptableObject
     public int enemyHP;
     public int level;
     public int enemySP;
+    public int drawCardAmt = 1;
     public List<CardSO> enemyDeck;
 
     [Header("Loot Drop Info")]

@@ -207,11 +207,19 @@ public class ChamberManager : MonoBehaviour
         switch (pathType)
         {
             case PathType.ENEMY:
-            case PathType.ELITE:
-            case PathType.BOSS:
                 List<EnemySO> enemyList = chamberList[currentChamberIndex].possibleEnemyToAppearList;
                 int enemySpawnIndex = Random.Range(0, enemyList.Count);
                 pathInfo.GetComponent<EnemyPath>().SetEnemy(enemyList[enemySpawnIndex]);
+                break;
+
+            case PathType.ELITE:
+                List<EnemySO> eliteList = chamberList[currentChamberIndex].possibleElitesToAppearList;
+                int eliteSpawnIndex = Random.Range(0, eliteList.Count);
+                pathInfo.GetComponent<EnemyPath>().SetEnemy(eliteList[eliteSpawnIndex]);
+                break;
+
+            case PathType.BOSS:
+                pathInfo.GetComponent<EnemyPath>().SetEnemy(chamberList[currentChamberIndex].bossReference);
                 break;
 
             case PathType.EVENT:

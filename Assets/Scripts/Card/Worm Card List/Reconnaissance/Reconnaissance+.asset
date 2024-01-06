@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardSprite: {fileID: 21300000, guid: 2a3f9064f4fbe3d45ba6e330b6c66903, type: 3}
   cardType: 2
-  cardCost: 1
+  cardCost: 2
   cardName: Reconnaissance
   cardDescription: Enemy takes 3 damage every turn for 3 turns.
   isUpgraded: 1

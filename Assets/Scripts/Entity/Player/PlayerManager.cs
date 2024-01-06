@@ -8,6 +8,9 @@ public class PlayerManager : MonoBehaviour
     private PlayerInfo playerInfo;
 
     [SerializeField] private List<CardSO> starterCardList;
+    [SerializeField] int startingMaxHealth = 10;
+    [SerializeField] int startingMaxEnergy = 3;
+    [SerializeField] int startingGearAmount = 0;
     public static PlayerManager GetInstance()
     {
         return instance;
@@ -20,7 +23,7 @@ public class PlayerManager : MonoBehaviour
         else
         {
             instance = this;
-            playerInfo = new PlayerInfo(10, 3, 0);
+            playerInfo = new PlayerInfo(startingMaxHealth, startingMaxEnergy, startingGearAmount);
 
             for (int i = 0; i < starterCardList.Count; i++)
             {

@@ -35,12 +35,13 @@ MonoBehaviour:
     minAmount: 4
     maxAmount: 6
   possibleEnemyToAppearList:
-  - {fileID: 11400000, guid: e1a6abc250e6a264cae41b888d96b872, type: 2}
-  - {fileID: 11400000, guid: 84de9cef300b1fc4d8d064a803bab220, type: 2}
-  - {fileID: 11400000, guid: 137e779ecd14a8747a57a05a62daf0b4, type: 2}
-  - {fileID: 11400000, guid: ea461c0a7629496448e8f848beb96c81, type: 2}
-  - {fileID: 11400000, guid: 996a9b66f8b0a7f41b46ff89480c8165, type: 2}
-  - {fileID: 11400000, guid: 1755dc865cfa8354d9221450295cb80e, type: 2}
+  - {fileID: 11400000, guid: c97947c32eb3ed74cb62a14d830db20d, type: 2}
+  - {fileID: 11400000, guid: 5114713e86d7ae147bda1dc7a3c0ac3b, type: 2}
+  possibleElitesToAppearList:
+  - {fileID: 11400000, guid: 0541025ec4360a04f9a6bd8e0cf0eaf2, type: 2}
+  - {fileID: 11400000, guid: 06ac9ac7c95f5a0459525b21604d2a88, type: 2}
+  - {fileID: 11400000, guid: d4eb8375bf8624645859da13b4f213c5, type: 2}
+  bossReference: {fileID: 11400000, guid: 926b0295b161b7d4899215310e7e6ca8, type: 2}
   avaliableShopItemList:
   - {fileID: 11400000, guid: ba1edc3ecadfac54da230eb5aac990ec, type: 2}
   - {fileID: 11400000, guid: 642c93ccf4944dc41a17f0559d7e27c5, type: 2}
