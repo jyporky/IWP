@@ -16,7 +16,7 @@ MonoBehaviour:
   cardType: 3
   cardCost: 3
   cardName: Execute
-  cardDescription: Do 20 damage.
+  cardDescription: Do 20 damage. Last hand.
   isUpgraded: 0
   keywordsList:
   - keywordType: 1
@@ -25,6 +25,21 @@ MonoBehaviour:
     duration: 0
     durationByTurn: 0
     statusSO: {fileID: 11400000, guid: b02df4c662204cf44bcc7c0e1da0004d, type: 2}
+    cardDelay:
+      statusInfo: {fileID: 0}
+      duration: 0
+      durationByTurn: 0
+    modifyEffectByAmountOfCards:
+      modifyByAmountOfCardType: 0
+      bywhatCardType: 0
+      value: 0
+      cardReferenceIfAny: {fileID: 0}
+  - keywordType: 16
+    value: 0
+    inflictSelf: 0
+    duration: 0
+    durationByTurn: 0
+    statusSO: {fileID: 11400000, guid: bf398cb534e572141807e646a2430b09, type: 2}
     cardDelay:
       statusInfo: {fileID: 0}
       duration: 0

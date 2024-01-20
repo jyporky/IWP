@@ -14,4 +14,16 @@ public class CardSO : ScriptableObject
     public string cardDescription;
     public bool isUpgraded;
     public List<Keyword> keywordsList;
+
+    private CardScore cardScore;
+
+    public CardScore GetCardScore()
+    {
+        return cardScore;
+    }
+
+    public void SetCardScore(CardScore newCardScore)
+    {
+        cardScore = newCardScore;
+    }
 }

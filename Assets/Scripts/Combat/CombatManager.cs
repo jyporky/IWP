@@ -235,7 +235,8 @@ public class CombatManager : MonoBehaviour
             case Turn.ENEMY_TURN:
                 endTurnButton.interactable = false;
                 enemy.StartTurn();
-                onEnemyPlay?.Invoke();
+                if (currentTurn == Turn.ENEMY_TURN)
+                    onEnemyPlay?.Invoke();
                 break;
         }
     }

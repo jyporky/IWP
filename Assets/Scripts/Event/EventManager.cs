@@ -29,7 +29,7 @@ public enum EventOutcomeType
     Gain_Max_SP,
     Gain_Gear_Parts,
     Add_Card,
-    Upgrade_Random_Card,
+    Delete_Card,
 }
 
 public class EventManager : MonoBehaviour
@@ -53,25 +53,27 @@ public class EventManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
+
+        UISpawnArea = GameObject.FindGameObjectWithTag("GameplayUISpawn").transform;
     }
 
-    private void Start()
+    [SerializeField] GameObject deleteCardPrefab;
+    private Transform UISpawnArea;
+
+    /// <summary>
+    /// Add to the list of possible events that can be encountered.
+    /// </summary>
+    public void AddToEventList(List<EventSO> eventList)
     {
-        UpdateEventOutcomeList();
+        eventOutcomesList = new(eventList);
     }
 
     /// <summary>
-    /// Fetch the list of possible events from the chamberManager and update the list.
+    /// Clear the list of possible events that can be encountered.
     /// </summary>
-    void UpdateEventOutcomeList()
+    public void ClearEventList()
     {
         eventOutcomesList.Clear();
-
-        List<EventSO> tempList = ChamberManager.GetInstance()?.GetPossibleEventsFromCurrentChamber();
-        foreach (EventSO eventSO in tempList)
-        {
-            eventOutcomesList.Add(eventSO);
-        }
     }
 
     /// <summary>
@@ -82,5 +84,14 @@ public class EventManager : MonoBehaviour
     {
         int eventIndex = Random.Range(0, eventOutcomesList.Count);
         return eventOutcomesList[eventIndex];
+    }
+
+    /// <summary>
+    /// Open up the delete card panel. Input the amount of cards to be deleted.
+    /// </summary>
+    public void OpenDeleteCardPanel(int cardsToDelete = 1)
+    {
+        DeleteCardManager deleteCardManager = Instantiate(deleteCardPrefab, UISpawnArea).GetComponent<DeleteCardManager>();
+        deleteCardManager.SetCounter(cardsToDelete);
     }
 }

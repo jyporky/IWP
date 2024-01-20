@@ -51,6 +51,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   havePerk: 1
   perkSprite: {fileID: 21300000, guid: 72ec4bfd2bb43b94d9bfcbfc1b5c813b, type: 3}
-  perkDescription: 'Booting: Add a "Energize" card into your hand at the start of
+  perkDescription: 'Booting: Add a "Energize+" card into your hand at the start of
     your turn.'
-  energizeCardSO: {fileID: 11400000, guid: 023ce6f387995a44e87a262b87ba52e0, type: 2}
+  energizeCardSO: {fileID: 11400000, guid: 5c1353c9d157dd14b9d204a39a89ada8, type: 2}

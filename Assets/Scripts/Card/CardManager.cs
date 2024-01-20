@@ -120,6 +120,8 @@ public enum KeywordType
     Block_Trojan,
     Gain_Nexus_Core,
     Add_Card,
+    First_Hand,
+    Last_Hand,
 }
 
 public enum CardType
@@ -231,6 +233,9 @@ public class CardManager : MonoBehaviour
                     break;
                 case KeywordType.Add_Card:
                     AddCard(targetEntity, keyword);
+                    break;
+                case KeywordType.Overload:
+                    targetEntity.TriggerOverLoad();
                     break;
             }
         }
@@ -387,5 +392,54 @@ public class CardManager : MonoBehaviour
     public Entity GetEnemyReference()
     {
         return enemyEntity;
+    }
+
+    /// <summary>
+    /// Get the score of the card inputted. <br/>
+    /// First Iteration: CardScore include damage,marked,strength,weaken.
+    /// Second Iteration: DamageOverTime effect is included.
+    /// </summary>
+    public static CardScore GetCardScore(CardSO cardToCheck)
+    {
+        CardScore cardScore = new CardScore();
+
+        foreach(Keyword kw in cardToCheck.keywordsList)
+        {
+            switch (kw.keywordType)
+            {
+                case KeywordType.Damage:
+                    if (kw.duration > 0)
+                        cardScore.dmgOvertimeScore = CalculateTotalValue(kw.value, kw.duration);
+                    else
+                        cardScore.dmgScore = kw.value;
+                    break;
+                case KeywordType.Marked:
+                    cardScore.dmgModifierScore = CalculateTotalValue(kw.value, kw.duration);
+                    break;
+                case KeywordType.Strength:
+                    cardScore.dmgModifierScore = CalculateTotalValue(kw.value, kw.duration);
+                    break;
+                case KeywordType.Weaken:
+                    cardScore.dmgModifierScore = CalculateTotalValue(-kw.value, kw.duration);
+                    break;
+                case KeywordType.Draw_Card:
+                    cardScore.drawScore = CalculateTotalValue(kw.value, kw.duration);
+                    break;
+            }
+        }
+
+        return cardScore;
+    }
+
+    /// <summary>
+    /// Return the value factoring the duration if any.
+    /// First Iteration: Includes a duration base effect for turns only.
+    /// </summary>
+    private static int CalculateTotalValue(int value, int duration)
+    {
+        if (duration == 0)
+            return value;
+
+        return value * duration;
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -101,9 +102,9 @@ public class ChamberManager : MonoBehaviour
     // the current chamber and room information
     private int currentChamberIndex = 0;
     private int currentRoomIndex = 0;
-    bool clearChamber = false;
+    //bool clearChamber = false;
     private PathType pathSelected;
-
+    private bool eliteDefeated;
 
     private void Start()
     {
@@ -120,16 +121,19 @@ public class ChamberManager : MonoBehaviour
     /// </summary>
     void GenerateRoomInList()
     {
-        // Add the avaliable shop item into the shop list
-        ShopManager.GetInstance().AddToShopList(chamberList[currentChamberIndex].avaliableShopItemList);
+        // Add the avaliable shop item into the shop list and clear the old one
+        ShopManager.GetInstance()?.ClearShopList();
+        ShopManager.GetInstance()?.AddToShopList(chamberList[currentChamberIndex].beforeEliteShopList);
+        EventManager.GetInstance()?.ClearEventList();
+        EventManager.GetInstance()?.AddToEventList(chamberList[currentChamberIndex].beforeEliteEventList);
 
         // Get the amount of rooms as well as the list of fixed rooms.
         int amountOfRooms = chamberList[currentChamberIndex].amountOfRooms;
         List <RoomIndex> loadedRoomList = chamberList[currentChamberIndex].fixedRooms;
         Transform pathSpawnLocation = GameObject.FindGameObjectWithTag("PathObjectSpawn").transform;
 
-        // Put the fixed rooms into a Dictionary for easier reference
-        Dictionary<int, Room_Type> fixedRoomDictionary = new Dictionary<int, Room_Type>();
+        //// Put the fixed rooms into a Dictionary for easier reference
+        //Dictionary<int, Room_Type> fixedRoomDictionary = new Dictionary<int, Room_Type>();
 
         // Create a list of max and min and the value.
         List<ListShuffler.ListValue<RoomTypeWrapper>> toShuffleList = new List<ListShuffler.ListValue<RoomTypeWrapper>>();
@@ -169,13 +173,19 @@ public class ChamberManager : MonoBehaviour
 
         // Generate the path and add them into the room list.
         Transform pathSpawnArea = GameObject.FindGameObjectWithTag("PathObjectSpawn").transform;
-
-        foreach (var room in generatedListResult)
+        eliteDefeated = false;
+        for (int i = 0; i < generatedListResult.Count; i++)
         {
-            GeneratePathInRoom(room.roomType, pathSpawnArea);
+            GeneratePathInRoom(generatedListResult[i].roomType, pathSpawnArea);
+            if (generatedListResult[i].roomType == Room_Type.ELITE_ROOM)
+            {
+                eliteDefeated = true;
+            }
         }
+        eliteDefeated = false;
         roomList[currentRoomIndex].SetAllPathActive();
-        GameplayManager.GetInstance().UpdateRoomCleared(currentRoomIndex, roomList.Count);
+        GameplayManager.GetInstance()?.UpdateRoomCleared(currentRoomIndex, roomList.Count);
+        GameplayManager.GetInstance()?.UpdateChamberDisplay(currentChamberIndex + 1);
     }
 
     /// <summary>
@@ -207,7 +217,17 @@ public class ChamberManager : MonoBehaviour
         switch (pathType)
         {
             case PathType.ENEMY:
-                List<EnemySO> enemyList = chamberList[currentChamberIndex].possibleEnemyToAppearList;
+                List<EnemySO> enemyList = new();
+                switch (eliteDefeated)
+                {
+                    case false:
+                        enemyList = chamberList[currentChamberIndex].possibleEnemyToAppearBeforeEliteList;
+                        break;
+                    case true:
+                        enemyList = chamberList[currentChamberIndex].possibleEnemyToAppearAfterEliteList;
+                        break;
+                }
+
                 int enemySpawnIndex = Random.Range(0, enemyList.Count);
                 pathInfo.GetComponent<EnemyPath>().SetEnemy(enemyList[enemySpawnIndex]);
                 break;
@@ -229,13 +249,22 @@ public class ChamberManager : MonoBehaviour
 
     /// <summary>
     /// Set all previous path to inactive, increase the currentroom index by 1. Afterwards, set the current path to active afterwards. <br/>
-    /// Update the room clear displayed also.
+    /// Update the room clear displayed also. If the room cleared is an elite enemy, set the shop and events to afterElite information.
     /// </summary>
     public void ClearRoom()
     {
+        if (pathSelected == PathType.ELITE)
+        {
+            ShopManager.GetInstance()?.ClearShopList();
+            ShopManager.GetInstance()?.AddToShopList(chamberList[currentChamberIndex].afterEliteShopList);
+            EventManager.GetInstance()?.ClearEventList();
+            EventManager.GetInstance()?.AddToEventList(chamberList[currentChamberIndex].afterEliteEventList);
+            GameplayManager.GetInstance().ToggleHackAbilitySelection(true);
+        }
+
         GameplayManager.GetInstance().SetPanelActive(PathType.NONE);
-        if (clearChamber)
-            return;
+        //if (clearChamber)
+        //    return;
 
         roomList[currentRoomIndex].SetAllPathInactive();
         currentRoomIndex++;
@@ -247,13 +276,27 @@ public class ChamberManager : MonoBehaviour
 
         if (currentRoomIndex >= roomList.Count)
         {
-            clearChamber = true;
+            //clearChamber = true;
             foreach (RoomInfo roomInfo in roomList)
             {
                 roomInfo.DestroyAllPath();
             }
             roomList.Clear();
-            Debug.Log("Stop");
+
+            //
+            if (currentChamberIndex + 1 < chamberList.Count)
+            {
+                currentRoomIndex = 0;
+                currentChamberIndex++;
+                Debug.Log("Going Next Chamber");
+                GenerateRoomInList();
+                GameplayManager.GetInstance().ToggleHackAbilitySelection(true, true);
+            }
+            else
+            {
+                Debug.Log("Stop");
+                //clearChamber = true;
+            }
         }
     }
 
@@ -291,9 +334,13 @@ public class ChamberManager : MonoBehaviour
                 break;
 
             case PathType.ENEMY:
-            case PathType.ELITE:
-            case PathType.BOSS:
                 pathSelected = PathType.ENEMY;
+                break;
+            case PathType.ELITE:
+                pathSelected = PathType.ELITE;
+                break;
+            case PathType.BOSS:
+                pathSelected= PathType.BOSS;
                 break;
 
         }
@@ -307,6 +354,8 @@ public class ChamberManager : MonoBehaviour
         switch (pathSelected)
         {
             case PathType.ENEMY:
+            case PathType.ELITE:
+            case PathType.BOSS:
                 GameplayManager.GetInstance().SetPanelActive(PathType.ENEMY);
                 Debug.Log("Engage with battle");
                 break;
@@ -326,14 +375,5 @@ public class ChamberManager : MonoBehaviour
                 ClearRoom();
                 break;
         }
-    }
-
-    /// <summary>
-    /// Get the list of possible events that can happen in the chamber.
-    /// </summary>
-    /// <returns></returns>
-    public List<EventSO> GetPossibleEventsFromCurrentChamber()
-    {
-        return chamberList[currentChamberIndex].avaliableEventList;
     }
 }

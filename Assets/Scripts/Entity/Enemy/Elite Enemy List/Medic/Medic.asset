@@ -15,22 +15,24 @@ MonoBehaviour:
   enemyName: Medic
   enemyDescription: Well Hello Medic!
   enemySprite: {fileID: 21300000, guid: b9fbc66c8f317fc4aba2c0035ec62059, type: 3}
-  enemyHP: 45
+  enemyHP: 55
   level: 6
-  enemySP: 0
+  enemySP: 1
   drawCardAmt: 2
   enemyDeck:
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
   - {fileID: 11400000, guid: cd508b2f4e2ea1c4e9717f9aecc9954b, type: 2}
   - {fileID: 11400000, guid: cd508b2f4e2ea1c4e9717f9aecc9954b, type: 2}
+  - {fileID: 11400000, guid: cd508b2f4e2ea1c4e9717f9aecc9954b, type: 2}
+  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
+  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
+  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
+  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
   - {fileID: 11400000, guid: 00f961a9f1626d741b831dbfff30b757, type: 2}
-  - {fileID: 11400000, guid: 1beb507e526daf046819af1755c17f49, type: 2}
-  - {fileID: 11400000, guid: 1beb507e526daf046819af1755c17f49, type: 2}
+  - {fileID: 11400000, guid: 55076fa4c1869ed49a654fb59ead3833, type: 2}
+  - {fileID: 11400000, guid: 55076fa4c1869ed49a654fb59ead3833, type: 2}
+  - {fileID: 11400000, guid: 55076fa4c1869ed49a654fb59ead3833, type: 2}
+  - {fileID: 11400000, guid: 55076fa4c1869ed49a654fb59ead3833, type: 2}
   gearPartsDrop: 40
   energyPointDrop: 6
+  decisionPattern: 030000000000000004000000
+  cardFocusList: []

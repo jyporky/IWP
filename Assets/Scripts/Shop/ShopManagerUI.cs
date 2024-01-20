@@ -18,6 +18,10 @@ public class ShopManagerUI : MonoBehaviour
     [Header("Misc")]
     [SerializeField] int itemStockAmount;
 
+    [SerializeField] GameObject selectedCardDisplayHolder;
+    [SerializeField] Button selectedCardDisplayHolderButton;
+    [SerializeField] SelectedCard selectedCard;
+
     private List<ShopItemSO> possibleShopItemList = new List<ShopItemSO>();
     private int refreshShopCost;
     private PlayerManager playerManager;
@@ -27,6 +31,8 @@ public class ShopManagerUI : MonoBehaviour
         playerManager = PlayerManager.GetInstance();
         refreshShopButton.onClick.AddListener(RefreshShop);
         leaveShopButton.onClick.AddListener(CloseShop);
+        selectedCardDisplayHolder.gameObject.SetActive(false);
+        selectedCardDisplayHolderButton.onClick.AddListener(CloseDisplayCard);
     }
 
     /// <summary>
@@ -124,6 +130,21 @@ public class ShopManagerUI : MonoBehaviour
         refreshShopCost += 1;
         UpdateRefreshShopInteractable();
         RestockShop();
+    }
+
+    /// <summary>
+    /// Display the card in the shopManagerUi according to the cardSORef inputted.
+    /// </summary>
+    /// <param name="cardSORef"></param>
+    public void DisplayCard(CardSO cardSORef)
+    {
+        selectedCard.UpdateCardDetails(cardSORef);
+        selectedCardDisplayHolder.gameObject.SetActive(true);
+    }
+
+    void CloseDisplayCard()
+    {
+        selectedCardDisplayHolder.gameObject.SetActive(false);
     }
 
     /// <summary>

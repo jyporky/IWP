@@ -65,6 +65,9 @@ public class HackDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         hackMaxLevel = PlayerManager.GetInstance().GetHackTypeMaxLevel(hackType);
         hackNameText.text = hm.GetHackTypeName(hackType);
 
+        // Set the icon of the hack type
+        hackIcon.sprite = hm.GetHackTypeIcon(hackType);
+
         // Disable any tabs that is not suppose to be shown
         UpgradedDescriptionReference.SetActive(false);
 

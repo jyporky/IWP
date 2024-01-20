@@ -100,7 +100,7 @@ public class Player : Entity
         currentHP = pm.GetCurrentHealth();
         maxEP = pm.GetMaxEP();
         currentEP = pm.GetCurrentEP();
-        startTurnDrawAmt = 3;
+        startTurnDrawAmt = 5;
     }
     
     public override void ChangeHealth(int healthChanged)
@@ -115,18 +115,18 @@ public class Player : Entity
     public override void ChangeEnergyPoint(int shieldPointChanged)
     {
         base.ChangeEnergyPoint(shieldPointChanged);
+    }
 
-        // If the player has less than 0 energy, clear the hack counter, reset all hacks, disable the players ability to use shield.
-        if (currentEP < 0)
+    public override void TriggerOverLoad()
+    {
+        base.TriggerOverLoad();
+        foreach (var hack in hackDisplayList)
         {
-            foreach(var hack in hackDisplayList)
-            {
-                cm.EnableShield(false);
-                hack.ResetHack();
-                hackCounterList.Clear();
-                cm.ClearHackCounter();
-            }
-        }    
+            cm.EnableShield(false);
+            hack.ResetHack();
+            hackCounterList.Clear();
+            cm.ClearHackCounter();
+        }
     }
 
     /// <summary>
@@ -157,6 +157,10 @@ public class Player : Entity
             case HackType.More_Nexus_Core:
                 currentNexusCoreAmount += hack.amount;
                 UpdateNexusCoreDisplay();
+                break;
+
+            case HackType.More_Card_Draw:
+                DrawCardFromDeck(hack.amount);
                 break;
         }
     }

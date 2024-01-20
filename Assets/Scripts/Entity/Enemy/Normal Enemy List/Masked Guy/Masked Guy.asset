@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3644211d70345fa498b07bf7cc591a9c, type: 3}
+  m_Name: Masked Guy
+  m_EditorClassIdentifier: 
+  enemyName: Masked Guy
+  enemyDescription: He looks like he wants to strike something.
+  enemySprite: {fileID: 21300000, guid: c868a4f73aa098c4db4a3d03e3858097, type: 3}
+  enemyHP: 90
+  level: 3
+  enemySP: 1
+  drawCardAmt: 2
+  enemyDeck:
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: eac260bc79fbd814aa85ca504f84a4b0, type: 2}
+  - {fileID: 11400000, guid: eac260bc79fbd814aa85ca504f84a4b0, type: 2}
+  - {fileID: 11400000, guid: 54bdcb71376b28f42bf3aeabf5a5e3cf, type: 2}
+  - {fileID: 11400000, guid: 54bdcb71376b28f42bf3aeabf5a5e3cf, type: 2}
+  gearPartsDrop: 20
+  energyPointDrop: 3
+  decisionPattern: 0200000000000000
+  cardFocusList: []

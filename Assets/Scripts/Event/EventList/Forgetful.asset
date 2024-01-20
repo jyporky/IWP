@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37d898dd6164e3f459e905e8e6e9dc3b, type: 3}
+  m_Name: Forgetful
+  m_EditorClassIdentifier: 
+  eventName: Forgetful
+  eventDescription: You came across a strange looking device in your journey. Using
+    it might help you forget some stuff, should I use it?
+  eventImage: {fileID: 21300000, guid: 655722cc6e5ec434c909e05cd79414f5, type: 3}
+  listOfOutcome:
+  - outcomeDesription: Use the machine. [Delete a card]
+    outcomeChosenDialogue: You fall into a deep sleep after using the machine. When
+      you wake up, you seem to be forgetting something.
+    listOfOutcomeEffects:
+    - eventOutcomeType: 7
+      amtChanged: 1
+      cardReferenceIfAny: {fileID: 0}
+  - outcomeDesription: Ignore the machine. [Nothing happen]
+    outcomeChosenDialogue: You decide that your database is too important to forget.
+      You continue on with your journey.
+    listOfOutcomeEffects: []

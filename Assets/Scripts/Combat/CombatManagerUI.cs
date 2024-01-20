@@ -4,7 +4,6 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.IMGUI.Controls.PrimitiveBoundsHandle;
 
 public class CombatManagerUI : MonoBehaviour
 {
@@ -28,6 +27,7 @@ public class CombatManagerUI : MonoBehaviour
     [Header("Shared variables")]
     [SerializeField] GameObject statusPrefab;
     [SerializeField] GameObject selectedCardPrefab;
+    [SerializeField] GameObject deckListUIPrefab;
 
     // The Player UI Reference
     [Header("Player Prefab Reference")]
@@ -52,9 +52,8 @@ public class CombatManagerUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI playerEnergyPointValue;
 
     [Header("Player Deck List Reference")]
-    [SerializeField] GameObject deckListUIPrefab;
-    [SerializeField] Button drawListButton;
-    [SerializeField] Button discardListButton;
+    [SerializeField] Button playerDrawListButton;
+    [SerializeField] Button playerDiscardListButton;
 
     [Header("Player Shield Reference")]
     [SerializeField] Button virusShieldButton;
@@ -93,6 +92,10 @@ public class CombatManagerUI : MonoBehaviour
     [SerializeField] Slider enemyEnergyPointBarSlider;
     [SerializeField] TextMeshProUGUI enemyEnergyPointValue;
 
+    [Header("Player Deck List Reference")]
+    [SerializeField] Button enemyDrawListButton;
+    [SerializeField] Button enemyDiscardListButton;
+
     [Header("Enemy Information")]
     [SerializeField] Image enemySprite;
     [SerializeField] TextMeshProUGUI enemyNameDisplay;
@@ -115,8 +118,10 @@ public class CombatManagerUI : MonoBehaviour
     {
         am = AssetManager.GetInstance();
         UISpawnArea = GameObject.FindGameObjectWithTag("GameplayUISpawn").transform;
-        drawListButton.onClick.AddListener(OpenDrawPileList);
-        discardListButton.onClick.AddListener(OpenDiscardPileList);
+        playerDrawListButton.onClick.AddListener(delegate { OpenDrawPileList(player, "Player Draw Pile"); });
+        playerDiscardListButton.onClick.AddListener(delegate { OpenDiscardPileList(player, "Player Discard Pile"); });
+        enemyDrawListButton.onClick.AddListener(delegate { OpenDrawPileList(enemy, "Enemy Draw Pile"); });
+        enemyDiscardListButton.onClick.AddListener(delegate { OpenDiscardPileList(enemy, "Enemy Discard Pile"); });
 
         virusShieldButton.onClick.AddListener(delegate { SetUpPlayerBlock(CardType.Virus); });
         wormShieldButton.onClick.AddListener(delegate { SetUpPlayerBlock(CardType.Worm); });
@@ -365,19 +370,19 @@ public class CombatManagerUI : MonoBehaviour
     /// <summary>
     /// Open and display the list of cards in the player draw pile.
     /// </summary>
-    void OpenDrawPileList()
+    void OpenDrawPileList(Entity whichEntity, string displayString)
     {
         DeckList newDrawListPanel = Instantiate(deckListUIPrefab, UISpawnArea).GetComponent<DeckList>();
-        newDrawListPanel.SetupDeckList(player.GetCardList(ModifyByAmountOfCardsType.BY_CARDS_IN_DRAW_PILE), "Draw Pile");
+        newDrawListPanel.SetupDeckList(whichEntity.GetCardList(ModifyByAmountOfCardsType.BY_CARDS_IN_DRAW_PILE), displayString);
     }
 
     /// <summary>
     /// Open and display the list of cards in the player discard pile.
     /// </summary>
-    void OpenDiscardPileList()
+    void OpenDiscardPileList(Entity whichEntity, string displayString)
     {
         DeckList newDiscardListPanel = Instantiate(deckListUIPrefab, UISpawnArea).GetComponent<DeckList>();
-        newDiscardListPanel.SetupDeckList(player.GetCardList(ModifyByAmountOfCardsType.BY_CARDS_IN_DISCARDS), "Discard Pile");
+        newDiscardListPanel.SetupDeckList(whichEntity.GetCardList(ModifyByAmountOfCardsType.BY_CARDS_IN_DISCARDS), displayString);
     }
 
     /// <summary>
@@ -405,8 +410,11 @@ public class CombatManagerUI : MonoBehaviour
     /// </summary>
     public void AddToHackCounter(CardType cardType)
     {
-        Image iconCounter = Instantiate(cardTypeDisplayPrefab, cardTypeIconListReference).GetComponent<Image>();
-        iconCounter.sprite = am.GetCardSprite(cardType);
+        if (cardType != CardType.None)
+        {
+            Image iconCounter = Instantiate(cardTypeDisplayPrefab, cardTypeIconListReference).GetComponent<Image>();
+            iconCounter.sprite = am.GetCardSprite(cardType);
+        }
     }
 
     /// <summary>
@@ -481,12 +489,12 @@ public class CombatManagerUI : MonoBehaviour
     {
         enemyActiveCard = Instantiate(selectedCardPrefab, playArea);
         enemyActiveCard.SetActive(false);
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         enemyActiveCard.transform.position = playArea.position;
         enemyActiveCard.GetComponent<CardBase>().UpdateCardDetails(cardPlayed);
         enemy.PlayCard(cardPlayed);
         enemyActiveCard.SetActive(true);
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         Destroy(enemyActiveCard);
         enemyPlayingCard = null;
         (enemy as EnemyBase)?.ExecuteTurn();
@@ -562,6 +570,14 @@ public class CombatManagerUI : MonoBehaviour
     /// </summary>
     public void RefreshAll()
     {
+        ClearHackCounter();
+
+        if (enemyDying != null)
+        {
+            StopCoroutine(enemyDying);
+            enemyDying = null;
+        }
+
         for (int i = playerCardList.Count - 1; i >= 0; i--)
         {
             Destroy(playerCardList[i].gameObject);

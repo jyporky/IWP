@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37d898dd6164e3f459e905e8e6e9dc3b, type: 3}
+  m_Name: Stun Boi
+  m_EditorClassIdentifier: 
+  eventName: Stun Boi
+  eventDescription: "You came across a random glitch that possess a stun gun. \u201CWould
+    you like me to help you forget?\u201D He asked nicely."
+  eventImage: {fileID: 21300000, guid: 062d2903488ce12488c193e8d1d51c3c, type: 3}
+  listOfOutcome:
+  - outcomeDesription: "Zap me once\r [Lose 50 Gear Parts] [Delete a card]\r"
+    outcomeChosenDialogue: "He proceeds to zap you. \u201CEnjoy! :D\u201D"
+    listOfOutcomeEffects:
+    - eventOutcomeType: 5
+      amtChanged: -50
+      cardReferenceIfAny: {fileID: 0}
+    - eventOutcomeType: 7
+      amtChanged: 1
+      cardReferenceIfAny: {fileID: 0}
+  - outcomeDesription: "Zap me Thrice\r [Lose 100 Gear Parts] [Delete 3 cards]\r"
+    outcomeChosenDialogue: "He proceeds to zap you harder. \u201CEnjoy! :D\u201D"
+    listOfOutcomeEffects:
+    - eventOutcomeType: 5
+      amtChanged: -100
+      cardReferenceIfAny: {fileID: 0}
+    - eventOutcomeType: 7
+      amtChanged: 3
+      cardReferenceIfAny: {fileID: 0}
+  - outcomeDesription: "Zap me The Best You can\r [Lose 150 Gear Parts] [Delete 5
+      cards]"
+    outcomeChosenDialogue: "He proceeds to zap you the best he could. \u201CEnjoy!
+      :D\u201D"
+    listOfOutcomeEffects:
+    - eventOutcomeType: 5
+      amtChanged: -150
+      cardReferenceIfAny: {fileID: 0}
+    - eventOutcomeType: 7
+      amtChanged: 5
+      cardReferenceIfAny: {fileID: 0}
+  - outcomeDesription: Sorry, I don't want to forget anything.
+    outcomeChosenDialogue: He sigh in disappointment.
+    listOfOutcomeEffects: []

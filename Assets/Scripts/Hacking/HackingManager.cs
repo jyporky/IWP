@@ -5,12 +5,15 @@ using UnityEngine;
 public enum HackType
 {
     More_Nexus_Core,
+    More_Card_Draw,
+    Total,
 }
 
 [System.Serializable]
 public class HackUpgradeList
 {
     public HackType hackType;
+    public Sprite hackIcon;
     public string hackName;
     public List<HackTypeSO> hackUpgradesList;
 }
@@ -79,9 +82,27 @@ public class HackingManager : MonoBehaviour
     {
         if (hackUpgradeDictionary.ContainsKey(hackType))
         {
-            return hackUpgradeDictionary[hackType][level - 1];
+            if (level < hackUpgradeDictionary[hackType].Count + 1)
+                return hackUpgradeDictionary[hackType][level - 1];
         }
 
+        return null;
+    }
+
+    /// <summary>
+    /// Get the icon of the inputted hack type.
+    /// </summary>
+    /// <param name="hackType"></param>
+    /// <returns></returns>
+    public Sprite GetHackTypeIcon(HackType hackType)
+    {
+        foreach (var hack in hackUpgradeList)
+        {
+            if (hack.hackType == hackType)
+            {
+                return hack.hackIcon;
+            }
+        }
         return null;
     }
 }

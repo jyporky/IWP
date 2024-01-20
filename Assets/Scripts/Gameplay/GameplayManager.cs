@@ -36,17 +36,22 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] GameObject upgradeStationPanel;
     [SerializeField] GameObject eventUIPanel;
     [SerializeField] GameObject chamberPanel;
+    [SerializeField] GameObject hackAbilityPanel;
     private GameObject[] panelArray;
 
     [Header("Currency UI Display")]
     [SerializeField] TextMeshProUGUI gearPartsAmountText;
 
     [Header("RoomDisplayList")]
-    [SerializeField] TextMeshProUGUI roomClearedAmountText;   
+    [SerializeField] TextMeshProUGUI roomClearedAmountText;
+
+    [Header("ChamberDisplay")]
+    [SerializeField] TextMeshProUGUI chamberNumberText;
 
     private void Start()
     {
         SetPanelActive(PathType.NONE);
+        ToggleHackAbilitySelection(false);
         UpdatePlayerStatsDisplay();
     }
 
@@ -70,6 +75,7 @@ public class GameplayManager : MonoBehaviour
                 break;
             case PathType.UPGRADE_STATION:
                 upgradeStationPanel.SetActive(true);
+                StartCoroutine(DelayOneFrame(result => upgradeStationPanel.GetComponent<UpgradeStationManagerUI>().LoadToUpgradeStation()));
                 chamberPanel.SetActive(false);
                 break;
             case PathType.EVENT:
@@ -86,6 +92,17 @@ public class GameplayManager : MonoBehaviour
                 TogglePlayerStatsDisplay(true);
                 break;
         }
+    }
+
+    /// <summary>
+    /// Toggle the Hack ability selection page to active or inactive depending on the boolean.
+    /// </summary>
+    /// <returns></returns>
+    public void ToggleHackAbilitySelection(bool panelActive, bool deadByBoss = false)
+    {
+        hackAbilityPanel.SetActive(panelActive);
+        if (panelActive)
+            StartCoroutine(DelayOneFrame(result => hackAbilityPanel.GetComponent<HackUpgradeUI>().SetHackAbility(deadByBoss)));
     }
 
     /// <summary>
@@ -112,9 +129,17 @@ public class GameplayManager : MonoBehaviour
         gearPartsAmountText.text = PlayerManager.GetInstance().GetGearPartsAmount().ToString();
     }
 
+    /// <summary>
+    /// Update the room cleared display
+    /// </summary>
     public void UpdateRoomCleared(int currentRoomIndex, int totalAmountOfRooms)
     {
         roomClearedAmountText.text = currentRoomIndex.ToString() + "/" + totalAmountOfRooms.ToString() + " Rooms Cleared";
+    }
+
+    public void UpdateChamberDisplay(int currentChamberIndex)
+    {
+        chamberNumberText.text = currentChamberIndex.ToString();
     }
 
     IEnumerator DelayOneFrame(Action<bool> callback)

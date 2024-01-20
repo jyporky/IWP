@@ -15,14 +15,14 @@ MonoBehaviour:
   eventName: Experiment
   eventDescription: You are stopped halfway in your journey by a weird professor.
     He can restore all your energy as well as increasing your maximum energy. However,
-    it comes with a downside of you being short circuited, Would you like to take
+    it comes with a downside of you being short circuited. Would you like to take
     the risk?
   eventImage: {fileID: 21300000, guid: 6c2f59ccbd1e82d4ca5b530df3ef121d, type: 3}
   listOfOutcome:
-  - outcomeDesription: Energize Me[Restore energy to max, gain 2 maximum energy point.
-      Add 3 short circuit card into your deck].
-    outcomeChosenDialogue: After getting shocked, you feel more energize than ever.
-      However you feel that some parts of your body is not functioning as well.
+  - outcomeDesription: Energise Me[Restore energy to max, gain 2 maximum energy points.
+      Add 3 short circuit cards into your deck]
+    outcomeChosenDialogue: After getting shocked, you feel more energised than ever.
+      However you feel that some parts of your body are not functioning as well.
     listOfOutcomeEffects:
     - eventOutcomeType: 2
       amtChanged: 999
@@ -35,5 +35,5 @@ MonoBehaviour:
       cardReferenceIfAny: {fileID: 11400000, guid: 73794f0a4883f5849b6726577009f5e4, type: 2}
   - outcomeDesription: No thanks. [Nothing happen]
     outcomeChosenDialogue: You politely reject the professor and continue your journey.
-      You turn back and saw the professor being disappointed.
+      You turned back and saw the professor being disappointed.
     listOfOutcomeEffects: []

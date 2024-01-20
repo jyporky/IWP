@@ -34,7 +34,7 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
-        playerInfo.AddNewHackType(HackType.More_Nexus_Core, 3);
+        playerInfo.AddNewHackType(HackType.More_Nexus_Core, 1);
     }
 
     /// <summary>
@@ -59,6 +59,22 @@ public class PlayerManager : MonoBehaviour
     public void RemoveFromCardList(CardSO card)
     {
         playerInfo.RemoveFromListOfCards(card);
+    }
+
+    /// <summary>
+    /// Get the amount of cards found in the list for the inputted card.
+    /// </summary>
+    public int GetCardCount(CardSO card)
+    {
+        int counter = 0;
+        List<CardSO> cardList = playerInfo.GetCardListFromDeck();
+        foreach(CardSO cards in cardList)
+        {
+            if (cards == card)
+                counter++;
+        }
+
+        return counter;
     }
 
     /// <summary>
@@ -211,5 +227,19 @@ public class PlayerManager : MonoBehaviour
     public List<HackType> GetListOfHackType()
     {
         return playerInfo.GetListOfHackType();
+    }
+
+    public bool CheckIfHackTypeExist(HackType hackType)
+    {
+        List<HackType> listOfPlayerHackType = playerInfo.GetListOfHackType();
+        foreach (HackType h in listOfPlayerHackType)
+        {
+            if (h == hackType)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

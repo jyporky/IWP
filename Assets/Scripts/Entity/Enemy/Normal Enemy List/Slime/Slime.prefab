@@ -50,5 +50,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   havePerk: 1
-  perkSprite: {fileID: 21300000, guid: 7170c851d32041745b682bc9b814a49b, type: 3}
+  perkSprite: {fileID: 21300000, guid: 5f267aa1b56cf0e49974faf395b35a2b, type: 3}
   perkDescription: 'Boink: Heal by 1 at the start of your turn.'

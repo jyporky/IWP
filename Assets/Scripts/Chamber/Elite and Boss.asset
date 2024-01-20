@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f7a459b24dca06449c2b73733e8a080, type: 3}
+  m_Name: Elite and Boss
+  m_EditorClassIdentifier: 
+  amountOfRooms: 5
+  fixedRooms:
+  - roomType: 0
+    roomIndex: 0
+  - roomType: 3
+    roomIndex: 1
+  - roomType: 4
+    roomIndex: 2
+  - roomType: 3
+    roomIndex: 3
+  - roomType: 5
+    roomIndex: 4
+  minimumAmountOfRoomsList: []
+  possibleEnemyToAppearBeforeEliteList:
+  - {fileID: 11400000, guid: 7ae2b5c05beaf5e4881c232ba2ad3ef0, type: 2}
+  - {fileID: 11400000, guid: 499753896f8d36e43bd4bc6d3a3665d9, type: 2}
+  possibleEnemyToAppearAfterEliteList:
+  - {fileID: 11400000, guid: c4a936bfbdc6773459336c95b4869e22, type: 2}
+  - {fileID: 11400000, guid: 8851e64af0b91b949a62cd79607f64d8, type: 2}
+  possibleElitesToAppearList:
+  - {fileID: 11400000, guid: 4e04ddc337594584f880404260cc500e, type: 2}
+  bossReference: {fileID: 11400000, guid: ec81ec1d39f8fc546bf1c61e6376db8f, type: 2}
+  beforeEliteShopList:
+  - {fileID: 11400000, guid: fa6419d2c17175b41923855e3fe7ab7b, type: 2}
+  afterEliteShopList:
+  - {fileID: 11400000, guid: 2f5a2a71ae717524a96ed1c8d584ec76, type: 2}
+  beforeEliteEventList:
+  - {fileID: 11400000, guid: 0cf39eb11c00c3d4eb80d0b433c1ea6c, type: 2}
+  afterEliteEventList:
+  - {fileID: 11400000, guid: 91ecc0e5d36138d4ebd98359a2852ce3, type: 2}

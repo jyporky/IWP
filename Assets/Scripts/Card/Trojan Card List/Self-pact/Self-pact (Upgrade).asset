@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a38b68d83bb91ff4b9dba46f2ba6f4bb, type: 3}
+  m_Name: Self-pact (Upgrade)
+  m_EditorClassIdentifier: 
+  baseCard: {fileID: 11400000, guid: 09d457be4d5234d4aab2e61d42e72bf0, type: 2}
+  upgradedCard: {fileID: 11400000, guid: 7e00fe834ce9b23468eb9aa560e05780, type: 2}
+  upgradeCost: 50

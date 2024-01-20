@@ -15,22 +15,23 @@ MonoBehaviour:
   enemyName: R2D2
   enemyDescription: He might shock you to death.
   enemySprite: {fileID: 21300000, guid: 72ec4bfd2bb43b94d9bfcbfc1b5c813b, type: 3}
-  enemyHP: 50
-  level: 4
-  enemySP: 3
-  drawCardAmt: 1
+  enemyHP: 100
+  level: 12
+  enemySP: 4
+  drawCardAmt: 2
   enemyDeck:
-  - {fileID: 11400000, guid: 4ba403edb37358c44a004631271db9d3, type: 2}
-  - {fileID: 11400000, guid: 4ba403edb37358c44a004631271db9d3, type: 2}
-  - {fileID: 11400000, guid: 4ba403edb37358c44a004631271db9d3, type: 2}
-  - {fileID: 11400000, guid: 4ba403edb37358c44a004631271db9d3, type: 2}
-  - {fileID: 11400000, guid: 4ba403edb37358c44a004631271db9d3, type: 2}
-  - {fileID: 11400000, guid: 4ba403edb37358c44a004631271db9d3, type: 2}
-  - {fileID: 11400000, guid: 023ce6f387995a44e87a262b87ba52e0, type: 2}
-  - {fileID: 11400000, guid: 023ce6f387995a44e87a262b87ba52e0, type: 2}
-  - {fileID: 11400000, guid: 023ce6f387995a44e87a262b87ba52e0, type: 2}
-  - {fileID: 11400000, guid: cfedb01b6c4664a43af023b2266c382a, type: 2}
-  - {fileID: 11400000, guid: cfedb01b6c4664a43af023b2266c382a, type: 2}
-  - {fileID: 11400000, guid: cfedb01b6c4664a43af023b2266c382a, type: 2}
+  - {fileID: 11400000, guid: 116eca87545fef24eb0e2c3a397c5ea7, type: 2}
+  - {fileID: 11400000, guid: 116eca87545fef24eb0e2c3a397c5ea7, type: 2}
+  - {fileID: 11400000, guid: 116eca87545fef24eb0e2c3a397c5ea7, type: 2}
+  - {fileID: 11400000, guid: 116eca87545fef24eb0e2c3a397c5ea7, type: 2}
+  - {fileID: 11400000, guid: 393bfa8bdc5e9dc4e8d603c9022cdab9, type: 2}
+  - {fileID: 11400000, guid: 393bfa8bdc5e9dc4e8d603c9022cdab9, type: 2}
+  - {fileID: 11400000, guid: 5cf828bb5275db84683c2a708dcf59d0, type: 2}
+  - {fileID: 11400000, guid: 5cf828bb5275db84683c2a708dcf59d0, type: 2}
+  - {fileID: 11400000, guid: 5cf828bb5275db84683c2a708dcf59d0, type: 2}
+  - {fileID: 11400000, guid: 5cf828bb5275db84683c2a708dcf59d0, type: 2}
   gearPartsDrop: 40
   energyPointDrop: 6
+  decisionPattern: 010000000000000003000000
+  cardFocusList:
+  - {fileID: 11400000, guid: b0f23820f7bd254419c9dab02020bea9, type: 2}

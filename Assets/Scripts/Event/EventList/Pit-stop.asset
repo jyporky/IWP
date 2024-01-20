@@ -12,25 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37d898dd6164e3f459e905e8e6e9dc3b, type: 3}
   m_Name: Pit-stop
   m_EditorClassIdentifier: 
-  eventName: Recharge Station
+  eventName: Pit Stop
   eventDescription: On your journey, you encounter a recharge station. This looks
     like a good place to take a break.
   eventImage: {fileID: 21300000, guid: 0cc91b6400262e8438aa2d0be3cb6055, type: 3}
   listOfOutcome:
-  - outcomeDesription: Repair-Self [Recover 20% of your maximum health].
-    outcomeChosenDialogue: After reparing your injuries, you went on with your journey.
+  - outcomeDesription: Repair-Self [Recover 20% of your maximum health]
+    outcomeChosenDialogue: After repairing your injuries, you went on with your journey.
     listOfOutcomeEffects:
     - eventOutcomeType: 1
       amtChanged: 20
       cardReferenceIfAny: {fileID: 0}
   - outcomeDesription: Charge yourself [Recover 2 Energy Point]
-    outcomeChosenDialogue: After charging yourself, you feel more energized. You
-      continue on with your joruney.
+    outcomeChosenDialogue: After charging yourself, you feel more energised. You
+      continue on with your journey.
     listOfOutcomeEffects:
     - eventOutcomeType: 2
       amtChanged: 2
       cardReferenceIfAny: {fileID: 0}
-  - outcomeDesription: Scavenge the area. [Get 4 gear parts].
+  - outcomeDesription: Scavenge the area. [Get 4 gear parts]
     outcomeChosenDialogue: You found some spare parts you can use at the pit stop.
       You grab it and continue your journey.
     listOfOutcomeEffects:
@@ -38,9 +38,6 @@ MonoBehaviour:
       amtChanged: 4
       cardReferenceIfAny: {fileID: 0}
   - outcomeDesription: I shall not rest. [Nothing happens]
-    outcomeChosenDialogue: You decided that it is not worth stopping for a pit-stop,
-      you continue your joruney.
-    listOfOutcomeEffects:
-    - eventOutcomeType: 2
-      amtChanged: 2
-      cardReferenceIfAny: {fileID: 0}
+    outcomeChosenDialogue: You decide that it is not worth stopping for a pit-stop,
+      you continue your journey.
+    listOfOutcomeEffects: []

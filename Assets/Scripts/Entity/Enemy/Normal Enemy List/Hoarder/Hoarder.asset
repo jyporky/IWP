@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3644211d70345fa498b07bf7cc591a9c, type: 3}
+  m_Name: Hoarder
+  m_EditorClassIdentifier: 
+  enemyName: Hoarder
+  enemyDescription: He likes to hoard a lot of cards.
+  enemySprite: {fileID: 21300000, guid: 1a5a895c06635874a8916507b7255b2f, type: 3}
+  enemyHP: 75
+  level: 1
+  enemySP: 1
+  drawCardAmt: 2
+  enemyDeck:
+  - {fileID: 11400000, guid: ff5a9279041e5614b9025fe516639526, type: 2}
+  - {fileID: 11400000, guid: ff5a9279041e5614b9025fe516639526, type: 2}
+  - {fileID: 11400000, guid: ff5a9279041e5614b9025fe516639526, type: 2}
+  - {fileID: 11400000, guid: ff5a9279041e5614b9025fe516639526, type: 2}
+  - {fileID: 11400000, guid: ff5a9279041e5614b9025fe516639526, type: 2}
+  - {fileID: 11400000, guid: ff5a9279041e5614b9025fe516639526, type: 2}
+  - {fileID: 11400000, guid: ff5a9279041e5614b9025fe516639526, type: 2}
+  - {fileID: 11400000, guid: de16c408d6fc1ac45af479153a322063, type: 2}
+  - {fileID: 11400000, guid: de16c408d6fc1ac45af479153a322063, type: 2}
+  - {fileID: 11400000, guid: e47b1091db9100e428976431f036ae22, type: 2}
+  gearPartsDrop: 16
+  energyPointDrop: 3
+  decisionPattern: 0100000004000000
+  cardFocusList:
+  - {fileID: 11400000, guid: e47b1091db9100e428976431f036ae22, type: 2}

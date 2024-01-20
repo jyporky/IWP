@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f7a459b24dca06449c2b73733e8a080, type: 3}
+  m_Name: Chamber 2
+  m_EditorClassIdentifier: 
+  amountOfRooms: 32
+  fixedRooms:
+  - roomType: 0
+    roomIndex: 0
+  - roomType: 1
+    roomIndex: 1
+  - roomType: 4
+    roomIndex: 16
+  - roomType: 3
+    roomIndex: 30
+  - roomType: 5
+    roomIndex: 31
+  minimumAmountOfRoomsList:
+  - roomType: 1
+    minAmount: 4
+    maxAmount: 6
+  - roomType: 2
+    minAmount: 16
+    maxAmount: 30
+  - roomType: 3
+    minAmount: 4
+    maxAmount: 6
+  possibleEnemyToAppearBeforeEliteList:
+  - {fileID: 11400000, guid: 5114713e86d7ae147bda1dc7a3c0ac3b, type: 2}
+  - {fileID: 11400000, guid: 499753896f8d36e43bd4bc6d3a3665d9, type: 2}
+  - {fileID: 11400000, guid: 8851e64af0b91b949a62cd79607f64d8, type: 2}
+  possibleEnemyToAppearAfterEliteList:
+  - {fileID: 11400000, guid: 499753896f8d36e43bd4bc6d3a3665d9, type: 2}
+  - {fileID: 11400000, guid: 8851e64af0b91b949a62cd79607f64d8, type: 2}
+  - {fileID: 11400000, guid: c4a936bfbdc6773459336c95b4869e22, type: 2}
+  possibleElitesToAppearList:
+  - {fileID: 11400000, guid: 7cb40b196e92a6c4299001e7d3ee352d, type: 2}
+  - {fileID: 11400000, guid: 06ac9ac7c95f5a0459525b21604d2a88, type: 2}
+  - {fileID: 11400000, guid: 55a0763b355159e4e96edfb725bf3d28, type: 2}
+  bossReference: {fileID: 11400000, guid: ec81ec1d39f8fc546bf1c61e6376db8f, type: 2}
+  beforeEliteShopList:
+  - {fileID: 11400000, guid: 716ea139146125a4fbf5cc510e4b4b6a, type: 2}
+  - {fileID: 11400000, guid: 52ee56126d98a574c828d48d2f17161f, type: 2}
+  - {fileID: 11400000, guid: 926f4474f7e7548409f5e787d6eb6152, type: 2}
+  - {fileID: 11400000, guid: 11a02bd85a8079d4db14e5c2987ac028, type: 2}
+  - {fileID: 11400000, guid: 39ec9bdadda200a46abe640bcd1d9fab, type: 2}
+  - {fileID: 11400000, guid: 642c93ccf4944dc41a17f0559d7e27c5, type: 2}
+  - {fileID: 11400000, guid: 053e3118d1539dc4497eada61a75e52b, type: 2}
+  - {fileID: 11400000, guid: 9b64692ea9c9235458bb19c37d56f455, type: 2}
+  - {fileID: 11400000, guid: ba1edc3ecadfac54da230eb5aac990ec, type: 2}
+  - {fileID: 11400000, guid: 42d2a45cb598b9b45a6f94e67a92c3c0, type: 2}
+  - {fileID: 11400000, guid: aef8f4b806656264b826bdd828e1f23b, type: 2}
+  - {fileID: 11400000, guid: 29680832f117841499bb8b511e8ca18e, type: 2}
+  - {fileID: 11400000, guid: 4d3bc25484e6fa742ba6dfc4e900f6bf, type: 2}
+  - {fileID: 11400000, guid: 8811c723c162ac746967ff40b08680ca, type: 2}
+  - {fileID: 11400000, guid: 2bfe7122926396448a00d073c4bb3b9e, type: 2}
+  - {fileID: 11400000, guid: 16a7642407f0bc146b85583274b39910, type: 2}
+  afterEliteShopList:
+  - {fileID: 11400000, guid: 716ea139146125a4fbf5cc510e4b4b6a, type: 2}
+  - {fileID: 11400000, guid: ff57280585faa20478beccb390589093, type: 2}
+  - {fileID: 11400000, guid: fd2eb0633e7b9134ca3afdf5e4c31643, type: 2}
+  - {fileID: 11400000, guid: 52ee56126d98a574c828d48d2f17161f, type: 2}
+  - {fileID: 11400000, guid: 11a02bd85a8079d4db14e5c2987ac028, type: 2}
+  - {fileID: 11400000, guid: 642c93ccf4944dc41a17f0559d7e27c5, type: 2}
+  - {fileID: 11400000, guid: 9b64692ea9c9235458bb19c37d56f455, type: 2}
+  - {fileID: 11400000, guid: ba1edc3ecadfac54da230eb5aac990ec, type: 2}
+  - {fileID: 11400000, guid: 42d2a45cb598b9b45a6f94e67a92c3c0, type: 2}
+  - {fileID: 11400000, guid: aef8f4b806656264b826bdd828e1f23b, type: 2}
+  - {fileID: 11400000, guid: f7d3a901e43ca82479e1523147aa1a74, type: 2}
+  - {fileID: 11400000, guid: 8811c723c162ac746967ff40b08680ca, type: 2}
+  - {fileID: 11400000, guid: 2bfe7122926396448a00d073c4bb3b9e, type: 2}
+  - {fileID: 11400000, guid: 16a7642407f0bc146b85583274b39910, type: 2}
+  - {fileID: 11400000, guid: 10cbcbe72aab5af44920c9284f77c0a2, type: 2}
+  - {fileID: 11400000, guid: a37d5dca89bc2a14b8a453c895f1f0d2, type: 2}
+  beforeEliteEventList:
+  - {fileID: 11400000, guid: 3fb4a3b6a5ccbd445b46302e349a7655, type: 2}
+  - {fileID: 11400000, guid: b361ad423dfa8da488ec6aeda1dfe1e1, type: 2}
+  afterEliteEventList:
+  - {fileID: 11400000, guid: 3fb4a3b6a5ccbd445b46302e349a7655, type: 2}
+  - {fileID: 11400000, guid: b361ad423dfa8da488ec6aeda1dfe1e1, type: 2}
+  - {fileID: 11400000, guid: 216d805da27f5a9438275d6f96b0a15e, type: 2}

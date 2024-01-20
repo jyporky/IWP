@@ -16,11 +16,11 @@ MonoBehaviour:
   cardType: 0
   cardCost: 0
   cardName: Berserk
-  cardDescription: Gain 3 nexus. Draw 3 cards.
+  cardDescription: Gain 2 nexus. Draw 2 cards. Glitch.
   isUpgraded: 0
   keywordsList:
   - keywordType: 13
-    value: 3
+    value: 2
     inflictSelf: 1
     duration: 0
     durationByTurn: 0
@@ -35,11 +35,26 @@ MonoBehaviour:
       value: 0
       cardReferenceIfAny: {fileID: 0}
   - keywordType: 2
-    value: 3
+    value: 2
     inflictSelf: 1
     duration: 0
     durationByTurn: 0
     statusSO: {fileID: 11400000, guid: a0e5ee247cf204543a12f17d07011c9d, type: 2}
+    cardDelay:
+      statusInfo: {fileID: 0}
+      duration: 0
+      durationByTurn: 0
+    modifyEffectByAmountOfCards:
+      modifyByAmountOfCardType: 0
+      bywhatCardType: 0
+      value: 0
+      cardReferenceIfAny: {fileID: 0}
+  - keywordType: 8
+    value: 0
+    inflictSelf: 0
+    duration: 0
+    durationByTurn: 0
+    statusSO: {fileID: 11400000, guid: 4bac3b53f28753344a83be18b5ee0c6e, type: 2}
     cardDelay:
       statusInfo: {fileID: 0}
       duration: 0

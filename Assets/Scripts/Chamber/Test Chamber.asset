@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f7a459b24dca06449c2b73733e8a080, type: 3}
+  m_Name: Test Chamber
+  m_EditorClassIdentifier: 
+  amountOfRooms: 7
+  fixedRooms:
+  - roomType: 0
+    roomIndex: 0
+  - roomType: 1
+    roomIndex: 1
+  - roomType: 3
+    roomIndex: 2
+  - roomType: 4
+    roomIndex: 3
+  - roomType: 1
+    roomIndex: 4
+  - roomType: 3
+    roomIndex: 5
+  - roomType: 5
+    roomIndex: 6
+  minimumAmountOfRoomsList: []
+  possibleEnemyToAppearBeforeEliteList:
+  - {fileID: 11400000, guid: 8851e64af0b91b949a62cd79607f64d8, type: 2}
+  - {fileID: 11400000, guid: c4a936bfbdc6773459336c95b4869e22, type: 2}
+  possibleEnemyToAppearAfterEliteList:
+  - {fileID: 11400000, guid: 8851e64af0b91b949a62cd79607f64d8, type: 2}
+  - {fileID: 11400000, guid: c4a936bfbdc6773459336c95b4869e22, type: 2}
+  possibleElitesToAppearList:
+  - {fileID: 11400000, guid: 0541025ec4360a04f9a6bd8e0cf0eaf2, type: 2}
+  - {fileID: 11400000, guid: 4e04ddc337594584f880404260cc500e, type: 2}
+  - {fileID: 11400000, guid: d4eb8375bf8624645859da13b4f213c5, type: 2}
+  bossReference: {fileID: 11400000, guid: 926b0295b161b7d4899215310e7e6ca8, type: 2}
+  beforeEliteShopList:
+  - {fileID: 11400000, guid: c0bdec751047138438d643703d12dee7, type: 2}
+  - {fileID: 11400000, guid: b4477ae19d899d44c87eb9058de02682, type: 2}
+  - {fileID: 11400000, guid: 29680832f117841499bb8b511e8ca18e, type: 2}
+  - {fileID: 11400000, guid: 16a7642407f0bc146b85583274b39910, type: 2}
+  - {fileID: 11400000, guid: 2f606cec79dcdad4487ddc0bec416630, type: 2}
+  - {fileID: 11400000, guid: 616a1e307cb3a204ca3a1d01b7d3ae26, type: 2}
+  - {fileID: 11400000, guid: 10cbcbe72aab5af44920c9284f77c0a2, type: 2}
+  - {fileID: 11400000, guid: 8811c723c162ac746967ff40b08680ca, type: 2}
+  - {fileID: 11400000, guid: 168576721e6a26e46b892780574aa95d, type: 2}
+  - {fileID: 11400000, guid: 4d3bc25484e6fa742ba6dfc4e900f6bf, type: 2}
+  - {fileID: 11400000, guid: 2bfe7122926396448a00d073c4bb3b9e, type: 2}
+  - {fileID: 11400000, guid: a37d5dca89bc2a14b8a453c895f1f0d2, type: 2}
+  afterEliteShopList: []
+  beforeEliteEventList:
+  - {fileID: 11400000, guid: 3fb4a3b6a5ccbd445b46302e349a7655, type: 2}
+  afterEliteEventList:
+  - {fileID: 11400000, guid: c3bb44889a1bb114b9bc6a25e9a7c403, type: 2}

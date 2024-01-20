@@ -15,18 +15,20 @@ MonoBehaviour:
   enemyName: Hecker
   enemyDescription: wait why is he here?
   enemySprite: {fileID: 21300000, guid: c4bd2ea4ab0323741886ef662a924bfa, type: 3}
-  enemyHP: 25
+  enemyHP: 50
   level: 2
-  enemySP: 0
+  enemySP: 1
   drawCardAmt: 1
   enemyDeck:
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
-  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
   - {fileID: 11400000, guid: 7265d471d83fbad43ade3b4ae131f43f, type: 2}
   - {fileID: 11400000, guid: 7265d471d83fbad43ade3b4ae131f43f, type: 2}
   gearPartsDrop: 10
   energyPointDrop: 2
+  decisionPattern: 0200000000000000
+  cardFocusList: []

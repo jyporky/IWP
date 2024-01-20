@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37d898dd6164e3f459e905e8e6e9dc3b, type: 3}
+  m_Name: Power Of RomCom
+  m_EditorClassIdentifier: 
+  eventName: Power of RomCom
+  eventDescription: You Stumbled across a fellow RomCom Enjoyer. "Hey do you want
+    to get a Power Of Kaguya card?" The RomCom Enjoyer asked. "It will cost you".
+  eventImage: {fileID: 21300000, guid: e738a1edf5be4034492b2edcdb2b6aad, type: 3}
+  listOfOutcome:
+  - outcomeDesription: Accept [Lose 10 Max HP] [Get 1 Power Of Kaguya]
+    outcomeChosenDialogue: You accepted the trade. You feel weaker but the power
+      of RomCom is within you.
+    listOfOutcomeEffects:
+    - eventOutcomeType: 3
+      amtChanged: -10
+      cardReferenceIfAny: {fileID: 0}
+    - eventOutcomeType: 6
+      amtChanged: 1
+      cardReferenceIfAny: {fileID: 11400000, guid: 282abd4ec6508124798247208dc675ba, type: 2}
+  - outcomeDesription: Accept [Lose 25 HP] [Get 1 Power Of Kaguya]
+    outcomeChosenDialogue: You accepted the trade. You feel weaker but the power
+      of RomCom is within you.
+    listOfOutcomeEffects:
+    - eventOutcomeType: 0
+      amtChanged: -25
+      cardReferenceIfAny: {fileID: 0}
+    - eventOutcomeType: 6
+      amtChanged: 1
+      cardReferenceIfAny: {fileID: 11400000, guid: 282abd4ec6508124798247208dc675ba, type: 2}
+  - outcomeDesription: Accept [Lose 4 Max Energy] [Get 1 Power Of Kaguya]
+    outcomeChosenDialogue: You accepted the trade. You feel weaker but the power
+      of RomCom is within you.
+    listOfOutcomeEffects:
+    - eventOutcomeType: 4
+      amtChanged: -4
+      cardReferenceIfAny: {fileID: 0}
+    - eventOutcomeType: 6
+      amtChanged: 1
+      cardReferenceIfAny: {fileID: 11400000, guid: 282abd4ec6508124798247208dc675ba, type: 2}
+  - outcomeDesription: Refuse [Nothing happen]
+    outcomeChosenDialogue: You refused the trade. The RomCom enjoyer seems disappointed
+      with your decision. "You will regret this!" He replied.
+    listOfOutcomeEffects: []

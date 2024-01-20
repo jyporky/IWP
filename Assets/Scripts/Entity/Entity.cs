@@ -111,9 +111,9 @@ public class Entity : MonoBehaviour
     /// Change the value of the current health. Put negative values for minus of health, and vice versa.
     /// Note that player health cannot go above the maximum limit
     /// </summary>
-    public virtual void ChangeEnergyPoint(int shieldPointChanged)
+    public virtual void ChangeEnergyPoint(int energyPointChanged)
     {
-        currentEP += shieldPointChanged;
+        currentEP += energyPointChanged;
 
         if (currentEP > maxEP)
         {
@@ -125,17 +125,25 @@ public class Entity : MonoBehaviour
         // If the entity energy amount is lesser than 0, overload the entity. For now it is fixed at 3 turns.
         if (currentEP < 0)
         {
-            AddStatusEffect(am.GetOverloadedEffect(3));
-            currentNexusCoreAmount = 0;
-            UpdateNexusCoreDisplay();
-
-            foreach (var r in cardsInHandList)
-            {
-                RemoveCardObject(r);
-            }
-
-            MoveToDifferentList(cardsInHandList, cardsInDiscardList);
+            TriggerOverLoad();
         }
+    }
+
+    /// <summary>
+    /// Trigger the overload effect to the entity.
+    /// </summary>
+    public virtual void TriggerOverLoad()
+    {
+        AddStatusEffect(am.GetOverloadedEffect(3));
+        currentNexusCoreAmount = 0;
+        UpdateNexusCoreDisplay();
+
+        foreach (var r in cardsInHandList)
+        {
+            RemoveCardObject(r);
+        }
+
+        MoveToDifferentList(cardsInHandList, cardsInDiscardList);
     }
 
     /// <summary>
@@ -144,7 +152,6 @@ public class Entity : MonoBehaviour
     public virtual void StartTurn()
     {
         TriggerEffect(false);
-        onEntityStartTurn?.Invoke();
 
         // if the player is not overloaded, draw cards and regenerate nexus point.
         if (!statusEffectList.ContainsKey(KeywordType.Overload))
@@ -152,6 +159,7 @@ public class Entity : MonoBehaviour
             DrawCardFromDeck(startTurnDrawAmt);
             currentNexusCoreAmount = maximumNexusCore;
         }
+        onEntityStartTurn?.Invoke();
         UpdateNexusCoreDisplay();
     }
 
@@ -178,6 +186,61 @@ public class Entity : MonoBehaviour
     void DrawCardFromDeck()
     {
         int cardIndexToGetFrom = Random.Range(0, cardsInDeckList.Count);
+
+        // Check for first hand and last hand card
+        if (cardsInDeckList.Count > 0)
+        {
+            // Check to see if there is a first hand card, if there is use that index.
+            for (int i = 0; i < cardsInDeckList.Count; i++)
+            {
+                CardSO card = cardsInDeckList[i];
+                for (int x = 0; x < card.keywordsList.Count; x++)
+                {
+                    if (card.keywordsList[x].keywordType == KeywordType.First_Hand)
+                    {
+                        cardIndexToGetFrom = i;
+                        break;
+                    }
+                }
+            }
+
+            // Check to see if the cardIndex is a last hand card. If it is a last hand card, repick another index.
+            // If all cards are last hand, use that index instead.
+
+            bool isLastHandCard = false;
+            foreach (Keyword kw in cardsInDeckList[cardIndexToGetFrom].keywordsList)
+            {
+                if (kw.keywordType == KeywordType.Last_Hand)
+                {
+                    isLastHandCard = true;
+                }
+            }
+
+            if (isLastHandCard)
+            {
+                List<int> nonLastHandCardIndexList = new List<int>();
+                for (int i = 0; i < cardsInDeckList.Count; i++)
+                {
+                    bool isThisCardLastHand = false;
+                    CardSO card = cardsInDeckList[i];
+                    for (int x = 0; x < card.keywordsList.Count; x++)
+                    {
+                        if (card.keywordsList[x].keywordType == KeywordType.Last_Hand)
+                            isThisCardLastHand = true;
+                    }
+
+                    if (!isThisCardLastHand)
+                        nonLastHandCardIndexList.Add(i);
+                }
+
+                if (nonLastHandCardIndexList.Count > 0)
+                {
+                    int indexFromList = Random.Range(0, nonLastHandCardIndexList.Count);
+                    cardIndexToGetFrom = nonLastHandCardIndexList[indexFromList];
+                }
+            }
+        }
+
         if (cardsInDeckList.Count != 0)
         {
             cm.CreateCard(this, cardsInDeckList[cardIndexToGetFrom]);
@@ -240,7 +303,6 @@ public class Entity : MonoBehaviour
     public virtual void PlayCard(CardSO cardPlayed)
     {
         TriggerEffect(true);
-        onEntityPlayCard?.Invoke();
         RemoveCardObject(cardPlayed);
 
         bool isCardGlitch = false;
@@ -257,6 +319,7 @@ public class Entity : MonoBehaviour
             MoveToDifferentList(cardsInHandList, cardsInDiscardList, cardPlayed);
 
         CardManager.GetInstance().ExecuteCard(cardPlayed, this);
+        onEntityPlayCard?.Invoke();
         currentNexusCoreAmount -= cardPlayed.cardCost;
         UpdateNexusCoreDisplay();
     }
@@ -281,7 +344,7 @@ public class Entity : MonoBehaviour
     /// <summary>
     /// Shuffle all cards from discard list as well as cards on hand back to the deck.
     /// </summary>
-    public void ReshuffleDeck()
+    public virtual void ReshuffleDeck()
     {
         for (int i = cardsInHandList.Count - 1; i >= 0; i--)
         {
@@ -422,7 +485,9 @@ public class Entity : MonoBehaviour
 
             if (removeWhatStatus == KeywordType.Overload)
             {
-                currentEP = 0;
+                if (currentEP < 0)
+                    currentEP = 0;
+
                 cm.UpdateEnergyDisplay(this, currentEP, maxEP);
             }
         }
@@ -448,7 +513,7 @@ public class Entity : MonoBehaviour
         {
             for (int i = 0; i < statusEffectList[KeywordType.Weaken].Count; i++)
             {
-                finalDmg += statusEffectList[KeywordType.Weaken][i].GetComponent<StatusEffect>().GetValue();
+                finalDmg -= statusEffectList[KeywordType.Weaken][i].GetComponent<StatusEffect>().GetValue();
             }
         }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyPath : PathInfo
 {
     private EnemySO enemySO;
+    [SerializeField] private PathType enemyPathType;
 
     /// <summary>
     /// Set the enemySo reference as well as update the path info display
@@ -19,6 +20,6 @@ public class EnemyPath : PathInfo
     public override void PathSelected()
     {
         EnemyManager.GetInstance().SetEnemySO(enemySO);
-        ChamberManager.GetInstance().InteractWithPath(PathType.ENEMY);
+        ChamberManager.GetInstance().InteractWithPath(enemyPathType);
     }
 }

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a38b68d83bb91ff4b9dba46f2ba6f4bb, type: 3}
+  m_Name: You Shall Suffer 1
+  m_EditorClassIdentifier: 
+  baseCard: {fileID: 11400000, guid: 907d9cb5226201247a3553b12afa5d9d, type: 2}
+  upgradedCard: {fileID: 11400000, guid: 4c7835049a90b3340b9b604a1c34f5b1, type: 2}
+  upgradeCost: 70

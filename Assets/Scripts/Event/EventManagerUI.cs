@@ -51,7 +51,7 @@ public class EventManagerUI : MonoBehaviour
         for (int i = 0; i < listOfPossibleOutcome.Count; i++)
         {
             GameObject newEventOutcome = Instantiate(eventChoicePrefab, eventChoicesSpawnArea);
-            newEventOutcome.GetComponent<EventChoice>().SetEventChoice(listOfPossibleOutcome[i], this);
+            newEventOutcome.GetComponent<EventChoice>().SetEventChoice(listOfPossibleOutcome[i], this, CheckIfCanChoose(listOfPossibleOutcome[i]));
         }
     }
 
@@ -122,11 +122,72 @@ public class EventManagerUI : MonoBehaviour
                         }
                     }
                     break;
-                case EventOutcomeType.Upgrade_Random_Card:
+                case EventOutcomeType.Delete_Card:
+                    EventManager.GetInstance().OpenDeleteCardPanel(eo.amtChanged);
                     break;
             }
         }
         GameplayManager.GetInstance().UpdatePlayerStatsDisplay();
+    }
+
+    /// <summary>
+    /// Check to see if the player fulfill the requirements to choose the options if a penalty is involved.
+    /// </summary>
+    /// <returns></returns>
+    bool CheckIfCanChoose(EventOutcome eventOutcome)
+    {
+        PlayerManager pm = PlayerManager.GetInstance();
+        foreach (OutcomeEffect oe in eventOutcome.listOfOutcomeEffects)
+        {
+            if (oe.amtChanged < 0 || oe.eventOutcomeType == EventOutcomeType.Delete_Card)
+            {
+                switch (oe.eventOutcomeType)
+                {
+                    case EventOutcomeType.Gain_Health:
+                        if (-oe.amtChanged >= pm.GetCurrentHealth())
+                            return false;
+
+                        break;
+                    case EventOutcomeType.Gain_Health_Percentage:
+                        int changeAmountBy = pm.GetMaxHP() * (int)(oe.amtChanged / 100.0f);
+                        if (-changeAmountBy >= pm.GetCurrentHealth())
+                            return false;
+                        break;
+                    case EventOutcomeType.Gain_Energy:
+                        if (-oe.amtChanged > pm.GetCurrentEP())
+                            return false;
+
+                        break;
+                    case EventOutcomeType.Gain_Max_HP:
+                        if (-oe.amtChanged >= pm.GetMaxHP())
+                            return false;
+
+                        break;
+                    case EventOutcomeType.Gain_Max_SP:
+                        if (-oe.amtChanged > pm.GetMaxEP())
+                            return false;
+
+                        break;
+                    case EventOutcomeType.Gain_Gear_Parts:
+                        if (-oe.amtChanged > pm.GetGearPartsAmount())
+                            return false;
+
+                        break;
+                    case EventOutcomeType.Add_Card:
+                        if (-oe.amtChanged > pm.GetCardCount(oe.cardReferenceIfAny))
+                            return false;
+
+                        break;
+                    case EventOutcomeType.Delete_Card:
+                        if (pm.GetCardList().Count == 0)
+                            return false;
+
+                        break;
+                }
+            }
+        }
+
+        return true;
     }
 
     /// <summary>

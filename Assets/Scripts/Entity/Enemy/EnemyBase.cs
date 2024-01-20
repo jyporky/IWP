@@ -73,21 +73,58 @@ public class EnemyBase : Entity
         base.ChangeEnergyPoint(shieldPointChanged);
     }
 
+    public override void ReshuffleDeck()
+    {
+        base.ReshuffleDeck();
+    }
+
     /// <summary>
     /// Make the AI do something.
     /// </summary>
     public void ExecuteTurn()
     {
-        if (cardsInHandList.Count > 0)
+        string cardList = string.Empty;
+        foreach (CardSO card in cardsInHandList)
         {
-            int cardToPlay = Random.Range(0, cardsInHandList.Count);
-            CardSO cardPlayed = cardsInHandList[cardToPlay];
-            cm.StartEnemyPlay(cardPlayed);
+            cardList += card.cardName + ", ";
         }
+        Debug.Log(cardList);
+
+        int cardFocusIter = -1;
+        CardSO cardToPlay = null;
+
+        for (int i = 0; i < enemySO.decisionPattern.Count; i++)
+        {
+            bool validDecision = false;
+            if (enemySO.decisionPattern[i] == DecisionType.Card_Focus)
+            {
+                cardFocusIter++;
+                validDecision = SmartEnemyAI.GetValidDecision(cardsInHandList, DecisionType.Card_Focus, currentNexusCoreAmount, enemySO.cardFocusList[cardFocusIter]);
+            }
+            else
+            {
+                validDecision = SmartEnemyAI.GetValidDecision(cardsInHandList, enemySO.decisionPattern[i], currentNexusCoreAmount);
+            }
+
+            if (validDecision)
+            {
+                switch (enemySO.decisionPattern[i] == DecisionType.Card_Focus)
+                {
+                    case true:
+                        cardToPlay = SmartEnemyAI.CardToPlay(cardsInHandList, currentNexusCoreAmount, enemySO.decisionPattern[i], enemySO.cardFocusList[cardFocusIter]);
+                        break;
+                    case false:
+                        cardToPlay = SmartEnemyAI.CardToPlay(cardsInHandList, currentNexusCoreAmount, enemySO.decisionPattern[i]);
+                        break;
+                }
+                break;
+            }
+        }
+
+        if (cardToPlay != null)
+            cm.StartEnemyPlay(cardToPlay);
         else
-        {
             CombatManager.GetInstance().EndEnemyTurn();
-        }
     }
 
     /// <summary>

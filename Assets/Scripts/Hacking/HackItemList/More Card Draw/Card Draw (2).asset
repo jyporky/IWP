@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e6fc41e2045df649be907c1c01f4ec4, type: 3}
+  m_Name: Card Draw (2)
+  m_EditorClassIdentifier: 
+  hackType: 1
+  hackDescription: Draw 2 extra card at the start of your turn. Last 3 turns.
+  duration: 3
+  amount: 2
+  combinationList: 0300000002000000020000000200000001000000

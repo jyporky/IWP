@@ -18,4 +18,16 @@ public class EnemySO : ScriptableObject
     [Header("Loot Drop Info")]
     public int gearPartsDrop;
     public int energyPointDrop;
+
+    [Header("Enemy attack pattern")]
+    
+    /// <summary>
+    /// the attack pattern that the enemy would go for. Note that cardFocus follow the same order as in the cardFocusList.
+    /// </summary>
+    public List<DecisionType> decisionPattern;
+
+    /// <summary>
+    /// Compromise of the cards that the enemy would prefer to play if possible.
+    /// </summary>
+    public List<CardSO> cardFocusList;
 }

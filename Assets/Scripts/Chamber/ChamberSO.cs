@@ -22,9 +22,14 @@ public class ChamberSO : ScriptableObject
     public List<MinMaxRoomAmount> minimumAmountOfRoomsList;
 
     /// <summary>
-    /// Get the list of enemies that can spawn in this chamber
+    /// Get the list of enemies that can spawn in this chamber before fighting the elite of this chamber.
     /// </summary>
-    public List<EnemySO> possibleEnemyToAppearList;
+    public List<EnemySO> possibleEnemyToAppearBeforeEliteList;
+
+    /// <summary>
+    /// Get the list of enemies that can spawn in this chamber after fighting the elite of this chamber.
+    /// </summary>
+    public List<EnemySO> possibleEnemyToAppearAfterEliteList;
 
     /// <summary>
     /// Get the list of elites that can spawn in this chamber.
@@ -37,12 +42,22 @@ public class ChamberSO : ScriptableObject
     public EnemySO bossReference;
 
     /// <summary>
-    /// Add it to the possible shop item player can encounter. Remains even when going to next chamber.
+    /// The list of shop items that player can encounter before fighting the elite of this chamber.
     /// </summary>
-    public List<ShopItemSO> avaliableShopItemList;
+    public List<ShopItemSO> beforeEliteShopList;
 
     /// <summary>
-    /// The possible events that the player can encounter in this chamber.
+    /// The list of shop items that player can encounter after fighting the elite of this chamber.
     /// </summary>
-    public List<EventSO> avaliableEventList;
+    public List<ShopItemSO> afterEliteShopList;
+
+    /// <summary>
+    /// The possible events that the player can encounter in this chamber before fighting the elite.
+    /// </summary>
+    public List<EventSO> beforeEliteEventList;
+
+    /// <summary>
+    /// The possible events that the player can encounter in this chamber after fighting the elite.
+    /// </summary>
+    public List<EventSO> afterEliteEventList;
 }

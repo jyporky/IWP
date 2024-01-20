@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37d898dd6164e3f459e905e8e6e9dc3b, type: 3}
+  m_Name: Spare Parts Seller
+  m_EditorClassIdentifier: 
+  eventName: Spare Parts Seller
+  eventDescription: You came across a spare part seller, selling different spare
+    parts which can aid you in your journey.
+  eventImage: {fileID: 21300000, guid: d98e1751af8c2914fa6f7a2ae3a468e3, type: 3}
+  listOfOutcome:
+  - outcomeDesription: Purchase Blue Spare Parts. [Lose 10 Gear Parts] [Delete a
+      card]
+    outcomeChosenDialogue: You purchased a blue spare parts and happily moved on
+      with your journey.
+    listOfOutcomeEffects:
+    - eventOutcomeType: 5
+      amtChanged: -10
+      cardReferenceIfAny: {fileID: 0}
+    - eventOutcomeType: 7
+      amtChanged: 1
+      cardReferenceIfAny: {fileID: 0}
+  - outcomeDesription: "Purchase Yellow Spare Parts.\r\n[Lose 10 Gear Parts] [Get
+      1 Maximum Energy]\r"
+    outcomeChosenDialogue: You purchased a yellow spare parts and happily moved on
+      with your journey.
+    listOfOutcomeEffects:
+    - eventOutcomeType: 5
+      amtChanged: -10
+      cardReferenceIfAny: {fileID: 0}
+    - eventOutcomeType: 4
+      amtChanged: 1
+      cardReferenceIfAny: {fileID: 0}
+  - outcomeDesription: "Purchase Red Spare Parts.\r [Lose 10 Gear Parts] [Get 5 Max
+      Health]\r"
+    outcomeChosenDialogue: You Purchased a red spare parts and happily moved on with
+      your journey.
+    listOfOutcomeEffects:
+    - eventOutcomeType: 5
+      amtChanged: -10
+      cardReferenceIfAny: {fileID: 0}
+    - eventOutcomeType: 3
+      amtChanged: 5
+      cardReferenceIfAny: {fileID: 0}
+  - outcomeDesription: "Do not purchase anything.\r [Nothing happen]\r"
+    outcomeChosenDialogue: You decide not to buy anything. You continue your journey.
+    listOfOutcomeEffects: []

@@ -7,7 +7,8 @@ using TMPro;
 public class ShopItem : MonoBehaviour
 {
     [SerializeField] ShopCard shopCard;
-    [SerializeField] Button shopcardSelf;
+    [SerializeField] Button viewCardButton;
+    [SerializeField] Button purchaseCardButton;
     [SerializeField] TextMeshProUGUI costText;
     [SerializeField] Color32 purchasableColor;
     [SerializeField] Color32 notPurchasableColor;
@@ -26,7 +27,8 @@ public class ShopItem : MonoBehaviour
         shopCard.UpdateCardDetails(shopItemSO.cardSOItem);
         bought = false;
         shopManagerUI = smUI;
-        shopcardSelf.onClick.AddListener(PurchaseItem);
+        viewCardButton.onClick.AddListener(DisplayCard);
+        purchaseCardButton.onClick.AddListener(PurchaseItem);
     }
 
     /// <summary>
@@ -62,9 +64,11 @@ public class ShopItem : MonoBehaviour
         {
             case true:
                 costText.color = purchasableColor;
+                purchaseCardButton.interactable = true;
                 break;
             case false:
                 costText.color = notPurchasableColor;
+                purchaseCardButton.interactable = false;
                 break;
         }
     }
@@ -82,5 +86,14 @@ public class ShopItem : MonoBehaviour
         shopCard.Bought();
         costText.text = "-";
         costText.color = purchasableColor;
+        purchaseCardButton.interactable = false;
+    }
+
+    /// <summary>
+    /// Display more about the card to the ShopManagerUI
+    /// </summary>
+    void DisplayCard()
+    {
+        shopManagerUI.DisplayCard(shopCard.GetCardSO());
     }
 }

@@ -38,7 +38,7 @@ public class UpgradeStat : MonoBehaviour
     /// <summary>
     /// Set the level and upgrade cost dislay. Store the new cost within this script.
     /// </summary>
-    void UpdateLevelAndCost()
+    public void UpdateLevelAndCost()
     {
         int level = UpgradeStationManager.GetInstance().GetUpgradeAmount(upgradeItemSO.upgradeItemType);
         levelText.text = "Lvl: " + level.ToString();

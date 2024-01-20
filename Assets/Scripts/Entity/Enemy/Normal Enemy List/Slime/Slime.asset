@@ -15,16 +15,18 @@ MonoBehaviour:
   enemyName: Slime
   enemyDescription: Boink Boink Boink.
   enemySprite: {fileID: 21300000, guid: 5f267aa1b56cf0e49974faf395b35a2b, type: 3}
-  enemyHP: 15
+  enemyHP: 25
   level: 1
   enemySP: 0
   drawCardAmt: 1
   enemyDeck:
-  - {fileID: 11400000, guid: 9cb12c7e07a8c5b48883a0c530629c4a, type: 2}
-  - {fileID: 11400000, guid: 9cb12c7e07a8c5b48883a0c530629c4a, type: 2}
-  - {fileID: 11400000, guid: 9cb12c7e07a8c5b48883a0c530629c4a, type: 2}
-  - {fileID: 11400000, guid: a77115f834375944ea4cee6b1c07a972, type: 2}
-  - {fileID: 11400000, guid: a77115f834375944ea4cee6b1c07a972, type: 2}
+  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
+  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
+  - {fileID: 11400000, guid: b0d78d7161ea4da47b65fe4bd6e3a275, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
   - {fileID: 11400000, guid: 44734c135614f8849889eaa76be86931, type: 2}
   gearPartsDrop: 4
   energyPointDrop: 1
+  decisionPattern: 0200000000000000
+  cardFocusList: []

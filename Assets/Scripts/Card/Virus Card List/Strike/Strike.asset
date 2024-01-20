@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7b32ee111c73144a9dbe8273ce71f8d, type: 3}
   m_Name: Strike
   m_EditorClassIdentifier: 
-  cardSprite: {fileID: 21300000, guid: e0cf85a07879ada4ab6d915950166a42, type: 3}
+  cardSprite: {fileID: 21300000, guid: 078f885111a51d54593489c11ae8583a, type: 3}
   cardType: 1
   cardCost: 1
   cardName: Strike
-  cardDescription: Do 3 damage
+  cardDescription: Do 5 damage
   isUpgraded: 0
   keywordsList:
   - keywordType: 1
-    value: 3
+    value: 5
     inflictSelf: 0
     duration: 0
     durationByTurn: 0

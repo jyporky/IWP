@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3644211d70345fa498b07bf7cc591a9c, type: 3}
+  m_Name: Sadist
+  m_EditorClassIdentifier: 
+  enemyName: Sadist
+  enemyDescription: Someone who likes to hurt themselves.
+  enemySprite: {fileID: 21300000, guid: 245dad98f6ae1ff428c752ad25e9518a, type: 3}
+  enemyHP: 150
+  level: 12
+  enemySP: 1
+  drawCardAmt: 2
+  enemyDeck:
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 53756c784e122cb408360d9e7d59fbc2, type: 2}
+  - {fileID: 11400000, guid: 09d457be4d5234d4aab2e61d42e72bf0, type: 2}
+  - {fileID: 11400000, guid: 09d457be4d5234d4aab2e61d42e72bf0, type: 2}
+  - {fileID: 11400000, guid: 3301d341097ddcb4a97fe34475b13c24, type: 2}
+  - {fileID: 11400000, guid: 3301d341097ddcb4a97fe34475b13c24, type: 2}
+  - {fileID: 11400000, guid: 12b1b952191543341be678094444c424, type: 2}
+  - {fileID: 11400000, guid: 12b1b952191543341be678094444c424, type: 2}
+  gearPartsDrop: 100
+  energyPointDrop: 10
+  decisionPattern: 01000000020000000400000000000000
+  cardFocusList:
+  - {fileID: 11400000, guid: 09d457be4d5234d4aab2e61d42e72bf0, type: 2}

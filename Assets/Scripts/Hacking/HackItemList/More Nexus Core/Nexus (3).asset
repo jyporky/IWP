@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Nexus (3)
   m_EditorClassIdentifier: 
   hackType: 0
-  hackDescription: Gain an extra 3 nexus core at the start of your turn. (Last 1
+  hackDescription: Gain an extra 3 nexus core at the start of your turn. (Last 2
     turns)
-  duration: 1
+  duration: 2
   amount: 3
   combinationList: 010000000200000003000000030000000200000001000000

@@ -16,12 +16,12 @@ MonoBehaviour:
   cardType: 3
   cardCost: 3
   cardName: I will Saw Through Your Bones
-  cardDescription: Take 30 damage, do 20 damage to the opponent.
+  cardDescription: Do 30 damage to the opponent. Last Hand
   isUpgraded: 0
   keywordsList:
   - keywordType: 1
-    value: 30
-    inflictSelf: 1
+    value: 25
+    inflictSelf: 0
     duration: 0
     durationByTurn: 0
     statusSO: {fileID: 11400000, guid: b02df4c662204cf44bcc7c0e1da0004d, type: 2}
@@ -34,12 +34,12 @@ MonoBehaviour:
       bywhatCardType: 0
       value: 0
       cardReferenceIfAny: {fileID: 0}
-  - keywordType: 1
-    value: 25
+  - keywordType: 16
+    value: 0
     inflictSelf: 0
     duration: 0
     durationByTurn: 0
-    statusSO: {fileID: 11400000, guid: b02df4c662204cf44bcc7c0e1da0004d, type: 2}
+    statusSO: {fileID: 11400000, guid: bf398cb534e572141807e646a2430b09, type: 2}
     cardDelay:
       statusInfo: {fileID: 0}
       duration: 0

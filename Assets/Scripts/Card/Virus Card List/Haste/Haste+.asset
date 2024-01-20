@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardSprite: {fileID: 21300000, guid: 89b67295fdd2a234996662f68474baaf, type: 3}
   cardType: 1
-  cardCost: 2
+  cardCost: 1
   cardName: Haste+
   cardDescription: Do 2 damage, draw 2 cards
   isUpgraded: 1

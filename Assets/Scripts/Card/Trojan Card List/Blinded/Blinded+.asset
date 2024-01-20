@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7b32ee111c73144a9dbe8273ce71f8d, type: 3}
+  m_Name: Blinded+
+  m_EditorClassIdentifier: 
+  cardSprite: {fileID: 21300000, guid: 6f0df41d06d3f494e8bc00248816a6af, type: 3}
+  cardType: 3
+  cardCost: 1
+  cardName: Blinded+
+  cardDescription: Enemy get Weaken x10 for 3 turns. Last Hand.
+  isUpgraded: 0
+  keywordsList:
+  - keywordType: 7
+    value: 10
+    inflictSelf: 0
+    duration: 3
+    durationByTurn: 1
+    statusSO: {fileID: 11400000, guid: 19e4eb7a109b0724ca096a5b73898080, type: 2}
+    cardDelay:
+      statusInfo: {fileID: 0}
+      duration: 0
+      durationByTurn: 0
+    modifyEffectByAmountOfCards:
+      modifyByAmountOfCardType: 0
+      bywhatCardType: 0
+      value: 0
+      cardReferenceIfAny: {fileID: 0}
+  - keywordType: 16
+    value: 0
+    inflictSelf: 0
+    duration: 0
+    durationByTurn: 0
+    statusSO: {fileID: 11400000, guid: bf398cb534e572141807e646a2430b09, type: 2}
+    cardDelay:
+      statusInfo: {fileID: 0}
+      duration: 0
+      durationByTurn: 0
+    modifyEffectByAmountOfCards:
+      modifyByAmountOfCardType: 0
+      bywhatCardType: 0
+      value: 0
+      cardReferenceIfAny: {fileID: 0}

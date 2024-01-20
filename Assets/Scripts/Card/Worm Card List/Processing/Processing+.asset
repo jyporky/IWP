@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7b32ee111c73144a9dbe8273ce71f8d, type: 3}
   m_Name: Processing+
   m_EditorClassIdentifier: 
-  cardSprite: {fileID: 21300000, guid: 83fd4bd53c3cfc64a849c7e7febd4873, type: 3}
+  cardSprite: {fileID: 21300000, guid: a761b833c59375a449cb985bdca6b334, type: 3}
   cardType: 2
   cardCost: 1
   cardName: Processing+
